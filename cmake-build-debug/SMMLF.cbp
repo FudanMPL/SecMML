@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="SMMLF"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DT">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/DT.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 DT"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DT/fast">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/DT.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 DT/fast"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DT_MPC">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/DT_MPC.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 DT_MPC"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="DT_MPC/fast">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/DT_MPC.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 DT_MPC/fast"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="kv_statistics">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/kv_statistics.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 kv_statistics"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="kv_statistics/fast">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/kv_statistics.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 kv_statistics/fast"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="omen">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/omen.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 omen"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="omen/fast">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/omen.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 omen/fast"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SMMLF">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/SMMLF.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 SMMLF"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SMMLF/fast">
+				<Option output="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/SMMLF.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed"/>
+					<Add directory="C:/MinGW-64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 SMMLF/fast"/>
+					<CompileFile command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW-64/mingw64/bin/mingw32-make.exe -f &quot;C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Cell.cpp">
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Cell.h">
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Constant.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Constant.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/LSTMGraph.cpp">
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/LSTMGraph.h">
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Mat.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Mat.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/MathOp.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/MathOp.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/NeuronMat.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/NeuronMat.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Op.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Op.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Player.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/Player.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/cmdlineCreateNG.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/cmdlineCreateNG.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/common.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/common.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/commonStructs.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/commonStructs.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/createNG.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/createNG.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/errorHandler.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/errorHandler.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/nGramReader.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/nGramReader.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/smoothing.c">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/comen/smoothing.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DTDAG.cpp">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DTDAG.h">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DT_graph.cpp">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DT_graph.h">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DT_main.cpp">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DT_main.h">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DecisionTree.cpp">
+			<Option target="DT"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/DecisionTree.h">
+			<Option target="DT"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/NodeMat.cpp">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/decision_tree/NodeMat.h">
+			<Option target="DT_MPC"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/kv_statics/StatisticsGraph.cpp">
+			<Option target="kv_statistics"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/kv_statics/StatisticsGraph.h">
+			<Option target="kv_statistics"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/kv_statics/kv_statistics.cpp">
+			<Option target="kv_statistics"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/kv_statics/kv_statistics.h">
+			<Option target="kv_statistics"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/machine_learning/BPGraph.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/machine_learning/BPGraph.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/machine_learning/NN.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/machine_learning/NN.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/main.cpp">
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/malicious_lib/feldman_vss.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/malicious_lib/feldman_vss.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/malicious_lib/reed_solomn_reconstruct.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/malicious_lib/reed_solomn_reconstruct.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/mpc_omen/NgramGraph.cpp">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/mpc_omen/NgramGraph.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/mpc_omen/omen_main.cpp">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/mpc_omen/omen_main.h">
+			<Option target="omen"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/IOManager.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/IOManager.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/SocketManager.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/SocketManager.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/SocketOnline.cpp">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/util/SocketOnline.h">
+			<Option target="DT_MPC"/>
+			<Option target="kv_statistics"/>
+			<Option target="omen"/>
+			<Option target="SMMLF"/>
+		</Unit>
+		<Unit filename="C:/Users/hlq/Desktop/Curious&apos;s Seceret/SMMLF/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

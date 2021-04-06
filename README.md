@@ -17,11 +17,11 @@ There are two practical situations as follow:
 
 ## Repository Structure
 
-* `core/`: Core libraries in MPL. The fundamental matrix lib, math operator lib and Player lib.  Some math computations are compiled as libraries (libcore_lib.so), and the source code are hidden.
+* `core/`: Core libraries in MPL. The fundamental matrix lib, math operator lib and Player lib.  Some math computations are compiled as libraries (libcore_lib.so).
 
 * `machine_learning/`: Machine learning algorithms: neural networks, linear regression and logistic regression.
 
-* `mnist/`: Training dataset.
+* `datesets/mnist/`: Training dataset.
 
 * `util/`: Data IO and network IO package. The network is implemented using socket, compatible on both Windows and Ubuntu.
 
@@ -37,7 +37,7 @@ Here take training a linear regression model among three parties as an example
 
   `git clone https://github.com/SMMLF/MPL-Public.git`
 
-* Set the number of parties to 3 (in `Constant.h`):
+* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
   
   `#define M 3`
 
@@ -77,7 +77,7 @@ Any question, please contact 19212010008@fudan.edu.cn.
 
 **Faculty**: Prof. Weili Han
 
-**Students**: Haoqi Wu, Zifeng Jiang, Wenqiang Ruan, Dingyi Tang
+**Students**: Haoqi Wu (Graduate Student), Zifeng Jiang (Graduate Student), Wenqiang Ruan (Ph.D Candidate), Lushan Song (Ph.D Candidate), Dingyi Tang (Post Graduate Student)
 
 
 

@@ -65,7 +65,7 @@ Here take training a linear regression model among three parties as an example
 - LSTM
     
 * Compile the executable file:
-    - `cd MPL-Public`
+    - `cd SecMML`
     - `cmake .`
     - `make`
 

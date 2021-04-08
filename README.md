@@ -2,6 +2,7 @@
 
 ## 介绍
 SecMML是FudanMPL(<u>M</u>ulti-<u>P</u>arty Computation + Machine <u>L</u>earning)的一个分支，是用于训练机器学习模型的高效可扩展的安全多方计算（MPC）框架，基于BGW协议实现。此框架可以应用到三个及以上参与方联合训练的场景中。目前，SecMML能够支持几种当前流行的机器学习模型，包括线性回归模型，逻辑回归模型，BP神经网络和LSTM神经网络模型。
+<img src="SecMML-arch.png" width = "400" height = "260" alt="arch" align=center>
 
 ## Introduction
   SecMML, a branch of FudanMPL (<u>M</u>ulti-<u>P</u>arty Computation + Machine <u>L</u>earning) , is a scalable and efficient MPC framework for training machine learning models based on BGW protocol.

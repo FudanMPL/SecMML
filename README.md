@@ -84,5 +84,10 @@ Any question, please contact 19212010008@fudan.edu.cn.
 
 **Students**: Haoqi Wu (Graduate Student), Zifeng Jiang (Graduate Student), Wenqiang Ruan (Ph.D Candidate), Lushan Song (Ph.D Candidate), Dingyi Tang (Post Graduate Student)
 
+## Related Projects
+
+Secure Quantized Training for Deep Learning:https://arxiv.org/pdf/2107.00501  code: https://github.com/data61/MP-SPDZ
+
+
 
 

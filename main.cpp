@@ -8,6 +8,8 @@
 
 int node_type;
 SocketManager::SMMLF tel;
+string ips[]={"127.0.0.1","127.0.0.1","127.0.0.1"};
+int  ports[]={1234,1235,1236};
 int globalRound;
 int main(int argc, char** argv) {
     srand(time(NULL)); // random seed
@@ -24,7 +26,7 @@ int main(int argc, char** argv) {
 
     Player::init();
     IOManager::init();
-    tel.init();
+    tel.init(ips,ports);
 
     /** LSTM **/
     // LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);

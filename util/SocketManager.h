@@ -21,8 +21,8 @@ public:
     static void print_socket();
     static void print();
     class SMMLF {
-        string ip;
-        int port;
+        string* ip;
+        int* port;
         SOCK serv_sock;
         SOCK clnt_sock[M];
         SOCK sock;
@@ -30,7 +30,7 @@ public:
     public:
         SMMLF();
         void init();
-        void init(string ip, int port);
+        void init(string* ip, int* port);
         void server();
         void client();
         void server_exit();

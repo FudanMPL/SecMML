@@ -124,10 +124,10 @@ void SocketManager::print() {
 SocketManager::SMMLF::SMMLF() {}
 
 void SocketManager::SMMLF::init() {
-    init("127.0.0.1", 1234);
+    init(new string[3]{"127.0.0.1","127.0.0.1","127.0.0.1"}, new int[3]{1234,1235,1236});
 }
 
-void SocketManager::SMMLF::init(string ip, int port) {
+void SocketManager::SMMLF::init(string* ip, int* port) {
     this->ip = ip;
     this->port = port;
     init_windows_socket();
@@ -136,7 +136,7 @@ void SocketManager::SMMLF::init(string ip, int port) {
 }
 
 void SocketManager::SMMLF::server() {
-    server_init(serv_sock, ip, port + node_type);
+    server_init(serv_sock, *(ip+node_type), *(port + node_type));
     char buffer[101];
     for (int i = node_type + 1; i < M; i++) {
         sock = accept_sock(serv_sock);
@@ -154,7 +154,7 @@ void SocketManager::SMMLF::server() {
 void SocketManager::SMMLF::client() {
 //    printf(" asdasd %d\n", port);
     for (int i = 0; i < node_type; i++) {
-        client_init(sock, ip, port + i);
+        client_init(sock, *(ip+i), *(port + i));
 //        printf("client %d connect to server %d\n", node_type, i);
 //        printf(" port %d\n", port);
 

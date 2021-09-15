@@ -40,7 +40,7 @@ Here take training a linear regression model among three parties as an example
 
 * Clone the SecMML git repository by running:
 
-  `git clone https://github.com/SMMLF/MPL-Public.git`
+  `git clone https://github.com/FudanMPL/SecMML.git`
 
 * Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
   

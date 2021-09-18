@@ -90,6 +90,7 @@ void LSTMGraph::LSTM::train() {
     clock_train = new Constant::Clock(CLOCK_TRAIN);
     globalRound = 0;
     for (int i = 0; i < 110000 && i < TRAIN_ITE; i++) {
+        signal(SIGINT, SIG_DFL);
         cout<<i<<endl;
         globalRound++;
         next_batch(x_batch, i * B, train_data, N);
@@ -139,6 +140,7 @@ void LSTMGraph::LSTM::test() {
     ofstream out_file;
     out_file.open("accuracy_lstm.txt", ios::app);
     for (int i = 0; i < NM / B; i++) {
+        signal(SIGINT, SIG_DFL);
         globalRound++;
         next_batch(x_batch, i * B, train_data);
         next_batch(y_batch, i * B, train_label);
@@ -156,7 +158,7 @@ void LSTMGraph::LSTM::test() {
 
         total += nn->getNeuron(output)->getForward()->equal(*nn->getNeuron(out_sig)->getForward()).count();\
     }
-    DBGprint("accuracy: \n", total * 1.0 / (NM / B * B));
+    DBGprint("accuracy: %f\n", total * 1.0 / (NM / B * B));
     out_file << "accuracy: \n" << total * 1.0 / (NM / B * B) << endl;
     out_file.close();
 }

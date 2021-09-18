@@ -14,6 +14,7 @@ extern int node_type;
 class BPGraph {
 public:
     class LR {
+    public:
         NN* nn;
         Constant::Clock *clock_train;
         Mat *train_data, *train_label;
@@ -26,7 +27,6 @@ public:
         int out_sig, re_out_sig;
         int id;
         int activation_out;
-    public:
         LR();
         LR(Mat* train_data, Mat* train_label, Mat* test_data, Mat* test_label);
         void graph(NN* nn, int id);

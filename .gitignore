@@ -8,3 +8,7 @@ output/
 cmake-build-debug/
 *.count
 *.level
+
+__pycache__/
+MPL_lib.py
+_MPL_lib.so

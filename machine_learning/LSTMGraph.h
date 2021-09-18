@@ -18,6 +18,7 @@ class LSTMGraph {
 
 public:
     class LSTM {
+    public:
         NN* nn;
         Constant::Clock *clock_train;
         Mat *train_data, *train_label;
@@ -32,7 +33,6 @@ public:
         int id;
         int activation_out;
 
-    public:
         LSTM();
         LSTM(Mat* train_data, Mat* train_label, Mat* test_data, Mat* test_label);
         void graph(NN* nn, int id);

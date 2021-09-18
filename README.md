@@ -34,6 +34,10 @@ There are two practical situations as follow:
 
 * `CMakeLists.txt`: Define the compile rule for the project. Note that, for windows users, the `target_link_libraries(SMMLF ws2_32)` shall be uncommented.
 
+* `python_lib/`: Machine learning algorithms built from interfaces for Python: neural networks, linear regression and logistic regression.
+
+* `MPL_lib.i`: Define the interfaces for Python.
+
 ## Running
 
 Here take training a linear regression model among three parties as an example
@@ -62,7 +66,7 @@ Here take training a linear regression model among three parties as an example
     - Linear Regression Model: bp->linear_graph();
     - Logistic Regression Model: bp->logistic_graph();
     - Three-layer Model: bp->graph();
-- LSTM
+    - LSTM: lstm->graph();
     
 * Compile the executable file:
     - `cd SecMML`
@@ -72,7 +76,39 @@ Here take training a linear regression model among three parties as an example
 * Start three processes and input the party index, respectively:
     - `./MPL`
     - `Please enter party index:`
-    - Enter 0,1,...,M for each process in order.
+    - Enter 0,1,...,M-1 for each process in order.
+
+## Running in Python
+
+Here take training a linear regression model among three parties as an example
+
+* Clone the SecMML git repository by running:
+
+  `git clone https://github.com/FudanMPL/SecMML.git`
+
+* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
+  
+  `#define M 3`
+
+* Install dependency:
+
+  `sudo apt install swig`
+
+* Compile the dynamic library:
+    - `cd SecMML`
+    - `cmake -DMPL_LIB=ON .`
+    - `make`
+
+* Choose the machine learning model (`MPL.py`):
+    - Linear Regression Model: model = linear_regression.graph(io)
+    - Logistic Regression Model: model = logistic_regression.graph(io)
+    - Three-layer Model: model = bp_nn.graph(io)
+    - LSTM: model = lstm_nn.graph(io)
+
+* Start three processes and input the party index, respectively:
+    - `python3 MPL.py`
+    - `Please enter party index:`
+    - Enter 0,1,...,M-1 for each process in order.
 
 ## Help
 

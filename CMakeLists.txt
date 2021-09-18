@@ -20,3 +20,23 @@ set(SOURCE_FILES_BASE Constant.cpp Constant.h util/SocketOnline.cpp util/SocketO
 add_executable(MPL main.cpp ${SOURCE_FILES_BASE} ${MALICIOUS_LIB} machine_learning/LSTMGraph.cpp machine_learning/Cell.cpp)
 target_link_libraries(MPL core_lib)
 # target_link_libraries(MPL ws2_32)
+
+option(MPL_LIB "Option to provide python interfaces." OFF)
+if(MPL_LIB)
+    # find SWIG requiring 4.0 or higher and python language support
+    find_package(SWIG 4.0 COMPONENTS python REQUIRED)
+    include(UseSWIG)
+
+    # include path for <Python.h>
+    find_package(PythonLibs REQUIRED)
+    include_directories(${PYTHON_INCLUDE_DIRS})
+
+    include_directories(${PROJECT_SOURCE_DIR})
+
+    set(SWIG_FILE MPL_lib.i)
+    # call swig in c++ mode
+    set_property(SOURCE ${SWIG_FILE} PROPERTY CPLUSPLUS ON)
+
+    swig_add_library(MPL_lib LANGUAGE python SOURCES ${SWIG_FILE} ${MALICIOUS_LIB} ${SOURCE_FILES_BASE} machine_learning/LSTMGraph.cpp machine_learning/Cell.cpp)
+    swig_link_libraries(MPL_lib core_lib)
+endif()

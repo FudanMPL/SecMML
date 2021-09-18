@@ -151,6 +151,7 @@ void BPGraph::LR::train() {
     // test();
     cout << "Train\n";
     for (int i = 0; i < 110000 && i < TRAIN_ITE; i++) {
+        signal(SIGINT, SIG_DFL);
         globalRound++;
         next_batch(x_batch, i * B, train_data, N);
         next_batch(y_batch, i * B, train_label, N);
@@ -179,6 +180,7 @@ void BPGraph::LR::test() {
     Mat x_batch(D + 1, B), y_batch(1, B);
     int total = 0;
     for (int i = 0; i < NM / B; i++) {
+        signal(SIGINT, SIG_DFL);
         globalRound++;
         next_batch(x_batch, i * B, test_data);
         next_batch(y_batch, i * B, test_label);

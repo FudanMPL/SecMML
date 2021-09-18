@@ -162,6 +162,7 @@ void SocketManager::SMMLF::client() {
         str[0] += node_type;
 //        printf("str: %s %d\n", str, strlen(str));
 #ifdef UNIX_PLATFORM
+        signal(SIGPIPE, SIG_DFL);
         write(sock, str, strlen(str));
 #else
         send(sock, str, strlen(str), NULL);

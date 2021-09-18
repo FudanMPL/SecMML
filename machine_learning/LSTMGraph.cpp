@@ -173,12 +173,16 @@ void LSTMGraph::LSTM::next_batch(Mat &batch, int start, Mat *A, int mod) {
 void LSTMGraph::LSTM::next_batch(Mat (&batch)[L], int start, Mat *A, int mod) {
     Mat *temp,*temp_IE,*tempI;
     temp=new Mat(D+1,B);
+    temp_IE=new Mat(1,B,IE);
     tempI=new Mat(D2,B);
     A->col(start % mod, start % mod + B, *temp);
     for (int i=0;i<L;i++){
         *tempI=temp->row(i*D2, (i+1)*D2);
-        Mat::hstack(&batch[i],tempI,new Mat(1, B, IE));
+        Mat::concat(&batch[i],tempI,temp_IE);
     }
+    delete temp;
+    delete temp_IE;
+    delete tempI;
 }
 
 

@@ -66,6 +66,17 @@ void NN::reveal_init() {
     }
 }
 
+void NN::output_init(int u) {
+    neuron[u]->setOpOutput(new MathOp::Reveal(getNeuron(u)->getForward(), getNeuron(u)->getForward()));
+}
+
+void NN::output_init() {
+    curOutput=1;
+    for (int i = 1; i <= tot; i++) {
+            neuron[i]->resetOp();
+    }
+}
+
 void NN::addedge(int u, int v) {
     adj[u].push_back(v);
     to[v]++;
@@ -343,6 +354,27 @@ void NN::reveal() {
 //    neuron[curReveal]->reveal();
     for (int i = 1; i <= tot; i++) {
             neuron[i]->reveal();
+    }
+}
+
+bool NN::outputHasNext() {
+    for (int i = 1; i <= tot; i++) {
+        if (neuron[i]->outputHasNext())
+            return 1;
+    }
+    return 0;
+}
+
+void NN::output() {
+//    while (!neuron[curReveal]->revealHasNext()) {
+//        curReveal++;
+//        if (curReveal > tot)
+//            return;
+//    }
+//    //cout<<curUpdate<<endl;
+//    neuron[curReveal]->reveal();
+    for (int i = 1; i <= tot; i++) {
+            neuron[i]->output();
     }
 }
 

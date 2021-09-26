@@ -113,6 +113,7 @@ void BPGraph::LR::linear_graph() {
     nn->reveal_init(out_sig);
     /// if the output is secret-shared as well
     nn->reveal_init(output);
+    nn->output_init(st_w);
 }
 
 void BPGraph::LR::logistic_graph() {
@@ -172,8 +173,16 @@ void BPGraph::LR::train() {
         if ((i+1)%PRINT_PRE_ITE == 0) {
             test();
             print_perd(i+1);
+            
+            
         }
     }
+    nn->output_init();
+    while (nn->outputHasNext()) {
+        nn->output();
+    }
+    nn->getNeuron(st_w)->getForward()->print();
+    
 }
 
 void BPGraph::LR::test() {

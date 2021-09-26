@@ -14,6 +14,7 @@ class NeuronMat {
     Op *op;
     Op *op_update;
     Op *op_reveal;
+    Op *op_output; //20210926 jzf
     int r, c;
     int k;
     Mat *f, *g;
@@ -29,14 +30,17 @@ public:
     void setOp(Op* op);
     void setOpUpdate(Op *op);
     void setOpReveal(Op *op);
+    void setOpOutput(Op *op); //20210926 jzf
     bool forwardHasNext();
     bool backHasNext();
     bool updateGradHasNext();
     bool revealHasNext();
+    bool outputHasNext();
     void forward();
     void back();
     void update();
     void reveal();
+    void output(); //20210926 jzf
     void update_grad();
     Mat* getForward();
     Mat* getGrad();

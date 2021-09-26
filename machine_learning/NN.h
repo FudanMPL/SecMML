@@ -17,6 +17,7 @@ class NN {
     int curGrad;
     int curUpdate;
     int curReveal;
+    int curOutput;
     vector<NeuronMat*> neuron;
     vector<bool> vst;
     vector<int> q;
@@ -28,6 +29,8 @@ public:
     void epoch_init();
     void reveal_init(int u);
     void reveal_init();
+    void output_init(int u);
+    void output_init();
     void addedge(int u, int v);
     int addnode(int r, int c, int k);
     NeuronMat* getNeuron(int u);
@@ -70,6 +73,8 @@ public:
     void update();
     bool revealHasNext();
     void reveal();
+    bool outputHasNext();
+    void output();
     int getTot();
     void print();
 };

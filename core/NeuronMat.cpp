@@ -28,6 +28,7 @@ NeuronMat::NeuronMat(int r, int c, int k) {
     op = nullptr;
     op_update = nullptr;
     op_reveal = nullptr;
+    op_output = nullptr;
     f = nullptr;
     g = nullptr;
 }
@@ -52,6 +53,11 @@ void NeuronMat::reveal() {
         op_reveal->forward();
 }
 
+void NeuronMat::output() {
+    if (op_output)
+        op_output->forward();
+}
+
 void NeuronMat::update_grad() {
     if (op_update)
         op_update->forward();
@@ -67,6 +73,10 @@ void NeuronMat::setOpUpdate(Op *op) {
 
 void NeuronMat::setOpReveal(Op *op) {
     this->op_reveal = op;
+}
+
+void NeuronMat::setOpOutput(Op *op) {
+    this->op_output = op;
 }
 
 bool NeuronMat::forwardHasNext() {
@@ -91,6 +101,13 @@ bool NeuronMat::updateGradHasNext() {
 bool NeuronMat::revealHasNext() {
     if (op_reveal) {
         return op_reveal->forwardHasNext();
+    }
+    return 0;
+}
+
+bool NeuronMat::outputHasNext() {
+    if (op_output) {
+        return op_output->forwardHasNext();
     }
     return 0;
 }

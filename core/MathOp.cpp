@@ -1237,14 +1237,17 @@ void MathOp::LTZ::forward() {
     reinit();
     switch (forwardRound) {
        case 1:
-           reveal->forward();
-           if (reveal->forwardHasNext()) {
-               forwardRound--;
-           }
-           break;
-       case 2:
-           *res = res->LTZ();
-           break;
+            pDiv2m->forward();
+            if (pDiv2m->forwardHasNext()) {
+                forwardRound--;
+            }
+            break;
+        case 2:
+            // return IE, 0
+            *res = res->opposite() * IE;
+            // return 1, 0
+            // *res = res->opposite();
+            break;
     }
 }
 

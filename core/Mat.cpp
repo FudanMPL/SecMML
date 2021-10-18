@@ -205,32 +205,78 @@ Mat Mat::operator*(const Mat &a) {
     tmp_c = a.cols();
     Mat ret(r, a.cols());
     int i, j;
-    for (int j = 0; j < tmp_c; j++) {
-        for (int i = 0; i < r; i++) {
-            switch (pair_order_type(this, &a)) {
-                case MM_NN:
-                    for (int k = 0; k < c; k++) {
-                        ret.val[j * r + i] += val[k * r + i] * a.val[j * c + k];
-                    }
-                    break;
-                case MM_NT:
-                    for (int k = 0; k < c; k++) {
-                        ret.val[j * r + i] += val[k * r + i] * a.val[k * tmp_c + j];
-                    }
-                    break;
-                case MM_TN:
-                    for (int k = 0; k < c; k++) {
-                        ret.val[j * r + i] += val[i * c + k] * a.val[j * c + k];
-                    }
-                    break;
-                case MM_TT:
-                    for (int k = 0; k < c; k++) {
-                        ret.val[j * r + i] += val[i * c + k] * a.val[k * tmp_c + j];
-                    }
-                    break;
+    ll128 tmp = 0;
+    if (pair_order_type(this, &a) == MM_NT){
+        for (int k = 0; k < c; k++){
+            for (int j = 0; j < tmp_c; j++){
+                tmp = a.val[k * tmp_c + j];
+                for (int i = 0; i < r; i++){
+                    ret.val[j * r + i] += val[k * r + i] * tmp;
+                }
+            }
+   
+        }
+    }
+    if (pair_order_type(this, &a) == MM_NN){
+        for (int j = 0; j < tmp_c; j++){
+            for (int k = 0; k < c; k++){
+                tmp = a.val[j * c + k];
+                for (int i = 0; i < r; i++){
+                    ret.val[j * r + i] += val[k * r + i] * tmp;
+                }
+            }
+   
+        }
+    }
+    if (pair_order_type(this, &a) == MM_TN){
+        for (int j = 0; j < tmp_c; j++){
+            for (int i = 0; i < r; i++){
+                tmp = ret.val[j * r + i];
+                for (int k = 0; k < c; k++){
+                    tmp += val[i * c + k] * a.val[j * c + k];
+                }
+                ret.val[j * r + i] += tmp;
+            }
+   
+        }
+    }
+    if (pair_order_type(this, &a) == MM_TT){
+        for (int j = 0; j < tmp_c; j++){
+            for (int i = 0; i < r; i++){
+                tmp = ret.val[j * r + i];
+                for (int k = 0; k < c; k++){
+                    tmp += val[i * c + k] * a.val[k * tmp_c + j];
+                }
+                ret.val[j * r + i] += tmp;
             }
         }
     }
+    // for (int j = 0; j < tmp_c; j++) {
+    //     for (int i = 0; i < r; i++) {
+    //         switch (pair_order_type(this, &a)) {
+    //             case MM_NN:
+    //                 for (int k = 0; k < c; k++) {
+    //                     ret.val[j * r + i] += val[k * r + i] * a.val[j * c + k];
+    //                 }
+    //                 break;
+    //             case MM_NT:
+    //                 for (int k = 0; k < c; k++) {
+    //                     ret.val[j * r + i] += val[k * r + i] * a.val[k * tmp_c + j];
+    //                 }
+    //                 break;
+    //             case MM_TN:
+    //                 for (int k = 0; k < c; k++) {
+    //                     ret.val[j * r + i] += val[i * c + k] * a.val[j * c + k];
+    //                 }
+    //                 break;
+    //             case MM_TT:
+    //                 for (int k = 0; k < c; k++) {
+    //                     ret.val[j * r + i] += val[i * c + k] * a.val[k * tmp_c + j];
+    //                 }
+    //                 break;
+    //         }
+    //     }
+    // }
     ret.residual();
     return ret;
 }

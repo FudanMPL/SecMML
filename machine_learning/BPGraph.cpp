@@ -177,11 +177,11 @@ void BPGraph::LR::train() {
             
         }
     }
-    nn->output_init();
-    while (nn->outputHasNext()) {
-        nn->output();
-    }
-    nn->getNeuron(st_w)->getForward()->print();
+    // nn->output_init();
+    // while (nn->outputHasNext()) {
+    //     nn->output();
+    // }
+    // nn->getNeuron(st_w)->getForward()->print();
     
 }
 

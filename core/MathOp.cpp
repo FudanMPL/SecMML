@@ -187,14 +187,16 @@ MathOp::Mul_Const_Trunc::Mul_Const_Trunc(Mat *res, Mat *a, double b) {
     div2mP = new Div2mP(res, res, BIT_P_LEN, DECIMAL_PLACES);
     reveal = new Reveal(revlea1, revlea1);
     reveal2 = new Reveal(res, res);
-    init(2, 0);
+    init(1, 0);
 }
 
 void MathOp::Mul_Const_Trunc::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            *res = (*a) * (ll)(b * IE);
+            // *res = (*a) * (ll)(b * IE);
+            // we can directly perform local truncation by IE since the learning rate etc. are constants
+            *res = (*a) * (ll)(b * IE)/ IE; 
             break;
         case 2:
             div2mP->forward();
@@ -487,22 +489,17 @@ void MathOp::Div2mP::forward() {
     switch (forwardRound) {
         case 1:
             // added by curious 2020.6.3, fix bug. each time, the variables need reinit
-            r_nd->clear();
-            r_st->clear();
-            for (int i = 0; i < m; i++) {
-                r_B[i].clear();
+            if (OFFLINE_PHASE_ON) {
+                r_nd->clear();
+                r_st->clear();
+                for (int i = 0; i < m; i++) {
+                    r_B[i].clear();
+                }
+                r->clear();
+                b->clear();
             }
-            r->clear();
-            b->clear();
             break;
         case 2:
-//            r_nd->clear();
-//            r_st->clear();
-//            for (int i = 0; i < m; i++) {
-//                r_B[i].clear();
-//            }
-//            r->clear();
-//            b->clear();
             // todo: offline
             if (OFFLINE_PHASE_ON) {
                 pRandM->forward();
@@ -984,10 +981,19 @@ void MathOp::PreMulC::forward() {
         case 5:
             {
                 // optimization: make use of memory localization
-                Mat * inverse_tmp = new Mat[k];
-                for (int i = 0; i < k; i++) {
-                    inverse_tmp[i] = u[i].inverse();
+                Mat inverse_tmp [k];
+                std::vector<std::thread> thrds;
+                int thread_num = THREAD_NUM;
+                int seg_len = ceil(k * 1.0 / thread_num);
+                for (int i = 0; i < thread_num; i++) {
+                    thrds.emplace_back(std::thread([this, i, seg_len, &inverse_tmp]() {
+                        for (int j = i*seg_len; j < (i+1)*seg_len && j < k; j++) {
+                            inverse_tmp[j] = u[j].inverse();
+                        }
+                    }));
                 }
+                for (auto& t: thrds) t.join();
+
                 for (int i = 1; i < k; i++) {
                     w[i] = w[i].dot(inverse_tmp[i-1]);
                 }
@@ -1550,7 +1556,7 @@ MathOp::Sigmoid_Mat::Sigmoid_Mat(NeuronMat *res, NeuronMat *a) {
 
     tmp = new Mat(tmp_r, tmp_c);
     reveal = new Reveal(tmp, u_st_res);
-    init(5, 4);
+    init(5, 1);
 }
 //
 void MathOp::Sigmoid_Mat::forward() {
@@ -1561,18 +1567,17 @@ void MathOp::Sigmoid_Mat::forward() {
             *u_nd = *a->getForward() - (IE >> 1);
             break;
         case 2:
-//            u_st->print();
             pLTZ_f_1->forward();
-//            u_st->print();
-            if (pLTZ_f_1->forwardHasNext()) {
+            pLTZ_f_2->forward();
+            if (pLTZ_f_1->forwardHasNext() || pLTZ_f_2->forwardHasNext()) {
                 forwardRound--;
             }
             break;
         case 3:
-            pLTZ_f_2->forward();
-            if (pLTZ_f_2->forwardHasNext()) {
-                forwardRound--;
-            }
+            // pLTZ_f_2->forward();
+            // if (pLTZ_f_2->forwardHasNext()) {
+            //     forwardRound--;
+            // }
             break;
         case 4:
             // added by curious 2020.6.4 -1 --> -IE
@@ -1583,7 +1588,6 @@ void MathOp::Sigmoid_Mat::forward() {
             break;
         case 5:
             pDegRed_res->forward();
-//            pDiv2mP_aux->forward();
             if (pDegRed_res->forwardHasNext()) {
                 forwardRound--;
             }
@@ -1604,18 +1608,15 @@ void MathOp::Sigmoid_Mat::forward() {
 void MathOp::Sigmoid_Mat::back() {
     backRound++;
     switch (backRound) {
-        // case 1:
-        //     *a->getGrad() = *res->getGrad();
-        //     break;
         case 1:
-//            *a->getBack() = res->getBack()->dot(*res->getAux());
-            *a->getGrad() = res->getForward()->dot(res->getForward()->oneMinus_IE());
+            // Case: Cross Entropy + Sigmoid, the backward gradient can be simplified to (y_out - y)
+            *a->getGrad() = *res->getGrad();
             break;
+//         case 1:
+//             *a->getBack() = res->getBack()->dot(*res->getAux());
+//             *a->getGrad() = res->getForward()->dot(res->getForward()->oneMinus_IE());
+//             break;
         case 2:
-//            pDiv2mP_a->forward();
-//            if (pDiv2mP_a->forwardHasNext()) {
-//                backRound--;
-//            }
             pDiv2mP_b1->forward();
             if (pDiv2mP_b1->forwardHasNext()) {
                 backRound--;

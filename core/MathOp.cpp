@@ -503,10 +503,13 @@ void MathOp::Div2mP::forward() {
 //            }
 //            r->clear();
 //            b->clear();
-            // pRandM->forward();
-            // if (pRandM->forwardHasNext()) {
-            //     forwardRound--;
-            // }
+            // todo: offline
+            if (OFFLINE_PHASE_ON) {
+                pRandM->forward();
+                if (pRandM->forwardHasNext()) {
+                    forwardRound--;
+                }
+            }
             break;
         case 3:
             *r = *r_nd * (1ll << m) + *r_st;
@@ -812,7 +815,7 @@ MathOp::Mod2::Mod2(Mat *res, Mat *a, int k) {
     c = new Mat(tmp_r, tmp_c);
     pRandM = new PRandM(r_nd, r_st, r_B, k, 1);
     reveal = new Reveal(c, c);
-    init(4, 0);
+    init(5, 0);
 }
 
 void MathOp::Mod2::forward() {
@@ -823,22 +826,26 @@ void MathOp::Mod2::forward() {
             r_st->clear();
             r_B[0].clear();
             c->clear();
-
-            pRandM->forward();
-            if (pRandM->forwardHasNext()) {
-                forwardRound--;
-            }
+            // todo: offline
             break;
         case 2:
-            *c = *a + (1ll << BIT_P_LEN - 1) + (*r_nd * 2) + *r_st;
+            if (OFFLINE_PHASE_ON) {
+                pRandM->forward();
+                if (pRandM->forwardHasNext()) {
+                    forwardRound--;
+                }
+            }
             break;
         case 3:
+            *c = *a + (1ll << BIT_P_LEN - 1) + (*r_nd * 2) + *r_st;
+            break;
+        case 4:
             reveal->forward();
             if (reveal->forwardHasNext()) {
                 forwardRound--;
             }
             break;
-        case 4:
+        case 5:
             *res = (*c & 1) + *r_st - (*c & 1).dot(*r_st) * 2;
             r_nd->clear();
             r_st->clear();
@@ -933,25 +940,29 @@ void MathOp::PreMulC::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            for (int i = 0; i < k; i++) {
-                pRandFld_r[i]->forward();
-                pRandFld_s[i]->forward();
-            }
-            for (int i = 0; i < k; i++) {
-                if (pRandFld_r[i]->forwardHasNext() || pRandFld_s[i]->forwardHasNext()) {
-                    forwardRound--;
-                    break;
+             if (OFFLINE_PHASE_ON) {
+                for (int i = 0; i < k; i++) {
+                    pRandFld_r[i]->forward();
+                    pRandFld_s[i]->forward();
+                }
+                for (int i = 0; i < k; i++) {
+                    if (pRandFld_r[i]->forwardHasNext() || pRandFld_s[i]->forwardHasNext()) {
+                        forwardRound--;
+                        break;
+                    }
                 }
             }
             break;
         case 2:
-            for (int i = 0; i < k; i++) {
-                pMulPub_st[i]->forward();
-            }
-            for (int i = 0; i < k; i++) {
-                if (pMulPub_st[i]->forwardHasNext()) {
-                    forwardRound--;
-                    break;
+            if (OFFLINE_PHASE_ON) {
+                for (int i = 0; i < k; i++) {
+                    pMulPub_st[i]->forward();
+                }
+                for (int i = 0; i < k; i++) {
+                    if (pMulPub_st[i]->forwardHasNext()) {
+                        forwardRound--;
+                        break;
+                    }
                 }
             }
             break;
@@ -971,11 +982,18 @@ void MathOp::PreMulC::forward() {
             }
             break;
         case 5:
-            for (int i = 1; i < k; i++) {
-                w[i] = w[i].dot(u[i-1].inverse());
-            }
-            for (int i = 0; i < k; i++) {
-                z[i] = s[i].dot(u[i].inverse());
+            {
+                // optimization: make use of memory localization
+                Mat * inverse_tmp = new Mat[k];
+                for (int i = 0; i < k; i++) {
+                    inverse_tmp[i] = u[i].inverse();
+                }
+                for (int i = 1; i < k; i++) {
+                    w[i] = w[i].dot(inverse_tmp[i-1]);
+                }
+                for (int i = 0; i < k; i++) {
+                    z[i] = s[i].dot(inverse_tmp[i]);
+                }
             }
             break;
         case 6:
@@ -1036,11 +1054,12 @@ void MathOp::BitLT::forward() {
     switch (forwardRound) {
         case 1:
             for (int i = 0; i < k; i++) {
-                d_B[i] = a->get_bit(i) + b_B[i] - a->get_bit(i).dot(b_B[i]) * 2; // d_B[k-1-i] -> d_B[i]
+                d_B[i] = a->get_bit(i) + b_B[i] - a->get_bit(i).dot(b_B[i]) * 2 + 1; // d_B[k-1-i] -> d_B[i]
             }
-            for (int i = 0; i < k; i++) {
-                d_B[i] = d_B[i] + 1;
-            }
+            // for (int i = 0; i < k; i++) {
+            //     d_B[i] = d_B[i] + 1;
+            // }
+
             // inverse input, considering SufMul
             for (int j = 0; j < k; ++j) {
                 d_B_inverse[j] = d_B[k - 1 - j];
@@ -1147,10 +1166,12 @@ void MathOp::Mod2m::forward() {
 //            }
 //            u->clear();
 //            b->clear();
-            // pRandM->forward();
-            // if (pRandM->forwardHasNext()) {
-            //     forwardRound--;
-            // }
+            if (OFFLINE_PHASE_ON) {
+                pRandM->forward();
+                if (pRandM->forwardHasNext()) {
+                    forwardRound--;
+                }
+            }
             break;
         case 2:
             // todo: m+r > q 的问题
@@ -1315,9 +1336,11 @@ void MathOp::EQZ::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            pRandM->forward();
-            if (pRandM->forwardHasNext()) {
-                forwardRound--;
+            if (OFFLINE_PHASE_ON) {
+                pRandM->forward();
+                if (pRandM->forwardHasNext()) {
+                    forwardRound--;
+                }
             }
             break;
         case 2:
@@ -1581,6 +1604,9 @@ void MathOp::Sigmoid_Mat::forward() {
 void MathOp::Sigmoid_Mat::back() {
     backRound++;
     switch (backRound) {
+        // case 1:
+        //     *a->getGrad() = *res->getGrad();
+        //     break;
         case 1:
 //            *a->getBack() = res->getBack()->dot(*res->getAux());
             *a->getGrad() = res->getForward()->dot(res->getForward()->oneMinus_IE());

@@ -9,7 +9,7 @@
 int node_type;
 SocketManager::SMMLF tel;
 string ips[]={"127.0.0.1","127.0.0.1","127.0.0.1"};
-int  ports[]={1234,1235,1236};
+int  ports[]={13579,13580,13581};
 int globalRound;
 int main(int argc, char** argv) {
     srand(time(NULL)); // random seed
@@ -26,7 +26,11 @@ int main(int argc, char** argv) {
 
     Player::init();
     IOManager::init();
-    tel.init(ips,ports);
+    if (!LOCAL_TEST) {
+        tel.init(ips,ports);
+    } else {
+        tel.init();
+    }
 
     /** LSTM **/
     // LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
@@ -41,11 +45,17 @@ int main(int argc, char** argv) {
     /** Three-layer Model **/
     // bp->graph();
 
-    /** Logisitc Regression Model **/
-    // bp->logistic_graph();
-
-    /** Linear Regression Model **/
-    bp->linear_graph();
+switch (GRAPH_TYPE)
+    {
+    case LOGISTIC:
+        bp->logistic_graph();
+        break;
+    case LINEAR:
+        bp->linear_graph();
+        break;
+    default:
+        break;
+    }
     bp->train();
     return 0;
 }

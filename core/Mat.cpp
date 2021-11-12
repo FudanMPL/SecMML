@@ -200,6 +200,7 @@ Mat Mat::operator-(ll128 b) {
     return ret;
 }
 
+// Base implementation, with complexity of O(N^3)
 Mat Mat::operator*(const Mat &a) {
     int tmp_c;
     tmp_c = a.cols();
@@ -251,6 +252,7 @@ Mat Mat::operator*(const Mat &a) {
             }
         }
     }
+    // Standard implementation 
     // for (int j = 0; j < tmp_c; j++) {
     //     for (int i = 0; i < r; i++) {
     //         switch (pair_order_type(this, &a)) {
@@ -378,6 +380,20 @@ Mat Mat::dot(const Mat &a) {
     for (int i = 0; i < l; i++) {
         ret.val[i] = val[i] * a.val[i];
     }
+
+    // Multithread version
+    // std::vector<std::thread> thrds;
+    // int thread_num = 2;
+    // int seg_len = ceil(l*1.0 / thread_num);
+    // for (int idx = 0; idx < thread_num; idx++) {
+    //     thrds.emplace_back(std::thread([this, idx, l, seg_len, a, &ret]() {
+    //         for (int j = idx*seg_len; j < (idx+1)*seg_len && j < l; j++) {
+    //             ret.val[j] = val[j] * a.val[j];
+    //         }
+    //     }));
+    // }
+    // for (auto& t: thrds) t.join();
+
     ret.residual();
     return ret;
 }

@@ -70,6 +70,7 @@ void BPGraph::LR::graph() {
 }
 
 void BPGraph::LR::linear_graph() {
+    DBGprint("Linear Regression constructor\n");
     int hidden_num = 1;
     int output_num = 1;
     input = nn->addnode(D+1, B, NeuronMat::NODE_INPUT);
@@ -113,10 +114,11 @@ void BPGraph::LR::linear_graph() {
     nn->reveal_init(out_sig);
     /// if the output is secret-shared as well
     nn->reveal_init(output);
-    nn->output_init(st_w);
+    // nn->output_init(st_w);
 }
 
 void BPGraph::LR::logistic_graph() {
+    DBGprint("Logistic Regression constructor\n");
     int hidden_num = 1;
     int output_num = 1;
     input = nn->addnode(D+1, B, NeuronMat::NODE_INPUT);
@@ -134,7 +136,11 @@ void BPGraph::LR::logistic_graph() {
     DBGprint("initialized!\n");
 
     nn->addOpMul_Mat(st_mul, st_w, input);
-    nn->addOpSigmoid(out_sig,st_mul);
+    if(ACTIVATION==SIGMOID){
+        nn->addOpSigmoid(out_sig,st_mul);
+    }else if (ACTIVATION==TANH){
+        nn->addOpHybrid_Tanh(out_sig,st_mul);
+    }
 
     nn->addOpMeanSquaredLoss(sd, output, out_sig);
     nn->addOpSimilar(argmax, output, out_sig);
@@ -149,14 +155,17 @@ void BPGraph::LR::train() {
     Mat x_batch(D + 1, B), y_batch(1, B);
     clock_train = new Constant::Clock(CLOCK_TRAIN);
     globalRound = 0;
+    double IOtime=0;
     // test();
     cout << "Train\n";
     for (int i = 0; i < 110000 && i < TRAIN_ITE; i++) {
         signal(SIGINT, SIG_DFL);
         globalRound++;
+        IOtime-=clock_train->get();
         next_batch(x_batch, i * B, train_data, N);
         next_batch(y_batch, i * B, train_label, N);
         feed(nn, x_batch, y_batch, input, output);
+        IOtime+=clock_train->get();
         {
             nn->epoch_init();
             while (nn->forwardHasNext()) {
@@ -173,7 +182,7 @@ void BPGraph::LR::train() {
         if ((i+1)%PRINT_PRE_ITE == 0) {
             test();
             print_perd(i+1);
-            
+            DBGprint("IOTime: %.3f\n",IOtime);
             
         }
     }

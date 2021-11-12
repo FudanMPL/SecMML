@@ -38,12 +38,25 @@
 #endif
 
 #define B 128
+#define D 784
+#define PRINT_PRE_ITE 100
+
+#define OFFLINE_PHASE_ON 0
+#define LOCAL_TEST 1
+#define GRAPH_TYPE 0
+#define ACTIVATION 0
+
+#define SIGMOID 0
+#define TANH 1
+
+#define LINEAR 0
+#define LOGISTIC 1
 
 #define LEAKEY_RELU_BIAS IE/2
 #define MOD 100000000000000003ll
 #define N 60000
 #define M 3
-#define D 784
+
 #define L 2
 // LSTM
 #define D2 D/L
@@ -64,7 +77,8 @@
 #define DECIMAL_PLACES 20
 #define HEADER_LEN_OPT 2
 #define TRAIN_ITE 10000
-#define PRINT_PRE_ITE 100
+
+#define THREAD_NUM 20
 
 #define MatColMajor 0
 #define MatRowMajor 1
@@ -73,6 +87,8 @@
 #define MM_NT 1
 #define MM_TN 2
 #define MM_TT 3
+
+
 
 // Markov training
 #define NGRAM 4

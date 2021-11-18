@@ -16,7 +16,7 @@
 // Multi thread configuration
 #include <thread>
 
-extern int node_type;
+// extern int node_type;
 extern SocketOnline *socket_io[M][M];
 extern Player player[M];
 extern Mat metadata;

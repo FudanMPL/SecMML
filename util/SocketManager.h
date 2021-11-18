@@ -8,7 +8,7 @@
 #include "../Constant.h"
 #include "SocketOnline.h"
 
-extern int node_type;
+// extern int node_type;
 
 class SocketManager {
 public:

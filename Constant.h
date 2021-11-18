@@ -121,6 +121,8 @@ typedef long long ll;       // 64-bit
 typedef __int128_t ll128;   // 128-bit
 typedef __float128 ff128;
 
+extern int node_type;
+extern int globalRound;
 extern int DBGtest;
 class Constant {
 public:

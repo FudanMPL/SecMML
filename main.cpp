@@ -6,11 +6,6 @@
 #include "machine_learning/BPGraph.h"
 #include "machine_learning/LSTMGraph.h"
 
-int node_type;
-SocketManager::SMMLF tel;
-string ips[]={"127.0.0.1","127.0.0.1","127.0.0.1"};
-int  ports[]={13579,13580,13581};
-int globalRound;
 int main(int argc, char** argv) {
     srand(time(NULL)); // random seed
     DBGtest=0;
@@ -26,6 +21,9 @@ int main(int argc, char** argv) {
 
     Player::init();
     IOManager::init();
+    SocketManager::SMMLF tel;
+    string ips[]={"127.0.0.1","127.0.0.1","127.0.0.1"};
+    int  ports[]={13579,13580,13581};
     if (!LOCAL_TEST) {
         tel.init(ips,ports);
     } else {

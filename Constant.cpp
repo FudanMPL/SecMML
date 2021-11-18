@@ -4,6 +4,8 @@
 
 #include "Constant.h"
 
+int node_type;
+int globalRound;
 int DBGtest;
 
 ll Constant::Clock::global_clock[101] = {0};

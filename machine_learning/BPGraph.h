@@ -9,7 +9,7 @@
 #include "NN.h"
 #include "../core/Player.h"
 
-extern int node_type;
+// extern int node_type;
 
 class BPGraph {
 public:

@@ -36,7 +36,9 @@ There are two practical situations as follow:
 
 * `python_lib/`: Machine learning algorithms built from interfaces for Python: neural networks, linear regression and logistic regression.
 
-* `MPL_lib.i`: Define the interfaces for Python.
+* `queqiao_wrapper.cpp`: The topmost wrapper code that defines the interfaces for Python.
+
+* `*_wrapper.cpp`: Wrapper code for corresponding classes.
 
 ## Running
 
@@ -92,23 +94,34 @@ Here take training a linear regression model among three parties as an example
 
 * Install dependency:
 
-  `sudo apt install swig`
+  `pip install pybind11[global]`
 
 * Compile the dynamic library:
     - `cd SecMML`
-    - `cmake -DMPL_LIB=ON .`
+    - `cmake -Dqueqiao=ON .`
     - `make`
 
-* Choose the machine learning model (`MPL.py`):
+* Choose the machine learning model (`queqiao.py`):
     - Linear Regression Model: model = linear_regression.graph(io)
     - Logistic Regression Model: model = logistic_regression.graph(io)
     - Three-layer Model: model = bp_nn.graph(io)
     - LSTM: model = lstm_nn.graph(io)
 
 * Start three processes and input the party index, respectively:
-    - `python3 MPL.py`
+    - `python3 queqiao.py`
     - `Please enter party index:`
     - Enter 0,1,...,M-1 for each process in order.
+
+* Support IntelliSense features of IDE:
+    - Generate stub file for queqiao:
+      ```
+      pip install mypy 
+      stubgen -m queqiao -o ./
+      ```
+    - Find the include path of pybind11: 
+      ```
+      python3 -m pybind11 --includes
+      ```
 
 ## Help
 

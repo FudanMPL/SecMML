@@ -7,7 +7,7 @@
 
 #include "../Constant.h"
 
-extern int globalRound;
+// extern int globalRound;
 
 class Op {
 protected:

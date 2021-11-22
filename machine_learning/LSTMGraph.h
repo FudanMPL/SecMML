@@ -10,7 +10,7 @@
 #include "../core/Player.h"
 #include "Cell.h"
 
-extern int node_type;
+// extern int node_type;
 
 class LSTMGraph {
 

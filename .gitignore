@@ -10,5 +10,5 @@ cmake-build-debug/
 *.level
 
 __pycache__/
-MPL_lib.py
-_MPL_lib.so
+*queqiao*.so
+*.pyi

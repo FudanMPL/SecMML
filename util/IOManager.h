@@ -7,7 +7,7 @@
 #include <cassert>
 #include "../core/Mat.h"
 #include "../Constant.h"
-extern int node_type;
+// extern int node_type;
 class IOManager {
 public:
     static Mat train_data, train_label;

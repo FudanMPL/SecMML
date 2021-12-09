@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-09 15:37:15
+ * @LastEditTime: 2021-12-09 15:57:20
  */
 
 #include <cstdio>
@@ -17,8 +17,10 @@ class IOconfig{
         static std::string constant_file_path;
         static std::string party_file_path;
         static Json::Value init();
+        //解析，new constant
         class Constant{
             public:
+                Constant(Json::Value constant_root) : B(constant_root["B"].asInt()){};
                 Constant(int _B) : B(_B){};
                 const int B;
         };
@@ -45,6 +47,7 @@ int main()
     Json::Value root;
     cout<<IOconfig::constant_file_path<<endl;
     root = IOconfig::init();
-    IOconfig::Constant c(root["B"].asInt());
+    cout << root["B"] << endl;
+    IOconfig::Constant c(root);
     cout<<c.B<<endl;
 }   

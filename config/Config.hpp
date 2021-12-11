@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-09 18:00:13
+ * @LastEditTime: 2021-12-09 19:09:48
  */
 
 #include <cstdio>
@@ -15,6 +15,7 @@
 class Config{
     public:
         static std::string file_name;
+        static Config * config_instance;
         static Config* init(){
             if(config_instance == nullptr){
                 Json::Value root;
@@ -128,7 +129,8 @@ class Config{
         const int CLOCK_TRAIN;
         const int FEATURE_DIM;
     private:
-        static Config * config_instance;
+        
 };
+
 Config * Config::config_instance = nullptr;
 std::string Config::file_name = "/home/txy/SecMML/config/parameter/constant.json";

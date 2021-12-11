@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-09 19:09:48
+ * @LastEditTime: 2021-12-11 14:44:07
  */
 
 #include <cstdio>
@@ -11,24 +11,14 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 
 class Config{
     public:
         static std::string file_name;
         static Config * config_instance;
-        static Config* init(){
-            if(config_instance == nullptr){
-                Json::Value root;
-                Json::Reader reader;
-                std::ifstream ifs(file_name);//open file example.json
-                if(!reader.parse(ifs, root)){
-                    std::cout<<"fail to parse"<<std::endl;
-                }
-                config_instance = new Config(root);
-            }
-            return config_instance;
-        }
-        Config(Json::Value root)  : B(root["B"].asInt()), 
+        static Config* init();
+        Config(Json::Value root, std::vector<std::string> ip, std::vector<int> port)  : B(root["B"].asInt()), 
                                     D(root["D"].asInt()),
                                     PRINT_PRE_ITE(root["PRINT_PRE_ITE"].asInt()),
                                     OFFLINE_PHASE_ON(root["OFFLINE_PHASE_ON"].asInt()),
@@ -77,7 +67,9 @@ class Config{
                                     ALPHABET_SIZE(root["ALPHABET_SIZE"].asInt()),
                                     CLOCK_MAIN(root["CLOCK_MAIN"].asInt()),
                                     CLOCK_TRAIN(root["CLOCK_TRAIN"].asInt()),
-                                    FEATURE_DIM(root["FEATURE_DIM"].asInt()){};
+                                    FEATURE_DIM(root["FEATURE_DIM"].asInt()),
+                                    IP(ip),
+                                    PORT(port){};
         const int B;
         const int D;
         const int PRINT_PRE_ITE;
@@ -92,7 +84,7 @@ class Config{
         const int LEAKEY_RELU_BIAS;
         const long MOD;
         const int N;
-        const int M;
+        const int M; //number of parties
         const int L;
         const int D2;
         const int CH;
@@ -128,9 +120,8 @@ class Config{
         const int CLOCK_MAIN;
         const int CLOCK_TRAIN;
         const int FEATURE_DIM;
+        const std::vector<std::string> IP;
+        const std::vector<int> PORT;
     private:
         
 };
-
-Config * Config::config_instance = nullptr;
-std::string Config::file_name = "/home/txy/SecMML/config/parameter/constant.json";

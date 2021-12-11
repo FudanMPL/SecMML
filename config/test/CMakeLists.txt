@@ -4,7 +4,7 @@ project(test)
  
 include_directories(/home/txy/SecMML/config)   #加入json库的路径
  
-add_executable(test test.cpp ../Config.hpp)
+add_executable(test test.cpp ../Config.hpp ../Config.cpp)
 
 
 target_link_libraries(test /home/txy/SecMML/config/json/libjsoncpp.so) 

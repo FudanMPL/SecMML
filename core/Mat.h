@@ -10,7 +10,7 @@
 
 class Mat {
     int r, c;
-    int order;
+    int order;   //0为列存 1为行存
     vector<ll128> val;
 public:
     Mat(int r, int c);
@@ -90,7 +90,7 @@ public:
     void residual();
     void AddDot(int k, ll128* x, int incx, ll128* y, ll128* gamma);
     void sign();
-    void reoeder();
+    void reorder();
     void transorder();
     void truncated_normal();
     void truncated_normal(double mean, double stddev);

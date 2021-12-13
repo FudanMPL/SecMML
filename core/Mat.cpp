@@ -27,6 +27,8 @@ double generateGaussianNoise(double mu, double sigma) {
     return z0 * sigma + mu;
 }
 
+// Construct Function
+
 Mat::Mat(int r, int c) {
     this->r = r;
     this->c = c;
@@ -45,6 +47,8 @@ Mat::Mat() {
     order = 0;
 }
 
+//Copy Constuct Fucntion
+
 Mat::Mat(const Mat &a) {
     r = a.rows();
     c = a.cols();
@@ -53,9 +57,13 @@ Mat::Mat(const Mat &a) {
     val.assign(a.val.begin(), a.val.end());
 }
 
+//Deconstruct Function
+
 Mat::~Mat() {
     order = 0;
 }
+
+//Initialization Function
 
 void Mat::init(int r, int c) {
     this->r = r;
@@ -64,35 +72,67 @@ void Mat::init(int r, int c) {
     val.resize(r * c);
 }
 
-ll128 &Mat::operator()(int a, int b) {
-    return val[b * r + a];
+//Overload Opeartor '()'
+
+ll128 &Mat::operator()(int row, int col) {
+    if(row >= 0 && row < r && col >= 0 && col < c)
+        return val[col * r + row];
+    else{
+        DBGprint("Function operator() The row value or column value entered is out of range\n");
+    }
 }
 
-ll128 Mat::get(int a, int b) const {
-    return val[b * r + a];
+//Get the value of row and column 
+
+ll128 Mat::get(int row, int col) const {
+     if(row >= 0 && row < r && col >= 0 && col < c)
+        return val[col * r + row];
+    else{
+        DBGprint("Function get The row value or column value entered is out of range\n");
+    }
 }
+
+//Get the value of the a-th element in the matrix
 
 ll128 &Mat::getVal(int a) {
-    return val[a];
+    if(a >= 0 && a < r * c)
+        return val[a];
+    else{
+        DBGprint("Function getVal The input is out of range\n");
+    }
 }
 
+//Set the value of the index-th element to v
+
 void Mat::setVal(int index, ll128 v) {
-    val[index] = v;
+    if(index >= 0 && index < r * c)
+        val[index] = v;
+    else{
+        DBGprint("Function setVal The input is out of range\n");
+    }
 }
+
+//Get the number of rows of the matrix
 
 int Mat::rows() const {
     return r;
 }
 
+//Get the number of columns of the matrix
+
 int Mat::cols() const {
     return c;
 }
+
+//Get the size of the matrix
 
 int Mat::size() const {
     return r * c;
 }
 
-Mat &Mat::operator=(const Mat &a) {
+//Overload the Operator '=' used for assignment between matrices
+
+Mat &Mat::operator=(const Mat &a) {     
     r = a.rows();
     c = a.cols();
     order = a.order;
@@ -102,15 +142,27 @@ Mat &Mat::operator=(const Mat &a) {
     return *this;
 }
 
-Mat &Mat::operator=(vector<ll128> &a) {
-    int l = a.size();
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            this->operator()(i, j) = a[l];
-    return *this;
-}
+//Overload the Operator '=' Assign values to matrix with vector a
 
-Mat &Mat::operator=(char *&p) {
+Mat &Mat::operator=(vector<ll128> &a) {
+    int l = 0;
+    if(a.size() >= r * c)
+    {
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                this->operator()(i, j) = a[l++];
+        return *this;
+    }
+    else
+    {
+        DBGprint("Function operator= The input vector is too small\n");
+    }
+}
+    
+
+//Overload the Operator '=' Used for assignment after socket receives data
+
+Mat &Mat::operator=(char *&p) {         //用于socket收到数据后的赋值
     int pr = Constant::Util::char_to_int(p);
     int pc = Constant::Util::char_to_int(p);
     this->r = pr;
@@ -124,18 +176,31 @@ Mat &Mat::operator=(char *&p) {
     return *this;
 }
 
-bool Mat::operator==(Mat p) {
+//Overload the operator '==' Judge whether the matrices are equal
+
+bool Mat::operator==(Mat p) {       
     int l = r * c;
 //    bool match = true;
-    for (int i = 0; i < l; i++) {
-        if (val[i] != p.getVal(i)) {
-            return false;
+    if(p.rows() == r && p.cols() == c)
+    {
+        for (int i = 0; i < l; i++) {
+            if (val[i] != p.getVal(i)) {
+                return false;
+            }
         }
+        return true;
     }
-    return true;
+    else
+    {
+        DBGprint("Function operator== The row or column between the two matrices is not equal\n");
+        return false;
+    }
+    
 }
 
-Mat Mat::transpose() const {
+//Matrix transpose
+
+Mat Mat::transpose() const {     
     Mat ret(c, r);
     for (int i = 0; i < r; i++) {
         for (int j = 0; j < c; j++) {
@@ -145,27 +210,48 @@ Mat Mat::transpose() const {
     return ret;
 }
 
-Mat Mat::operator+(const Mat &a) {
-    Mat ret(r, c);
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] + a.val[i];
-        ret.val[i] = ret.val[i] >= MOD ? ret.val[i] - MOD : ret.val[i];
-        ret.val[i] = ret.val[i] <= -MOD ? ret.val[i] + MOD : ret.val[i];
+//Overload the operator '+' Used for matrix addition
+
+Mat Mat::operator+(const Mat &a) {     //矩阵加法
+    if(a.cols() == c && a.rows() == r)
+    {
+        Mat ret(r, c);
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = val[i] + a.val[i];
+            ret.val[i] = ret.val[i] >= MOD ? ret.val[i] - MOD : ret.val[i];
+            ret.val[i] = ret.val[i] <= -MOD ? ret.val[i] + MOD : ret.val[i];
+        }
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function operator+ The input matrix format is illegal\n");
+    }
+   
 }
 
-void Mat::operator+=(const Mat &a) {
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        val[i] += a.val[i];
-        val[i] = val[i] >= MOD ? val[i] - MOD : val[i];
-        val[i] = val[i] <= -MOD ? val[i] + MOD : val[i];
+//Overload the operator '+='
+
+void Mat::operator+=(const Mat &a) {   //矩阵+=操作
+    if(a.cols() == c && a.rows() == r)
+    {
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            val[i] += a.val[i];
+            val[i] = val[i] >= MOD ? val[i] - MOD : val[i];
+            val[i] = val[i] <= -MOD ? val[i] + MOD : val[i];
+        }
+    }
+    else
+    {
+        DBGprint("Function operator += The input matrix format is illegal\n");
     }
 }
 
-Mat Mat::operator+(const ll128 &b) {
+//Add b to each element in the matrix and map it to the field
+
+Mat Mat::operator+(const ll128 &b) {     //矩阵每个数都加上b
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -176,19 +262,29 @@ Mat Mat::operator+(const ll128 &b) {
     return ret;
 }
 
+//Overload the operator '-' Used for matrix subtraction
 
-Mat Mat::operator-(const Mat &a) {
-    Mat ret(r, c);
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] - a.val[i];
-        ret.val[i] = ret.val[i] > MOD ? ret.val[i] - MOD : ret.val[i];
-        ret.val[i] = ret.val[i] < -MOD ? ret.val[i] + MOD : ret.val[i];
+Mat Mat::operator-(const Mat &a) {      //矩阵减法操作
+    if(a.cols() == c && a.rows() == r)
+    {
+        Mat ret(r, c);
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = val[i] - a.val[i];
+            ret.val[i] = ret.val[i] > MOD ? ret.val[i] - MOD : ret.val[i];
+            ret.val[i] = ret.val[i] < -MOD ? ret.val[i] + MOD : ret.val[i];
+        }
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function operator- The input matrix format is illegal\n");
+    }
 }
 
-Mat Mat::operator-(ll128 b) {
+//Subtract b to each element in the matrix and map it to the field
+
+Mat Mat::operator-(ll128 b) {    //矩阵每个数减去b
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -201,87 +297,100 @@ Mat Mat::operator-(ll128 b) {
 }
 
 // Base implementation, with complexity of O(N^3)
-Mat Mat::operator*(const Mat &a) {
-    int tmp_c;
-    tmp_c = a.cols();
-    Mat ret(r, a.cols());
-    int i, j;
-    ll128 tmp = 0;
-    if (pair_order_type(this, &a) == MM_NT){
-        for (int k = 0; k < c; k++){
-            for (int j = 0; j < tmp_c; j++){
-                tmp = a.val[k * tmp_c + j];
-                for (int i = 0; i < r; i++){
-                    ret.val[j * r + i] += val[k * r + i] * tmp;
-                }
-            }
-   
-        }
-    }
-    if (pair_order_type(this, &a) == MM_NN){
-        for (int j = 0; j < tmp_c; j++){
+//Multiplication operation of different storage methods of matrix
+
+
+Mat Mat::operator*(const Mat &a) {     //不同矩阵存储方式的乘法操作
+    if(c == a.rows())
+    {
+        int tmp_c;
+        tmp_c = a.cols();
+        Mat ret(r, a.cols());
+        int i, j;
+        ll128 tmp = 0;
+        if (pair_order_type(this, &a) == MM_NT){     // Column storage multiply row storage
             for (int k = 0; k < c; k++){
-                tmp = a.val[j * c + k];
+                for (int j = 0; j < tmp_c; j++){
+                    tmp = a.val[k * tmp_c + j];
+                    for (int i = 0; i < r; i++){
+                        ret.val[j * r + i] += val[k * r + i] * tmp;
+                    }
+                }
+    
+            }
+        }
+        if (pair_order_type(this, &a) == MM_NN){     //Column storage multiply column storage
+            for (int j = 0; j < tmp_c; j++){
+                for (int k = 0; k < c; k++){
+                    tmp = a.val[j * c + k];
+                    for (int i = 0; i < r; i++){
+                        ret.val[j * r + i] += val[k * r + i] * tmp;
+                    }
+                }
+    
+            }
+        }
+        if (pair_order_type(this, &a) == MM_TN){     //Row storage multiply column storage
+            for (int j = 0; j < tmp_c; j++){
                 for (int i = 0; i < r; i++){
-                    ret.val[j * r + i] += val[k * r + i] * tmp;
+                    tmp = ret.val[j * r + i];
+                    for (int k = 0; k < c; k++){
+                        tmp += val[i * c + k] * a.val[j * c + k];
+                    }
+                    ret.val[j * r + i] += tmp;
                 }
-            }
-   
-        }
-    }
-    if (pair_order_type(this, &a) == MM_TN){
-        for (int j = 0; j < tmp_c; j++){
-            for (int i = 0; i < r; i++){
-                tmp = ret.val[j * r + i];
-                for (int k = 0; k < c; k++){
-                    tmp += val[i * c + k] * a.val[j * c + k];
-                }
-                ret.val[j * r + i] += tmp;
-            }
-   
-        }
-    }
-    if (pair_order_type(this, &a) == MM_TT){
-        for (int j = 0; j < tmp_c; j++){
-            for (int i = 0; i < r; i++){
-                tmp = ret.val[j * r + i];
-                for (int k = 0; k < c; k++){
-                    tmp += val[i * c + k] * a.val[k * tmp_c + j];
-                }
-                ret.val[j * r + i] += tmp;
+    
             }
         }
+        if (pair_order_type(this, &a) == MM_TT){     //Row storage multiply row storage
+            for (int j = 0; j < tmp_c; j++){
+                for (int i = 0; i < r; i++){
+                    tmp = ret.val[j * r + i];
+                    for (int k = 0; k < c; k++){
+                        tmp += val[i * c + k] * a.val[k * tmp_c + j];
+                    }
+                    ret.val[j * r + i] += tmp;
+                }
+            }
+        }
+        // Standard implementation 
+        // for (int j = 0; j < tmp_c; j++) {
+        //     for (int i = 0; i < r; i++) {
+        //         switch (pair_order_type(this, &a)) {
+        //             case MM_NN:
+        //                 for (int k = 0; k < c; k++) {
+        //                     ret.val[j * r + i] += val[k * r + i] * a.val[j * c + k];
+        //                 }
+        //                 break;
+        //             case MM_NT:
+        //                 for (int k = 0; k < c; k++) {
+        //                     ret.val[j * r + i] += val[k * r + i] * a.val[k * tmp_c + j];
+        //                 }
+        //                 break;
+        //             case MM_TN:
+        //                 for (int k = 0; k < c; k++) {
+        //                     ret.val[j * r + i] += val[i * c + k] * a.val[j * c + k];
+        //                 }
+        //                 break;
+        //             case MM_TT:
+        //                 for (int k = 0; k < c; k++) {
+        //                     ret.val[j * r + i] += val[i * c + k] * a.val[k * tmp_c + j];
+        //                 }
+        //                 break;
+        //         }
+        //     }
+        // }
+        ret.residual();
+        return ret;
     }
-    // Standard implementation 
-    // for (int j = 0; j < tmp_c; j++) {
-    //     for (int i = 0; i < r; i++) {
-    //         switch (pair_order_type(this, &a)) {
-    //             case MM_NN:
-    //                 for (int k = 0; k < c; k++) {
-    //                     ret.val[j * r + i] += val[k * r + i] * a.val[j * c + k];
-    //                 }
-    //                 break;
-    //             case MM_NT:
-    //                 for (int k = 0; k < c; k++) {
-    //                     ret.val[j * r + i] += val[k * r + i] * a.val[k * tmp_c + j];
-    //                 }
-    //                 break;
-    //             case MM_TN:
-    //                 for (int k = 0; k < c; k++) {
-    //                     ret.val[j * r + i] += val[i * c + k] * a.val[j * c + k];
-    //                 }
-    //                 break;
-    //             case MM_TT:
-    //                 for (int k = 0; k < c; k++) {
-    //                     ret.val[j * r + i] += val[i * c + k] * a.val[k * tmp_c + j];
-    //                 }
-    //                 break;
-    //         }
-    //     }
-    // }
-    ret.residual();
-    return ret;
+    else
+    {
+        DBGprint("Function operator* The input matrix format is illegal\n");
+    }
+ 
 }
+
+//Multiply each element in the matrix by b
 
 Mat Mat::operator*(const ll128 &b) {
     Mat ret(r, c);
@@ -292,6 +401,8 @@ Mat Mat::operator*(const ll128 &b) {
     ret.residual();
     return ret;
 }
+
+//Divide each element in the matrix by b
 
 Mat Mat::operator/(const ll128 &b) {
     Mat ret;
@@ -305,17 +416,28 @@ Mat Mat::operator/(const ll128 &b) {
     return ret;
 }
 
+//Divide each element in the matrix by each element in the corresponding position in matrix a
+
 Mat Mat::operator/(Mat a) {
-    Mat ret;
-    ret = *this;
-    ret.sign();
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] / a.val[i];
+    if(a.cols() == c && a.rows() == r)
+    {
+        Mat ret;
+        ret = *this;
+        ret.sign();
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = val[i] / a.val[i];
+        }
+        ret.residual();
+        return ret;
     }
-    ret.residual();
-    return ret;
+    else
+    {
+        DBGprint("Function operator/ The input matrix format is illegal\n");
+    }
 }
+
+//Each element in the matrix is shifted to the left by b bits
 
 Mat Mat::operator<<(int b) const {
     Mat ret(r, c);
@@ -327,6 +449,8 @@ Mat Mat::operator<<(int b) const {
     return ret;
 }
 
+//Map each element in the matrix to a signed number and shift to the right by b bits
+
 Mat Mat::operator>>(int b) const {
     Mat ret(r, c);
     int l = r * c;
@@ -335,6 +459,8 @@ Mat Mat::operator>>(int b) const {
     }
     return ret;
 }
+
+//Each element in the matrix AND b
 
 Mat Mat::operator&(int b) const {
     Mat ret(r, c);
@@ -345,14 +471,26 @@ Mat Mat::operator&(int b) const {
     return ret;
 }
 
+//Each element in the matrix AND each element in the corresponding position in matrix a
+
 Mat Mat::operator&(const Mat &a) const {
-    Mat ret(r, c);
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] & a.val[i];
+    if(a.cols() == c && a.rows() == r)
+    {
+        Mat ret(r, c);
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = val[i] & a.val[i];
+        }
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function operator& The input matrix format is illegal\n");
+    }
 }
+
+// 将矩阵中的每个数用1减去 得到的新矩阵所有数映射至域上 并返回新矩阵
+//Use 1 to substract each element in the matrix and map all the elements in the new matrix to the field return the new matrix
 
 Mat Mat:: oneMinus() {
     Mat ret(r, c);
@@ -364,6 +502,9 @@ Mat Mat:: oneMinus() {
     return ret;
 }
 
+// 将矩阵中的每个数用2的20次方减去 得到的新矩阵所有数映射至域上 并返回新矩阵
+//Use 2^20 to substract each element in the matrix and map all the elements in the new matrix to the filed return the new matrix
+
 Mat Mat::oneMinus_IE() {
     Mat ret(r, c);
     int l = r * c;
@@ -374,11 +515,24 @@ Mat Mat::oneMinus_IE() {
     return ret;
 }
 
+// 将该矩阵与矩阵a进行对应元素乘法 得到的新矩阵所有数映射至域上 并返回新矩阵
+//Each element in the matrix Multiply each element in the corresponding position in matrix 
+//and map all the elements in the new matrix to the field return the new matrix
+
 Mat Mat::dot(const Mat &a) {
-    Mat ret(r, c);
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] * a.val[i];
+    if(a.cols() == c && a.rows() == r)
+    {
+        Mat ret(r, c);
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = val[i] * a.val[i];
+        }
+        ret.residual();
+        return ret;
+    }
+    else
+    {
+        DBGprint("Function dot The input matrix format is illegal\n");
     }
 
     // Multithread version
@@ -393,38 +547,69 @@ Mat Mat::dot(const Mat &a) {
     //     }));
     // }
     // for (auto& t: thrds) t.join();
-
-    ret.residual();
-    return ret;
 }
+
+// 获取对应行的元素存入vector 返回该vector
+//Get the element of the ath row and store it in the vector return the vector
 
 vector<ll128> Mat::row(int a) {
-    vector<ll128> ret(c);
-    for (int i = 0; i < c; i++) {
-        ret[i] = get(a, i);
+    if(a < r && a >= 0)
+    {
+        vector<ll128> ret(c);
+        for (int i = 0; i < c; i++) {
+            ret[i] = get(a, i);
+        }
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function row(int a) The input is out of range\n");
+    }
 }
+
+//将vector a中的元素存入矩阵的b行
+//Store the elements in vector a into row b of the matrix
 
 void Mat::init_row(vector<ll128> a, int b) {
-    for (int i = 0; i < c; i++) {
-        operator()(b, i) = a[i];
+    if(a.size() >= c && b >= 0 && b < r)
+    {
+        for (int i = 0; i < c; i++) {
+            operator()(b, i) = a[i];
+        }
+    }
+    else
+    {
+        DBGprint("Function init_row The row input is out of range or the vector is too small\n");
     }
 }
 
+// 将矩阵前 a*b个元素取出 组成 a行b列的矩阵返回(按行取)
+//Take out a*b elements in the original matrix and compose a a*b matrix return this matrix(take by row) 
+
 Mat Mat::resize(int a, int b) {
-    Mat ret(a, b);
-    vector<ll128> temp;
-    for (int i = 0; i < r; i++)
-        for (int j = 0; j < c; j++)
-            temp.push_back(get(i, j));
-    int l = 0;
-    for (int i = 0; i < a; i++)
-        for (int j = 0; j < b; j++) {
-            ret(i, j) = temp[l++];
-        }
-    return ret;
+    if(a >= 1 && b >= 1 && a * b <= r * c)
+    {
+        Mat ret(a, b);
+        vector<ll128> temp;
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                temp.push_back(get(i, j));
+        int l = 0;
+        for (int i = 0; i < a; i++)
+            for (int j = 0; j < b; j++) {
+                ret(i, j) = temp[l++];
+            }
+        return ret;
+    }
+    else
+    {
+         DBGprint("Function resize The input is out of range\n");
+    }   
+    
 }
+
+//取出矩阵每一列元素的最大值 存入矩阵并返回
+// Take the maximum element of each column of the matrix, store it in the matrix and return the matrix 
 
 Mat Mat::argmax() {
     Mat ret(1, c);
@@ -437,6 +622,10 @@ Mat Mat::argmax() {
     }
     return ret;
 }
+
+// 判断预测值与实际值是否相同, 由于连续值,误差小于1/2认为相同 对应处元素置1 返回结果矩阵
+//Determine whether the predicted value is the same as the actual value. Because of the continuous value, 
+//if the error is less than 1/2 the corresponding element is set to 1(be thought to same) and the result matrix is returned.
 
 Mat Mat::equal(const Mat &a) {
     Mat ret(r, c);
@@ -454,14 +643,29 @@ Mat Mat::equal(const Mat &a) {
     return ret;
 }
 
+// 判断该矩阵与矩阵a是否相等,返回值为相同大小的矩阵，对于处元素相等置为1，否则置为0
+//Judge whether the matrix and matrix a are equal, the return value is a matrix of the same size
+//set to 1 for equal elements, otherwise set to 0
+
 Mat Mat::eq(const Mat &a) {
-    Mat ret(r, c);
-    int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ret.val[i] = (val[i] == a.val[i]) ? 1 : 0;
+    if(a.rows() == r && a.cols() == c)
+    {
+        Mat ret(r, c);
+        int l = r * c;
+        for (int i = 0; i < l; i++) {
+            ret.val[i] = (val[i] == a.val[i]) ? 1 : 0;
+        }
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function eq The matrix input is illegal\n");
+    }
 }
+    
+
+// 将矩阵中的数符号化
+//Convert the elements in the matrix to signed numbers
 
 Mat Mat::getSign() {
     Mat ret;
@@ -469,6 +673,8 @@ Mat Mat::getSign() {
     ret.sign();
     return ret;
 }
+
+//The element in the matrix do radical operations on the filed 
 
 Mat Mat::sqrt() {
     Mat ret(r, c);
@@ -479,6 +685,9 @@ Mat Mat::sqrt() {
     return ret;
 }
 
+// 将矩阵中的每个数在域上进行求逆运算 返回对应矩阵(注：不是求逆矩阵)
+//Invert each element in the matrix on the field and return the matrix(not inverse matrix)
+
 Mat Mat::inverse() {
     Mat ret(r, c);
     int l = r * c;
@@ -487,6 +696,9 @@ Mat Mat::inverse() {
     }
     return ret;
 }
+
+//将矩阵中的每个数在域上做平方根然后倒数
+//Take the square root of each number in the matrix on the field and then compute their reciprocal return the matrix
 
 Mat Mat::sqrt_inv() {
     Mat ret(r, c, 1);
@@ -509,6 +721,9 @@ Mat Mat::sqrt_inv() {
     ret.residual();
     return ret;
 }
+
+// 将矩阵在域上做除2运算 返回结果矩阵
+//Divide the matrix by 2 on the field return the matrix 
 
 Mat Mat::divideBy2() {
     Mat ret(r, c);
@@ -609,6 +824,9 @@ Mat Mat::tanh() {
         }
     return ret;
 }
+
+//模拟SecureML中的激活函数（大于1/2置为1，（-1/2,1/2）置为x+1/2，小于-1/2置为0）
+//Simulate the activation function in SecureML(more than 1/2 set 1) ((-1/2,1/2) set x+1/2) (less than -1/2 set 0)
 
 Mat Mat::cross_entropy() {
     Mat ret(r, c);
@@ -712,34 +930,45 @@ Mat Mat::not_eqz() const {
     return ret;
 }
 
+// 从矩阵中取出[st,ed)行 赋值给新矩阵并返回
+// Take [st,ed) row from matrix, assign to new matrix and return
+
 Mat Mat::row(int st, int ed) const {
-    Mat ret((ed - st + r) % r, c);
-    if (order == MatColMajor || 1) {
-        if (st < ed) {
-            int tmp_r = ed - st;
-            for (int i = 0; i < c; i++) {
-                copy(val.begin() + i * r + st, val.begin() + i * r + st + tmp_r, ret.val.begin() + i * tmp_r);
+    if(st >= 0 && st <= r && ed >= 0 && ed <= r && (ed - st) % r != 0)
+    {
+        Mat ret((ed - st + r) % r, c);
+        if (order == MatColMajor || 1) {
+            if (st < ed) {
+                int tmp_r = ed - st;
+                for (int i = 0; i < c; i++) {
+                    copy(val.begin() + i * r + st, val.begin() + i * r + st + tmp_r, ret.val.begin() + i * tmp_r);
+                }
+            } else {
+                int ret_r = (ed - st + r) % r;
+                int tmp_r = r - st;
+                for (int i = 0; i < c; i++) {
+                    copy(val.begin() + i * r + st, val.begin() + i * r + st + tmp_r, ret.val.begin() + i * ret_r);
+                    copy(val.begin() + i * r, val.begin() + i * r + (ret_r - tmp_r), ret.val.begin() + i * ret_r + tmp_r);
+                }
             }
         } else {
-            int ret_r = (ed - st + r) % r;
-            int tmp_r = r - st;
-            for (int i = 0; i < c; i++) {
-                copy(val.begin() + i * r + st, val.begin() + i * r + st + tmp_r, ret.val.begin() + i * ret_r);
-                copy(val.begin() + i * r, val.begin() + i * r + (ret_r - tmp_r), ret.val.begin() + i * ret_r + tmp_r);
+            if (st < ed) {
+                ret.val.assign(val.begin() + st * c, val.begin() + ed * c);
+            } else {
+                ret.val.assign(val.begin() + st * c, val.end());
+                ret.val.insert(ret.val.end(), val.begin(), val.begin() + ed * c);
             }
+            ret.order = order;
+            ret.reorder();
         }
-    } else {
-        if (st < ed) {
-            ret.val.assign(val.begin() + st * c, val.begin() + ed * c);
-        } else {
-            ret.val.assign(val.begin() + st * c, val.end());
-            ret.val.insert(ret.val.end(), val.begin(), val.begin() + ed * c);
-        }
-        ret.order = order;
-        ret.reoeder();
+        return ret;
     }
-    return ret;
+    else
+    {
+        DBGprint("Function row(int st, int ed) The input is out of range\n");
+    }
 }
+
 
 Mat Mat::col(int st, int ed) const {
     Mat ret(r, (ed - st + c) % c);
@@ -747,7 +976,11 @@ Mat Mat::col(int st, int ed) const {
     return ret;
 }
 
-Mat Mat::get_bit(int b) const {
+// 对矩阵中每个元素进行操作,若该元素第b位(最低位为第1位)为1则该元素置1,为0则置0
+// Operate on each element in the matrix If the b-th position of the element is 1, then the element is set to 1,otherwise set to 0
+// (The lowest bit is the first bit)
+
+Mat Mat::get_bit(int b) const {    
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -756,7 +989,10 @@ Mat Mat::get_bit(int b) const {
     return ret;
 }
 
-Mat Mat::opposite() const {
+// 将矩阵中每个元素在域上取相反数,返回结果矩阵
+// Take the opposite number of each element in the matrix on the field   
+
+Mat Mat::opposite() const {         
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -804,8 +1040,14 @@ Mat Mat::toOneHot() const {
     return ret;
 }
 
+// 从该矩阵中取[st,ed)列赋值给a
+// Take [st,ed) column from the matrix and assign it to a
+
 void Mat::col(int st, int ed, Mat &a) const {
-    a.val.assign(val.begin() + st * r, val.begin() + ed * r);
+    if(st >= 0 && ed <= c && st <= ed && a.size() >= ((ed - st) * r) && a.rows() == r)
+        a.val.assign(val.begin() + st * r, val.begin() + ed * r);
+    else
+        DBGprint("Function col The input is out of range\n");
 }
 
 void Mat::append(int st, int ed, Mat *a) {
@@ -816,7 +1058,10 @@ void Mat::append(int st, int ed, Mat *a) {
     copy(val.begin(), val.end(), a->val.begin() + st);
 }
 
-Mat Mat::mod(ll b) {
+// 将矩阵中每个元素对b取余数,返回结果矩阵
+// Take each element in the matrix %b return the matrix
+
+Mat Mat::mod(ll b) {     
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -824,6 +1069,8 @@ Mat Mat::mod(ll b) {
     }
     return ret;
 }
+
+
 ll Mat::count_sum() {
     ll ret = 0;
     int l = r * c;
@@ -832,6 +1079,9 @@ ll Mat::count_sum() {
     }
     return ret;
 }
+
+// 计算矩阵中等于1的元素的个数 返回结果值
+// Count the number of elements equal to 1 in the matrix return the result
 
 int Mat::count() {
     int ret = 0;
@@ -911,12 +1161,17 @@ void Mat::cp(const Mat &a, const Mat &mask) {
     }
 }
 
+// 将矩阵中的每个数映射到域上
+// Map each number in the matrix to the field
+
 void Mat::residual() {
     int l = r * c;
     for (int i = 0; i < l; i++) {
         val[i] = (val[i] % MOD + MOD) % MOD;
     }
 }
+
+
 
 void Mat::AddDot(int k, ll128 *x, int incx, ll128 *y, ll128 *gamma) {
     int p;
@@ -925,6 +1180,9 @@ void Mat::AddDot(int k, ll128 *x, int incx, ll128 *y, ll128 *gamma) {
     }
 }
 
+// 将矩阵中的数转换成有符号数
+// Convert the number in the vector to a signed number
+
 void Mat::sign() {
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -932,7 +1190,9 @@ void Mat::sign() {
     }
 }
 
-void Mat::reoeder() {
+// Convert row storage to column storage or Convert column storage to row storage
+
+void Mat::reorder() {         //将行存转为列存或者列存转为行存
     vector<ll128> v(r * c);
     int tmp_r = r;
     int tmp_c = c;
@@ -948,7 +1208,9 @@ void Mat::reoeder() {
     order ^= 1;
 }
 
-void Mat::transorder() {
+// Tranpose the matrix and change the storage method
+
+void Mat::transorder() {    //将矩阵转置并改变排序方式
     swap(r, c);
     order ^= 1;
 }
@@ -971,11 +1233,15 @@ void Mat::col(int u, vector<ll128> &a) {
         this->operator()(i, u) = a[i];
 }
 
-void Mat::clear() {
+// Clear the matrix and set all to 0
+
+void Mat::clear() {    //矩阵清空全部置0
     val = vector<ll128>(r * c);
 }
 
-void Mat::print() const {
+// Output the matrix in matrix form if a column vector output as a line
+
+void Mat::print() const {    //将矩阵按矩阵形式输出，如为列向量则输出成一行
     DBGprint("r: %d c: %d\n", r, c);
     if (c == 1) {
         for (int i = 0; i < r; i++) {
@@ -1022,7 +1288,9 @@ void Mat::toString(char *p) {
     *p = 0;
 }
 
-int Mat::toString_pos(char *p) const {
+// Read the matrix into char *  return the size of matrix(include row and column of matrix)
+
+int Mat::toString_pos(char *p) const {      // 将矩阵读入char *中,返回矩阵长度（包括矩阵的行和列）
     Constant::Util::int_to_char(p, r);
     Constant::Util::int_to_char(p, c);
     int l = r * c;
@@ -1033,11 +1301,15 @@ int Mat::toString_pos(char *p) const {
     return 2 * 4 + r * c * 8;
 }
 
-int Mat::getStringLen() {
+// Return the size of matrix(include row and column of matrix)
+
+int Mat::getStringLen() {     // 返回矩阵的长度（包括矩阵的行和列）
     return 2 * 4 + r * c * 8;
 }
 
-void Mat::getFrom_pos(char *&p) {
+// Read the matrix from char *
+
+void Mat::getFrom_pos(char *&p) {    // 从char *中读出矩阵
     r = Constant::Util::char_to_int(p);
     c = Constant::Util::char_to_int(p);
     val.resize(r * c);
@@ -1047,7 +1319,9 @@ void Mat::getFrom_pos(char *&p) {
     }
 }
 
-void Mat::addFrom_pos(char *&p) {
+// Add matrix(taken from p) to the matrix
+
+void Mat::addFrom_pos(char *&p) {     // 将该矩阵加上从p中取出的矩阵
     int tmp_r, tmp_c;
     tmp_r = Constant::Util::char_to_int(p);
     tmp_c = Constant::Util::char_to_int(p);
@@ -1060,71 +1334,139 @@ void Mat::addFrom_pos(char *&p) {
     }
 }
 
+// 使用a_r矩阵中的非0元素填充a（按元素顺序逐一填充 遇0则选择下一个），如果未能完全填充则返回0，完全填充返回1，同时使用b_r填充b，填充元素顺序和a完全对应
+// Fill a with the non-zero elements in the a_r matrix (fill one by one in the order of elements, and choose the next one if it meets 0)
+// if it fails to fill completely, return 0, completely fill it returns 1
+// and use b_r to fill b at the same time, fill the element order and a completely correspond
+
 bool Mat::fill(Mat *a, Mat *a_r, Mat *b, Mat *b_r) {
-    int l = a->rows() * a->cols();
-    int l_r = a_r->rows() * a_r->cols();
-    int k = 0;
-    for (int i = 0; i < l; i++) {
-        while (k < l_r && a_r->val[k] == 0) {
+    if(b_r->size() >= a_r->size())
+    {
+        int l = a->rows() * a->cols();
+        int l_r = a_r->rows() * a_r->cols();
+        int k = 0;
+        for (int i = 0; i < l; i++) {
+            while (k < l_r && a_r->val[k] == 0) {
+                k++;
+            }
+            if (k >= l_r) {
+                return 0;
+            }
+            a->val[i] = a_r->val[k];
+            b->val[i] = b_r->val[k];
             k++;
         }
-        if (k >= l_r) {
-            return 0;
-        }
-        a->val[i] = a_r->val[k];
-        b->val[i] = b_r->val[k];
-        k++;
+        return 1;
     }
-    return 1;
+    else
+    {
+        DBGprint("Function fill The input may lead to out-of-bounds\n");
+        return 0;
+    }    
+    
 }
+
+// 将a矩阵插入res后再将b矩阵插入res 即res为a矩阵和b矩阵合并后的结果
+// Insert a matrix into res and then insert b matrix into res(res is the result of combining a matrix and b matrix)
 
 void Mat::concat(Mat *res, Mat *a, Mat *b) {
-    for (int i = 0; i < a->rows(); i++)
-        for (int j = 0; j < a->cols(); j++)
-            res->operator()(i, j) = a->operator()(i, j);
-    for (int i = 0; i < b->rows(); i++)
-        for (int j = 0; j < b->cols(); j++)
-            res->operator()(i + a->rows(), j) = b->operator()(i, j);
-}
-
-void Mat::reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb) {
-    if (fa) {
+    if(res->rows() == (a->rows() + b->rows()) && res->cols() == a->cols() && res->cols() == b->cols())
+    {
         for (int i = 0; i < a->rows(); i++)
             for (int j = 0; j < a->cols(); j++)
-                a->operator()(i, j) += res->operator()(i, j);
-    }
-    if (fb) {
+                res->operator()(i, j) = a->operator()(i, j);
         for (int i = 0; i < b->rows(); i++)
             for (int j = 0; j < b->cols(); j++)
-                b->operator()(i, j) += res->operator()(i + a->rows(), j);
+                res->operator()(i + a->rows(), j) = b->operator()(i, j);
     }
+    else
+    {
+        DBGprint("Function concat The input matrix format is illegal\n");
+    }    
+    
+}
+
+// 拆分res矩阵 分别加上给a和b if(fa)将res矩阵前矩阵a大小的矩阵加上给a if(fb)将res中矩阵a大小之后b矩阵大小的矩阵加上给b(紧接着a矩阵之后)
+// Split the res matrix and assign it to a and b if (fa) assign the matrix (size of matrix a) of res matrix add to a
+// if (fb) assign the matrix (size of matrix b after matrix a) of res add to b (following matrix a) 
+
+void Mat::reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb) {
+    if(res->rows() == (a->rows() + b->rows()) && res->cols() == a->cols() && res->cols() == b->cols())
+    {
+         if (fa) {
+            for (int i = 0; i < a->rows(); i++)
+                for (int j = 0; j < a->cols(); j++)
+                    a->operator()(i, j) += res->operator()(i, j);
+        }
+        if (fb) {
+            for (int i = 0; i < b->rows(); i++)
+                for (int j = 0; j < b->cols(); j++)
+                    b->operator()(i, j) += res->operator()(i + a->rows(), j);
+        }
+    }
+    else
+    {
+        DBGprint("Function reconcat The input matrix format is illegal\n");
+    }
+    
 }
 
 void Mat::vstack(Mat *res, Mat *a, Mat *b) {}
 
 void Mat::re_vstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb) {}
 
+//将矩阵a赋值给矩阵res 然后将矩阵b插入矩阵res
+//Assign matrix a to matrix res and insert matrix b into matrix res
+
 void Mat::hstack(Mat *res, Mat *a, Mat *b) {
-    res->val.assign(a->val.begin(), a->val.end());
-    res->val.insert(res->val.end(), b->val.begin(), b->val.end());
+    if(res->size() == (a->size() + b->size()))
+    {
+        res->val.assign(a->val.begin(), a->val.end());
+        res->val.insert(res->val.end(), b->val.begin(), b->val.end());
+    }
+    else        
+   {
+       DBGprint("Function hstack The input matrix format is illegal\n");
+   }
 }
 
+// if(fa)将矩阵res的前矩阵a大小的矩阵赋值给a if(fb)将res中矩阵a大小之后的矩阵b大小的矩阵赋值给b
+//if(fa) assign the matrix (size of matrix a) of res to a 
+//if(fb) assign the matrix (size of matrix b after matrix a) in res to b
+
 void Mat::re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb) {
-    int len_a = a->rows() * a->cols();
-    int len_b = a->rows() * a->cols();
-    if (fa) {
-        a->val.assign(res->val.begin(), res->val.begin() + len_a);
+    if(res->size() == (a->size() + b->size()))
+    {
+        int len_a = a->rows() * a->cols();
+        int len_b = a->rows() * a->cols();
+        if (fa) {
+            a->val.assign(res->val.begin(), res->val.begin() + len_a);
+        }
+        if (fb) {
+            b->val.assign(res->val.begin() + len_a, res->val.end());
+        }
     }
-    if (fb) {
-        b->val.assign(res->val.begin() + len_a, res->val.end());
+    else
+    {
+        DBGprint("Function re_hstack The input matrix format is illegal\n");
     }
 }
+
+//判断a和b的存储方式,返回值为0表示列存和列存,为1表示列存和行存,为2表示行存和列存,为3表示行存和行存
+//Determine the storage mode of a and b. 
+//The return value is 0 for column storage and column storage, 
+//1 for column storage and row storage, 
+//2 for row storage and column storage, 
+//3 for row storage and row storage.
 
 int Mat::pair_order_type(Mat *a, const Mat *b) {
     return (a->order << 1) + b->order;
 }
 
-void Mat::random_neg(Mat *a) {
+//产生一个随机数矩阵和a的大小相同，并赋值给a
+//Generate a random matrix with the same size as a and assign it to a
+
+void Mat::random_neg(Mat *a) {      
     int r = a->rows();
     int c = a->cols();
     Mat ret(r, c);

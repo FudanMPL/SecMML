@@ -37,9 +37,12 @@
 #include <winsock2.h>
 #endif
 
-#define B 128          //Batch size
-#define D 784          //Dimension
+#define B 1          //Batch size
+#define D 3          //Dimension
+#define USE_D 2      // the real used Dimension
 #define PRINT_PRE_ITE 100   //每隔多少个迭代打印一遍
+#define LABEL_P -1      // 0: 标签位于第一行，-1：标签位于最后一行，如果标签和特征值是分开放的，这个参数没有意义
+
 
 #define OFFLINE_PHASE_ON 0  
 #define LOCAL_TEST 1
@@ -54,7 +57,7 @@
 
 #define LEAKEY_RELU_BIAS IE/2
 #define MOD 100000000000000003ll    //field size
-#define N 60000                     //size of train dataset
+#define N 4                     //size of train dataset
 #define M 3                         //number of parties
 
 #define L 2
@@ -66,14 +69,13 @@
 #define TN 2
 #define MAX_NODE_NUM 2001
 #define MASTER 0
-#define IE 1048576                  //定点数的精度
-#define NM 10000                    //测试集的数量
+#define IE 1048576                  //定点数的精度 2的100次方
+#define NM 1                    //测试集的数量
 #define BIT_LENGTH 64               //bit length
 #define REDUNDANCY 3                
 #define BIT_P_LEN 55                //bit length of field
 #define BUFFER_MAX 10000001         //通信缓冲区最大大小
 #define HEADER_LEN 4                //头的大小
-#define ND 784                      //Dimension
 #define DECIMAL_PLACES 20           //定点数位数
 #define HEADER_LEN_OPT 2            //socket有关？？
 #define TRAIN_ITE 10000             //总迭代次数
@@ -171,8 +173,9 @@ public:
         static ll char_to_ll(char* &p);
         static void int_to_header(char* p, int u);
         static int header_to_int(char* p);
-        static int getint(char* &p);
-        static ll getll(char* &p);
+        static int getNext(char *p, int begin);
+        static int getint(char* p,int &begin);
+        static ll getll(char* p,int &begin);
         static ll randomlong();
         static ll128 get_residual(ll128 a);
         static ll128 get_sign(ll128 a);

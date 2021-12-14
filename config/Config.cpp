@@ -2,21 +2,21 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-11 14:41:29
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-11 14:47:15
+ * @LastEditTime: 2021-12-13 17:01:53
  */
 #include "Config.hpp"
 
 
 Config * Config::config_instance = nullptr;
-//jsonfile path
-std::string Config::file_name = "/home/txy/SecMML/config/parameter/constant.json";
 
-Config* Config::init(){
+
+//jsonfile path
+Config* Config::init(std::string file_name){
     if(Config::config_instance == nullptr){
         Json::Value root;
         Json::Reader reader;
         //open json file
-        std::ifstream ifs(Config::file_name);
+        std::ifstream ifs(file_name);
         if(!reader.parse(ifs, root)){
             std::cout<<"fail to parse"<<std::endl;
         }

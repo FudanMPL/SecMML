@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-11 14:39:13
+ * @LastEditTime: 2021-12-13 17:03:05
  */
 
 #include <cstdio>
@@ -19,7 +19,7 @@ using namespace std;
 
 int main()
 {
-    Config* config = Config::init();
+    Config* config = Config::init("../parameter/constant.json");
     cout<<config->B<<endl;
     cout<<config->IP[0]<<endl;
     cout<<config->PORT[0]<<endl;

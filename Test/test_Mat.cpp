@@ -448,10 +448,10 @@ void test_fill()
     std::stringstream ss;
     std::vector<ll128> p = {11, 0, 22, 23, 0, 16, 0, 15, 11};
     std::vector<ll128> q = {11, 12, 9, 16, 15, 12, 15, 19, 4};
-    Mat a(2, 3), a_r(3, 3), b(2, 3),b_r(3,3);
+    Mat a(2, 3), a_r(3, 3), b(2, 3), b_r(3, 3);
     a_r = p;
     b_r = q;
-    Mat::fill(&a,&a_r,&b,&b_r);
+    Mat::fill(&a, &a_r, &b, &b_r);
     for (int i = 0; i < 6; i++)
     {
         ss << a.getVal(i) << " ";
@@ -478,7 +478,7 @@ void test_concat()
     Mat mat(2, 3), mat1(2, 3), mat2(4, 3);
     mat = a;
     mat1 = b;
-    Mat::concat(&mat2,&mat,&mat1);
+    Mat::concat(&mat2, &mat, &mat1);
     for (int i = 0; i < 12; i++)
     {
         ss << mat2.getVal(i) << " ";
@@ -495,11 +495,11 @@ void test_concat()
 
 void test_reconcat()
 {
-    std::stringstream ss1,ss2;
-    std::vector<ll128> a = {11, 22, 23, 16, 15, 11,11, 12, 9, 16, 15, 12};
+    std::stringstream ss1, ss2;
+    std::vector<ll128> a = {11, 22, 23, 16, 15, 11, 11, 12, 9, 16, 15, 12};
     Mat mat(3, 3), mat1(1, 3), mat2(4, 3);
     mat2 = a;
-    Mat::reconcat(&mat2,&mat,true,&mat1,true);
+    Mat::reconcat(&mat2, &mat, true, &mat1, true);
     for (int i = 0; i < 9; i++)
     {
         ss1 << mat.getVal(i) << " ";
@@ -526,7 +526,7 @@ void test_hstack()
     Mat mat(2, 3), mat1(2, 3), mat2(4, 3);
     mat = a;
     mat1 = b;
-    Mat::hstack(&mat2,&mat,&mat1);
+    Mat::hstack(&mat2, &mat, &mat1);
     for (int i = 0; i < 12; i++)
     {
         ss << mat2.getVal(i) << " ";
@@ -543,11 +543,11 @@ void test_hstack()
 
 void test_re_hstack()
 {
-    std::stringstream ss1,ss2;
-    std::vector<ll128> a = {11, 22, 23, 16, 15, 11,11, 12, 9, 16, 15, 12};
+    std::stringstream ss1, ss2;
+    std::vector<ll128> a = {11, 22, 23, 16, 15, 11, 11, 12, 9, 16, 15, 12};
     Mat mat(3, 3), mat1(1, 3), mat2(4, 3);
     mat2 = a;
-    Mat::re_hstack(&mat2,&mat,true,&mat1,true);
+    Mat::re_hstack(&mat2, &mat, true, &mat1, true);
     for (int i = 0; i < 9; i++)
     {
         ss1 << mat.getVal(i) << " ";
@@ -663,4 +663,6 @@ int main()
     std::cout << "-----------------------------------------------" << std::endl;
     std::cout << "Test Function Mat::re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb)" << std::endl;
     test_re_hstack();
+
+    return 0;
 }

@@ -76,7 +76,17 @@ void Mat::init(int r, int c) {
 
 ll128 &Mat::operator()(int row, int col) {
     if(row >= 0 && row < r && col >= 0 && col < c)
-        return val[col * r + row];
+    {
+        if(order == MatColMajor)
+        {
+            return val[col * r + row];
+        }
+        else
+        {
+            return val[row * c + col];
+        }
+    }
+        
     else{
         DBGprint("Function operator() The row value or column value entered is out of range\n");
     }
@@ -86,7 +96,17 @@ ll128 &Mat::operator()(int row, int col) {
 
 ll128 Mat::get(int row, int col) const {
      if(row >= 0 && row < r && col >= 0 && col < c)
-        return val[col * r + row];
+     {
+         if(order == MatColMajor)
+         {
+             return val[col * r + row];
+         }
+         else
+         {
+             return val[row * c + col];
+         }
+     }
+        
     else{
         DBGprint("Function get The row value or column value entered is out of range\n");
     }
@@ -183,9 +203,11 @@ bool Mat::operator==(Mat p) {
 //    bool match = true;
     if(p.rows() == r && p.cols() == c)
     {
-        for (int i = 0; i < l; i++) {
-            if (val[i] != p.getVal(i)) {
-                return false;
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+            {
+                if (this->operator()(i,j) != p.operator()(i,j)) {
+                    return false;
             }
         }
         return true;
@@ -217,11 +239,12 @@ Mat Mat::operator+(const Mat &a) {     //矩阵加法
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] + a.val[i];
-            ret.val[i] = ret.val[i] >= MOD ? ret.val[i] - MOD : ret.val[i];
-            ret.val[i] = ret.val[i] <= -MOD ? ret.val[i] + MOD : ret.val[i];
-        }
+       for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) + a.get(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) >= MOD ? ret.operator()(i,j) - MOD : ret.operator()(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) <= -MOD ? ret.operator()(i,j) + MOD : ret.operator()(i,j);
+            }
         return ret;
     }
     else
@@ -237,11 +260,12 @@ void Mat::operator+=(const Mat &a) {   //矩阵+=操作
     if(a.cols() == c && a.rows() == r)
     {
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            val[i] += a.val[i];
-            val[i] = val[i] >= MOD ? val[i] - MOD : val[i];
-            val[i] = val[i] <= -MOD ? val[i] + MOD : val[i];
-        }
+         for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                this->operator()(i,j) += a.get(i,j);
+                this->operator()(i,j) = this->operator()(i,j) >= MOD ? this->operator()(i,j) - MOD : this->operator()(i,j);
+                this->operator()(i,j) = this->operator()(i,j) <= -MOD ? this->operator()(i,j) + MOD : this->operator()(i,j);
+            }
     }
     else
     {
@@ -269,11 +293,12 @@ Mat Mat::operator-(const Mat &a) {      //矩阵减法操作
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] - a.val[i];
-            ret.val[i] = ret.val[i] > MOD ? ret.val[i] - MOD : ret.val[i];
-            ret.val[i] = ret.val[i] < -MOD ? ret.val[i] + MOD : ret.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) - a.get(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) > MOD ? ret.operator()(i,j) - MOD : ret.operator()(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) < -MOD ? ret.operator()(i,j) + MOD : ret.operator()(i,j);
+            }
         return ret;
     }
     else
@@ -425,9 +450,10 @@ Mat Mat::operator/(Mat a) {
         ret = *this;
         ret.sign();
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] / a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) / a.get(i,j);
+            }
         ret.residual();
         return ret;
     }
@@ -478,9 +504,10 @@ Mat Mat::operator&(const Mat &a) const {
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] & a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->get(i,j) & a.get(i,j);
+            }
         return ret;
     }
     else
@@ -520,13 +547,14 @@ Mat Mat::oneMinus_IE() {
 //and map all the elements in the new matrix to the field return the new matrix
 
 Mat Mat::dot(const Mat &a) {
-    if(a.cols() == c && a.rows() == r)
+    if(a.cols() == c && a.rows() == r && a.order == order)
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] * a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) * a.get(i,j);
+            }
         ret.residual();
         return ret;
     }
@@ -630,13 +658,14 @@ Mat Mat::argmax() {
 Mat Mat::equal(const Mat &a) {
     Mat ret(r, c);
     int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ll128 tmp = val[i] - a.val[i];
-        tmp = (tmp % MOD + MOD) % MOD;
-        tmp = tmp > MOD / 2 ? tmp - MOD : tmp;
-        tmp = tmp < 0 ? -tmp : tmp;
-        ret.val[i] = tmp < IE / 2 ? 1 : 0;
-    }
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++) {
+            ll128 tmp = this->operator()(i,j) - a.get(i,j);
+            tmp = (tmp % MOD + MOD) % MOD;
+            tmp = tmp > MOD / 2 ? tmp - MOD : tmp;
+            tmp = tmp < 0 ? -tmp : tmp;
+            ret.val[i] = tmp < IE / 2 ? 1 : 0;
+        }
 //    for (int j = 0; j < 10; ++j) {
 //        DBGprint("%d: %lld, %lld, %lld\n", j, (ll)val[j], (ll)a.val[j], (ll)ret.val[j]);
 //    }
@@ -652,9 +681,10 @@ Mat Mat::eq(const Mat &a) {
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = (val[i] == a.val[i]) ? 1 : 0;
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = (this->operator()(i,j) == a.get(i,j)) ? 1 : 0;
+            }
         return ret;
     }
     else

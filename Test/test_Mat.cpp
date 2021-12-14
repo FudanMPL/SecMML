@@ -428,7 +428,7 @@ void test_take_col()
     std::vector<ll128> a = {21, 22, 23, 11, 12, 9, 16, 15, 12};
     Mat mat(3, 2), mat1(3, 3);
     mat1 = a;
-    mat = mat1.col(1, 3);
+    mat1.col(1, 3, mat);
     for (int i = 0; i < 6; i++)
     {
         ss << mat.getVal(i) << " ";

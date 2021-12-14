@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-11 14:44:07
+ * @LastEditTime: 2021-12-13 17:00:15
  */
 
 #include <cstdio>
@@ -15,9 +15,9 @@
 
 class Config{
     public:
-        static std::string file_name;
+        // static std::string file_name;
         static Config * config_instance;
-        static Config* init();
+        static Config* init(std::string file_name);
         Config(Json::Value root, std::vector<std::string> ip, std::vector<int> port)  : B(root["B"].asInt()), 
                                     D(root["D"].asInt()),
                                     PRINT_PRE_ITE(root["PRINT_PRE_ITE"].asInt()),

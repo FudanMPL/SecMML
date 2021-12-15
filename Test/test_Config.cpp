@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-15 10:31:21
+ * @LastEditTime: 2021-12-15 20:47:52
  */
 
 #include <cstdio>
@@ -27,4 +27,5 @@ int main()
 
     Player::init();
     IOManager::init();
+    
 }   

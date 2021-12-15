@@ -12,13 +12,12 @@
 #include "../malicious_lib/reed_solomn_reconstruct.h"
 #include "../util/IOManager.h"
 #include "../Constant.h"
+#include "../util/SocketManager.h"
 
 // Multi thread configuration
 #include <thread>
 
 // extern int node_type;
-extern SocketOnline *socket_io[Config::config->M][Config::config->M];
-extern Player player[Config::config->M];
 extern Mat metadata;
 //extern Mat *input_table_data;
 class MathOp {

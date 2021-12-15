@@ -7,11 +7,13 @@
 
 #include "../Constant.h"
 #include "SocketOnline.h"
+#include "vector"
 
 // extern int node_type;
 
 class SocketManager {
 public:
+    static vector<vector<SocketOnline*>> socket_io;
     static void init_windows_socket();
     static void exit_windows_socket();
     static void server_init(SOCK &sock, string ip, int port);
@@ -24,7 +26,7 @@ public:
         string* ip;
         int* port;
         SOCK serv_sock;
-        SOCK clnt_sock[Config::config->M];
+        SOCK *clnt_sock;
         SOCK sock;
         int epoch;
     public:

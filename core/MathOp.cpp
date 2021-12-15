@@ -552,11 +552,11 @@ void MathOp::Reveal::forward() {
     Mat tmp[M];
     switch (forwardRound) {
         case 1:
-            *b = *a * player[node_type].lagrange;
+            *b = *a * Player::player[node_type].lagrange;
             broadcase_rep(b);
             break;
         case 2:
-            *b = *a * player[node_type].lagrange;
+            *b = *a * Player::player[node_type].lagrange;
             receive_add(b);
             *res = *b;
             break;
@@ -739,7 +739,7 @@ void MathOp::MulPub::forward() {
     switch (forwardRound) {
         case 1:
             *res = a->dot(*b);
-            *res = *res * player[node_type].lagrange;
+            *res = *res * Player::player[node_type].lagrange;
             for (int i = 0; i < M; i++) {
                 if (i != node_type) {
                     tmp[i] = *res;
@@ -1730,10 +1730,10 @@ void MathOp::random(Mat *a, ll range) {
         }
         for (int j = 0; j < M; j++) {
             ll128 tmp = coefficient[0];
-            ll128 key = player[j].key;
+            ll128 key = Player::player[j].key;
             for (int k = 1; k < TN; k++) {
                 tmp += coefficient[k] * key;
-                key *= player[j].key;
+                key *= Player::player[j].key;
                 key = Constant::Util::get_residual(key);
             }
             a[j].getVal(i) = tmp;

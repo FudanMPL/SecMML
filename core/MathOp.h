@@ -18,7 +18,6 @@
 
 // extern int node_type;
 extern SocketOnline *socket_io[Config::config->M][Config::config->M];
-extern Player player[Config::config->M];
 extern Mat metadata;
 //extern Mat *input_table_data;
 class MathOp {

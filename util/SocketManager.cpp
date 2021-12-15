@@ -4,7 +4,7 @@
 
 #include "SocketManager.h"
 
-SocketOnline *socket_io[M][M];
+SocketOnline *socket_io[Config::config->M][Config::config->M];
 
 void SocketManager::init_windows_socket() {
 #ifdef UNIX_PLATFORM
@@ -100,8 +100,8 @@ SOCK SocketManager::accept_sock(SOCK serv_sock) {
 }
 
 void SocketManager::print_socket() {
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < M; j++) {
+    for (int i = 0; i < Config::config->M; i++) {
+        for (int j = 0; j < Config::config->M; j++) {
             if (i != j) {
                 DBGprint("socket %d %d:\n");
                 socket_io[i][j]->print();
@@ -112,7 +112,7 @@ void SocketManager::print_socket() {
 
 void SocketManager::print() {
     ll tot_send = 0, tot_recv = 0;
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (node_type != i) {
             tot_send += socket_io[node_type][i]->send_num;
             tot_recv += socket_io[node_type][i]->recv_num;
@@ -138,7 +138,7 @@ void SocketManager::SMMLF::init(string* ip, int* port) {
 void SocketManager::SMMLF::server() {
     server_init(serv_sock, *(ip+node_type), *(port + node_type));
     char buffer[101];
-    for (int i = node_type + 1; i < M; i++) {
+    for (int i = node_type + 1; i < Config::config->M; i++) {
         sock = accept_sock(serv_sock);
 #ifdef UNIX_PLATFORM
         read(sock, buffer, 1);
@@ -178,7 +178,7 @@ void SocketManager::SMMLF::server_exit() {
 }
 
 void SocketManager::SMMLF::client_exit() {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
             socket_close(clnt_sock[i]);
         }

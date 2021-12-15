@@ -1,3 +1,9 @@
+/*
+ * @Author: Xinyu Tu
+ * @Date: 2021-12-07 09:52:08
+ * @LastEditors: Xinyu Tu
+ * @LastEditTime: 2021-12-14 19:10:50
+ */
 //
 // Created by 姜子丰 on 2020/8/29.
 //
@@ -23,9 +29,9 @@ public:
         Constant::Clock *clock_train;
         Mat *train_data, *train_label;
         Mat *test_data, *test_label;
-        Cell *cells[L];
+        Cell *cells[Config::config->L];
         int input, output, h0, c0;
-        int x[L];
+        int x[Config::config->L];
         int argmax, st_con, st_w, st_b, st_mul;
         int sd;
         int re_st_add, re_output;
@@ -38,9 +44,9 @@ public:
         void graph(NN* nn, int id);
         void train();
         void test();
-        void feed(NN* nn, Mat (&x_batch)[L], Mat& y_batch, int *input, int output);
-        void next_batch(Mat &batch, int start, Mat* A, int mod = NM);
-        void next_batch(Mat (&batch)[L], int start, Mat* A, int mod = NM);
+        void feed(NN* nn, Mat (&x_batch)[Config::config->L], Mat& y_batch, int *input, int output);
+        void next_batch(Mat &batch, int start, Mat* A, int mod = Config::config->NM);
+        void next_batch(Mat (&batch)[Config::config->L], int start, Mat* A, int mod = Config::config->NM);
         void graph();
         void print_perd(int round);
     };

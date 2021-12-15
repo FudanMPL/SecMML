@@ -1676,7 +1676,7 @@ void MathOp::Equal::back() {}
 void MathOp::broadcast(Mat *a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->send_message(a[i]);
+            socket_io[node_type][i]->send_message(a[i]); 
         }
     }
 }

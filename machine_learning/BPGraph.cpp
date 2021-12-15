@@ -20,20 +20,20 @@ BPGraph::LR::LR(Mat *train_data, Mat *train_label, Mat *test_data, Mat *test_lab
 void BPGraph::LR::graph() {
     int hidden_num = 10;
     int output_num = 1;
-    input = nn->addnode(D+1, B, NeuronMat::NODE_INPUT);
+    input = nn->addnode(Config::config->D+1, Config::config->B, NeuronMat::NODE_INPUT);
     output = nn->addnode(output_num, B, NeuronMat::NODE_INPUT);
     // todo 添加正态随机分布的权重初始化值
-    st_w = nn->addnode(hidden_num, D+1, NeuronMat::NODE_NET);
-    st_mul = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
+    st_w = nn->addnode(hidden_num, Config::config->D+1, NeuronMat::NODE_NET);
+    st_mul = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
 
-   nd_hidden = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
-   nd_b = nn->addnode(1, B, NeuronMat::NODE_NET);
-   nd_add = nn->addnode(hidden_num+1, B, NeuronMat::NODE_OP);
+   nd_hidden = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
+   nd_b = nn->addnode(1, Config::config->B, NeuronMat::NODE_NET);
+   nd_add = nn->addnode(hidden_num+1, Config::config->B, NeuronMat::NODE_OP);
    nd_w = nn->addnode(output_num, hidden_num+1, NeuronMat::NODE_NET);
-    // nd_mul = nn->addnode(1, B, NeuronMat::NODE_OP);
-//    activation = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
-    out_sig = nn->addnode(output_num, B, NeuronMat::NODE_OP);
-//    activation_out = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
+    // nd_mul = nn->addnode(1, Config::config->B, NeuronMat::NODE_OP);
+//    activation = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
+    out_sig = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_OP);
+//    activation_out = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
     int sd = nn->addnode(1, 1, NeuronMat::NODE_OP);
     argmax = nn->addnode(1, 1, NeuronMat::NODE_OP);
     DBGprint("initializing!\n");
@@ -73,13 +73,13 @@ void BPGraph::LR::linear_graph() {
     DBGprint("Linear Regression constructor\n");
     int hidden_num = 1;
     int output_num = 1;
-    input = nn->addnode(D+1, B, NeuronMat::NODE_INPUT);
-    output = nn->addnode(output_num, B, NeuronMat::NODE_INPUT);
+    input = nn->addnode(Config::config->D+1, Config::config->B, NeuronMat::NODE_INPUT);
+    output = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_INPUT);
     // todo 添加正态随机分布的权重初始化值
-    st_w = nn->addnode(hidden_num, D+1, NeuronMat::NODE_NET);
-    st_mul = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
+    st_w = nn->addnode(hidden_num, Config::config->D+1, NeuronMat::NODE_NET);
+    st_mul = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
 
-    out_sig = nn->addnode(output_num, B, NeuronMat::NODE_OP);
+    out_sig = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_OP);
     int sd = nn->addnode(1, 1, NeuronMat::NODE_OP);
     argmax = nn->addnode(1, 1, NeuronMat::NODE_OP);
 
@@ -121,13 +121,13 @@ void BPGraph::LR::logistic_graph() {
     DBGprint("Logistic Regression constructor\n");
     int hidden_num = 1;
     int output_num = 1;
-    input = nn->addnode(D+1, B, NeuronMat::NODE_INPUT);
-    output = nn->addnode(output_num, B, NeuronMat::NODE_INPUT);
+    input = nn->addnode(Config::config->D+1, Config::config->B, NeuronMat::NODE_INPUT);
+    output = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_INPUT);
     // todo 添加正态随机分布的权重初始化值
-    st_w = nn->addnode(hidden_num, D+1, NeuronMat::NODE_NET);
-    st_mul = nn->addnode(hidden_num, B, NeuronMat::NODE_OP);
+    st_w = nn->addnode(hidden_num, Config::config->D+1, NeuronMat::NODE_NET);
+    st_mul = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
 
-    out_sig = nn->addnode(output_num, B, NeuronMat::NODE_OP);
+    out_sig = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_OP);
     int sd = nn->addnode(1, 1, NeuronMat::NODE_OP);
     argmax = nn->addnode(1, 1, NeuronMat::NODE_OP);
 
@@ -138,7 +138,7 @@ void BPGraph::LR::logistic_graph() {
     nn->addOpMul_Mat(st_mul, st_w, input);
     if(ACTIVATION==SIGMOID){
         nn->addOpSigmoid(out_sig,st_mul);
-    }else if (ACTIVATION==TANH){
+    }else if (ACTIVATION==Config::config->TANH){
         nn->addOpHybrid_Tanh(out_sig,st_mul);
     }
 
@@ -152,18 +152,18 @@ void BPGraph::LR::logistic_graph() {
 }
 
 void BPGraph::LR::train() {
-    Mat x_batch(D + 1, B), y_batch(1, B);
-    clock_train = new Constant::Clock(CLOCK_TRAIN);
+    Mat x_batch(Config::config->D + 1, Config::config->B), y_batch(1, Config::config->B);
+    clock_train = new Constant::Clock(Config::config->CLOCK_TRAIN);
     globalRound = 0;
     double IOtime=0;
     // test();
     cout << "Train\n";
-    for (int i = 0; i < 110000 && i < TRAIN_ITE; i++) {
+    for (int i = 0; i < 110000 && i < Config::config->TRAIN_ITE; i++) {
         signal(SIGINT, SIG_DFL);
         globalRound++;
         IOtime-=clock_train->get();
-        next_batch(x_batch, i * B, train_data, N);
-        next_batch(y_batch, i * B, train_label, N);
+        next_batch(x_batch, i * Config::config->B, train_data, Config::config->N);
+        next_batch(y_batch, i * Config::config->B, train_label, Config::config->N);
         feed(nn, x_batch, y_batch, input, output);
         IOtime+=clock_train->get();
         {
@@ -179,7 +179,7 @@ void BPGraph::LR::train() {
             }
             nn->gradUpdate();
         }
-        if ((i+1)%PRINT_PRE_ITE == 0) {
+        if ((i+1)%Config::config->PRINT_PRE_ITE == 0) {
             test();
             print_perd(i+1);
             DBGprint("IOTime: %.3f\n",IOtime);
@@ -195,13 +195,13 @@ void BPGraph::LR::train() {
 }
 
 void BPGraph::LR::test() {
-    Mat x_batch(D + 1, B), y_batch(1, B);
+    Mat x_batch(Config::config->D + 1, Config::config->B), y_batch(1, Config::config->B);
     int total = 0;
-    for (int i = 0; i < NM / B; i++) {
+    for (int i = 0; i < Config::config->NM / Config::config->B; i++) {
         signal(SIGINT, SIG_DFL);
         globalRound++;
-        next_batch(x_batch, i * B, test_data);
-        next_batch(y_batch, i * B, test_label);
+        next_batch(x_batch, i * Config::config->B, test_data);
+        next_batch(y_batch, i * Config::config->B, test_label);
         feed(nn, x_batch, y_batch, input, output);
         nn->epoch_init();
         while (nn->forwardHasNext()) {
@@ -218,7 +218,7 @@ void BPGraph::LR::test() {
 //        nn->getNeuron(output)->getForward()->print();
         total += nn->getNeuron(output)->getForward()->equal(*nn->getNeuron(out_sig)->getForward()).count();
     }
-    DBGprint("accuracy: %f\n", total * 1.0 / (NM / B * B));
+    DBGprint("accuracy: %f\n", total * 1.0 / (Config::config->NM / Config::config->B * Config::config->B));
 }
 
 void BPGraph::LR::feed(NN* nn, Mat &x_batch, Mat &y_batch, int input, int output) {
@@ -227,12 +227,12 @@ void BPGraph::LR::feed(NN* nn, Mat &x_batch, Mat &y_batch, int input, int output
 }
 
 void BPGraph::LR::next_batch(Mat &batch, int start, Mat *A, int mod) {
-    A->col(start%mod, start%mod + B, batch);
+    A->col(start%mod, start%mod + Config::config->B, batch);
 }
 
 void BPGraph::LR::print_perd(int round) {
     ll tot_send = 0, tot_recv = 0;
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (node_type != i) {
             tot_send += socket_io[node_type][i]->send_num;
             tot_recv += socket_io[node_type][i]->recv_num;

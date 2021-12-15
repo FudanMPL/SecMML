@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-13 17:00:15
+ * @LastEditTime: 2021-12-14 18:05:51
  */
 
 #include <cstdio>
@@ -15,9 +15,11 @@
 
 class Config{
     public:
-        // static std::string file_name;
-        static Config * config_instance;
+        static Config* config;
         static Config* init(std::string file_name);
+        static __int128_t inverse(__int128_t a, __int128_t b, long MOD);
+        static __int128_t power(__int128_t a, __int128_t b, long MOD);
+        static __int128_t get_residual(__int128_t a, long MOD);
         Config(Json::Value root, std::vector<std::string> ip, std::vector<int> port)  : B(root["B"].asInt()), 
                                     D(root["D"].asInt()),
                                     PRINT_PRE_ITE(root["PRINT_PRE_ITE"].asInt()),
@@ -69,7 +71,11 @@ class Config{
                                     CLOCK_TRAIN(root["CLOCK_TRAIN"].asInt()),
                                     FEATURE_DIM(root["FEATURE_DIM"].asInt()),
                                     IP(ip),
-                                    PORT(port){};
+                                    PORT(port),
+                                    SQRTINV( (__int128_t)(atol(root["MOD"].asString().c_str())+1>>2) * (atol(root["MOD"].asString().c_str())-2) % (atol(root["MOD"].asString().c_str())-1) ),
+                                    INV2(Config::inverse(2, atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str()))),
+                                    INV2_M(1<<Config::inverse(1<<root["DECIMAL_PLACES"].asInt(), atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str())))
+                                    {};
         const int B;
         const int D;
         const int PRINT_PRE_ITE;
@@ -122,6 +128,9 @@ class Config{
         const int FEATURE_DIM;
         const std::vector<std::string> IP;
         const std::vector<int> PORT;
+        const long long SQRTINV;
+        const long long INV2;
+        const long long INV2_M;
     private:
         
 };

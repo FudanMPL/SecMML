@@ -7,7 +7,6 @@
 int node_type;
 int globalRound;
 int DBGtest;
-
 ll Constant::Clock::global_clock[101] = {0};
 
 
@@ -99,15 +98,15 @@ ll Constant::Util::getll(char *&p) {
 }
 
 ll Constant::Util::randomlong() {
-    return rand() % MOD;
+    return rand() % Config::config->MOD;
 }
 
 ll128 Constant::Util::get_residual(ll128 a) {
-    return (a % MOD + MOD) % MOD;
+    return (a % Config::config->MOD + Config::config->MOD) % Config::config->MOD;
 }
 
 ll128 Constant::Util::get_sign(ll128 a) {
-    return a > MOD / 2 ? a - MOD : a;
+    return a > Config::config->MOD / 2 ? a - Config::config->MOD : a;
 }
 
 ll128 Constant::Util::get_abs(ll128 a) {
@@ -115,7 +114,7 @@ ll128 Constant::Util::get_abs(ll128 a) {
 }
 
 ll128 Constant::Util::sqrt(ll128 a) {
-    return power(a, MOD + 1 >> 2);
+    return power(a, Config::config->MOD + 1 >> 2);
 }
 
 ll128 Constant::Util::inverse(ll128 a, ll128 b) {
@@ -124,8 +123,8 @@ ll128 Constant::Util::inverse(ll128 a, ll128 b) {
 
 ll128 Constant::Util::power(ll128 a, ll128 b) {
     ll128 ret = 1;
-    a = (a%MOD+MOD)%MOD;
-    b = (b%MOD+MOD)%MOD;
+    a = (a%Config::config->MOD+Config::config->MOD)%Config::config->MOD;
+    b = (b%Config::config->MOD+Config::config->MOD)%Config::config->MOD;
     if (b == 0)
         return 1;
     while (b > 0) {
@@ -143,7 +142,7 @@ ll128 Constant::Util::cal_perm(ll128 *key, int l, int k) {
         return 1;
     vector<ll128> a(l+1);
     a[0] = 1;
-    for (int i = 0; i < M; i++)
+    for (int i = 0; i < Config::config->M; i++)
         if (i != k)
             for (int j = l; j; j--) {
                 a[j] += a[j - 1] * key[i];
@@ -176,6 +175,3 @@ operator<<( std::ostream& dest, __int128_t value )
     }
     return dest;
 }
-const ll Constant::inv2 = Constant::Util::inverse(2, MOD);
-
-const ll Constant::inv2_m = Constant::Util::inverse(1 << DECIMAL_PLACES, MOD);

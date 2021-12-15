@@ -13,6 +13,7 @@ class Mat {
     int order;   //0为列存 1为行存
     vector<ll128> val;
 public:
+    Config* config;
     Mat(int r, int c);
     Mat(int r, int c, ll128 b);
     Mat();

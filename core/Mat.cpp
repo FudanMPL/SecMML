@@ -30,6 +30,7 @@ double generateGaussianNoise(double mu, double sigma) {
 // Construct Function
 
 Mat::Mat(int r, int c) {
+   
     this->r = r;
     this->c = c;
     order = 0;
@@ -37,6 +38,7 @@ Mat::Mat(int r, int c) {
 }
 
 Mat::Mat(int r, int c, ll128 b) {
+  
     this->r = r;
     this->c = c;
     order = 0;
@@ -50,6 +52,7 @@ Mat::Mat() {
 //Copy Constuct Fucntion
 
 Mat::Mat(const Mat &a) {
+
     r = a.rows();
     c = a.cols();
     order = a.order;
@@ -76,7 +79,16 @@ void Mat::init(int r, int c) {
 
 ll128 &Mat::operator()(int row, int col) {
     if(row >= 0 && row < r && col >= 0 && col < c)
-        return val[col * r + row];
+    {
+        if(order == Config::config->MatColMajor)
+        {
+            return val[col * r + row];
+        }
+        else
+        {
+            return val[row * c + col];
+        }
+    }
     else{
         DBGprint("Function operator() The row value or column value entered is out of range\n");
     }
@@ -85,8 +97,16 @@ ll128 &Mat::operator()(int row, int col) {
 //Get the value of row and column 
 
 ll128 Mat::get(int row, int col) const {
-     if(row >= 0 && row < r && col >= 0 && col < c)
-        return val[col * r + row];
+     if(row >= 0 && row < r && col >= 0 && col < c){
+        if(order == Config::config->MatColMajor)
+        {
+            return val[col * r + row];
+        }
+        else
+        {
+            return val[row * c + col];
+        }
+     }
     else{
         DBGprint("Function get The row value or column value entered is out of range\n");
     }
@@ -183,9 +203,13 @@ bool Mat::operator==(Mat p) {
 //    bool match = true;
     if(p.rows() == r && p.cols() == c)
     {
-        for (int i = 0; i < l; i++) {
-            if (val[i] != p.getVal(i)) {
-                return false;
+        for (int i = 0; i < r; i++)
+        {
+            for (int j = 0; j < c; j++)
+            {
+                if (this->operator()(i,j) != p.operator()(i,j)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -217,10 +241,12 @@ Mat Mat::operator+(const Mat &a) {     //矩阵加法
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] + a.val[i];
-            ret.val[i] = ret.val[i] >= MOD ? ret.val[i] - MOD : ret.val[i];
-            ret.val[i] = ret.val[i] <= -MOD ? ret.val[i] + MOD : ret.val[i];
+        for (int i = 0; i < r; i++){
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) + a.get(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) >= Config::config->MOD ? ret.operator()(i,j) - Config::config->MOD : ret.operator()(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) <= -Config::config->MOD ? ret.operator()(i,j) + Config::config->MOD : ret.operator()(i,j);
+            }
         }
         return ret;
     }
@@ -237,11 +263,12 @@ void Mat::operator+=(const Mat &a) {   //矩阵+=操作
     if(a.cols() == c && a.rows() == r)
     {
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            val[i] += a.val[i];
-            val[i] = val[i] >= MOD ? val[i] - MOD : val[i];
-            val[i] = val[i] <= -MOD ? val[i] + MOD : val[i];
-        }
+         for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                this->operator()(i,j) += a.get(i,j);
+                this->operator()(i,j) = this->operator()(i,j) >= Config::config->MOD ? this->operator()(i,j) - Config::config->MOD : this->operator()(i,j);
+                this->operator()(i,j) = this->operator()(i,j) <= -Config::config->MOD ? this->operator()(i,j) + Config::config->MOD : this->operator()(i,j);
+            }
     }
     else
     {
@@ -256,8 +283,8 @@ Mat Mat::operator+(const ll128 &b) {     //矩阵每个数都加上b
     int l = r * c;
     for (int i = 0; i < l; i++) {
         ret.val[i] = val[i] + b;
-        ret.val[i] = ret.val[i] >= MOD ? ret.val[i] - MOD : ret.val[i];
-        ret.val[i] = ret.val[i] <= -MOD ? ret.val[i] + MOD : ret.val[i];
+        ret.val[i] = ret.val[i] >= Config::config->MOD ? ret.val[i] - Config::config->MOD : ret.val[i];
+        ret.val[i] = ret.val[i] <= -Config::config->MOD ? ret.val[i] + Config::config->MOD : ret.val[i];
     }
     return ret;
 }
@@ -269,11 +296,12 @@ Mat Mat::operator-(const Mat &a) {      //矩阵减法操作
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] - a.val[i];
-            ret.val[i] = ret.val[i] > MOD ? ret.val[i] - MOD : ret.val[i];
-            ret.val[i] = ret.val[i] < -MOD ? ret.val[i] + MOD : ret.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) - a.get(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) > Config::config->MOD ? ret.operator()(i,j) - Config::config->MOD : ret.operator()(i,j);
+                ret.operator()(i,j) = ret.operator()(i,j) < -Config::config->MOD ? ret.operator()(i,j) + Config::config->MOD : ret.operator()(i,j);
+            }
         return ret;
     }
     else
@@ -289,8 +317,8 @@ Mat Mat::operator-(ll128 b) {    //矩阵每个数减去b
     int l = r * c;
     for (int i = 0; i < l; i++) {
         ret.val[i] = val[i] - b;
-        ret.val[i] = ret.val[i] > MOD ? ret.val[i] - MOD : ret.val[i];
-        ret.val[i] = ret.val[i] < -MOD ? ret.val[i] + MOD : ret.val[i];
+        ret.val[i] = ret.val[i] > Config::config->MOD ? ret.val[i] - Config::config->MOD : ret.val[i];
+        ret.val[i] = ret.val[i] < -Config::config->MOD ? ret.val[i] + Config::config->MOD : ret.val[i];
     }
     ret.residual();
     return ret;
@@ -308,7 +336,7 @@ Mat Mat::operator*(const Mat &a) {     //不同矩阵存储方式的乘法操作
         Mat ret(r, a.cols());
         int i, j;
         ll128 tmp = 0;
-        if (pair_order_type(this, &a) == MM_NT){     // Column storage multiply row storage
+        if (pair_order_type(this, &a) == Config::config->MM_NT){     // Column storage multiply row storage
             for (int k = 0; k < c; k++){
                 for (int j = 0; j < tmp_c; j++){
                     tmp = a.val[k * tmp_c + j];
@@ -319,7 +347,7 @@ Mat Mat::operator*(const Mat &a) {     //不同矩阵存储方式的乘法操作
     
             }
         }
-        if (pair_order_type(this, &a) == MM_NN){     //Column storage multiply column storage
+        if (pair_order_type(this, &a) == Config::config->MM_NN){     //Column storage multiply column storage
             for (int j = 0; j < tmp_c; j++){
                 for (int k = 0; k < c; k++){
                     tmp = a.val[j * c + k];
@@ -330,7 +358,7 @@ Mat Mat::operator*(const Mat &a) {     //不同矩阵存储方式的乘法操作
     
             }
         }
-        if (pair_order_type(this, &a) == MM_TN){     //Row storage multiply column storage
+        if (pair_order_type(this, &a) == Config::config->MM_TN){     //Row storage multiply column storage
             for (int j = 0; j < tmp_c; j++){
                 for (int i = 0; i < r; i++){
                     tmp = ret.val[j * r + i];
@@ -342,7 +370,7 @@ Mat Mat::operator*(const Mat &a) {     //不同矩阵存储方式的乘法操作
     
             }
         }
-        if (pair_order_type(this, &a) == MM_TT){     //Row storage multiply row storage
+        if (pair_order_type(this, &a) == Config::config->MM_TT){     //Row storage multiply row storage
             for (int j = 0; j < tmp_c; j++){
                 for (int i = 0; i < r; i++){
                     tmp = ret.val[j * r + i];
@@ -425,9 +453,10 @@ Mat Mat::operator/(Mat a) {
         ret = *this;
         ret.sign();
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] / a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) / a.get(i,j);
+            }
         ret.residual();
         return ret;
     }
@@ -455,7 +484,7 @@ Mat Mat::operator>>(int b) const {
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        ret.val[i] = val[i] > MOD / 2 ? val[i] - MOD >> b : val[i] >> b;
+        ret.val[i] = val[i] > Config::config->MOD / 2 ? val[i] - Config::config->MOD >> b : val[i] >> b;
     }
     return ret;
 }
@@ -478,9 +507,10 @@ Mat Mat::operator&(const Mat &a) const {
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] & a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->get(i,j) & a.get(i,j);
+            }
         return ret;
     }
     else
@@ -509,7 +539,7 @@ Mat Mat::oneMinus_IE() {
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        ret.val[i] = IE - val[i];
+        ret.val[i] = Config::config->IE - val[i];
     }
     ret.residual();
     return ret;
@@ -520,13 +550,14 @@ Mat Mat::oneMinus_IE() {
 //and map all the elements in the new matrix to the field return the new matrix
 
 Mat Mat::dot(const Mat &a) {
-    if(a.cols() == c && a.rows() == r)
+    if(a.cols() == c && a.rows() == r && a.order == order)
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = val[i] * a.val[i];
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = this->operator()(i,j) * a.get(i,j);
+            }
         ret.residual();
         return ret;
     }
@@ -630,13 +661,14 @@ Mat Mat::argmax() {
 Mat Mat::equal(const Mat &a) {
     Mat ret(r, c);
     int l = r * c;
-    for (int i = 0; i < l; i++) {
-        ll128 tmp = val[i] - a.val[i];
-        tmp = (tmp % MOD + MOD) % MOD;
-        tmp = tmp > MOD / 2 ? tmp - MOD : tmp;
-        tmp = tmp < 0 ? -tmp : tmp;
-        ret.val[i] = tmp < IE / 2 ? 1 : 0;
-    }
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++) {
+            ll128 tmp = this->operator()(i,j) - a.get(i,j);
+            tmp = (tmp % Config::config->MOD + Config::config->MOD) % Config::config->MOD;
+            tmp = tmp > Config::config->MOD / 2 ? tmp - Config::config->MOD : tmp;
+            tmp = tmp < 0 ? -tmp : tmp;
+            ret.val[i] = tmp < Config::config->IE / 2 ? 1 : 0;
+        }
 //    for (int j = 0; j < 10; ++j) {
 //        DBGprint("%d: %lld, %lld, %lld\n", j, (ll)val[j], (ll)a.val[j], (ll)ret.val[j]);
 //    }
@@ -652,9 +684,10 @@ Mat Mat::eq(const Mat &a) {
     {
         Mat ret(r, c);
         int l = r * c;
-        for (int i = 0; i < l; i++) {
-            ret.val[i] = (val[i] == a.val[i]) ? 1 : 0;
-        }
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++) {
+                ret.operator()(i,j) = (this->operator()(i,j) == a.get(i,j)) ? 1 : 0;
+            }
         return ret;
     }
     else
@@ -692,7 +725,7 @@ Mat Mat::inverse() {
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        ret.val[i] = Constant::Util::inverse(val[i], MOD);
+        ret.val[i] = Constant::Util::inverse(val[i], Config::config->MOD);
     }
     return ret;
 }
@@ -704,17 +737,17 @@ Mat Mat::sqrt_inv() {
     Mat ret(r, c, 1);
     Mat a(*this);
     int l = r * c;
-    ll b = Constant::SQRTINV;
+    ll b = Config::config->SQRTINV;
     while (b != 0) {
         if (b & 1) {
             for (int i = 0; i < l; i++) {
                 ret.val[i] = ret.val[i] * a.val[i];
-                ret.val[i] %= MOD;
+                ret.val[i] %= Config::config->MOD;
             }
         }
         for (int i = 0; i < l; i++) {
             a.val[i] *= a.val[i];
-            a.val[i] %= MOD;
+            a.val[i] %= Config::config->MOD;
         }
         b >>= 1;
     }
@@ -727,7 +760,7 @@ Mat Mat::sqrt_inv() {
 
 Mat Mat::divideBy2() {
     Mat ret(r, c);
-    ll128 inv2 = Constant::inv2;
+    ll128 inv2 = Config::config->INV2;
     int l = r * c;
     for (int i = 0; i < l; i++) {
         ret.val[i] = val[i] * inv2;
@@ -759,13 +792,13 @@ Mat Mat::sigmoid() const {
         for (int j = 0; j < c; j++) {
             ll128 u = this->get(i, j);
             u = Constant::Util::get_residual(u);
-            ll128 u_add = u + IE / 2;
-            ll128 u_sub = u - IE / 2;
+            ll128 u_add = u + Config::config->IE / 2;
+            ll128 u_sub = u - Config::config->IE / 2;
             bool p, q;
-            p = u < MOD / 2;
-            q = u > MOD - IE / 2;
+            p = u < Config::config->MOD / 2;
+            q = u > Config::config->MOD - Config::config->IE / 2;
             ret(i, j) = u_add * (!(!p & !q) ? 1 : 0);
-            q = u > IE / 2;
+            q = u > Config::config->IE / 2;
             ret(i, j) -= u_sub * ((p & q) ? 1 : 0);
             ret(i, j) = Constant::Util::get_residual(ret(i, j));
         }
@@ -780,22 +813,22 @@ Mat Mat::hard_tanh() {
         for (int j = 0; j < c; j++) {
             ll128 u = this->get(i, j);
             u = Constant::Util::get_residual(u);
-            if (u > MOD / 2)
-                u = u - MOD;
-            temp = (u * 1.0) / IE;
+            if (u > Config::config->MOD / 2)
+                u = u - Config::config->MOD;
+            temp = (u * 1.0) / Config::config->IE;
             if (temp > 1)
                 ans = 1;
             else if (temp < -1)
                 ans = 0;
             else ans = (temp + 1) / 2;
-            temp_l = ans * IE;
+            temp_l = ans * Config::config->IE;
             temp_l = Constant::Util::get_residual(temp_l);
             ret(i, j) = temp_l;
             /*ll128 u_add = u/2 + IE / 2;
             ll128 u_sub = u/2 - IE / 2;
             bool p, q;
-            p = u < MOD / 2;
-            q = u > MOD - IE ;
+            p = u < Config::config->MOD / 2;
+            q = u > Config::config->MOD - IE ;
             ret(i, j) = u_add * (!(!p & !q) ? 1 : 0);
             q = u > IE ;
             ret(i, j) -= u_sub * ((p & q) ? 1 : 0);
@@ -817,10 +850,10 @@ Mat Mat::tanh() {
             temp=0;
             u = Constant::Util::get_residual(u);
             for (int k=0;k<9;k++){
-                temp=(temp+coefficients[k])*u/IE;
+                temp=(temp+coefficients[k])*u/Config::config->IE;
                 temp=Constant::Util::get_residual(temp);
             }
-            ret(i,j)=(temp+IE)/2;
+            ret(i,j)=(temp+Config::config->IE)/2;
         }
     return ret;
 }
@@ -834,13 +867,13 @@ Mat Mat::cross_entropy() {
         for (int j = 0; j < c; j++) {
             ll128 u = this->get(i, j);
             u = Constant::Util::get_residual(u);
-            ll128 u_add = u + IE / 2;
-            ll128 u_sub = u - IE / 2;
+            ll128 u_add = u + Config::config->IE / 2;
+            ll128 u_sub = u - Config::config->IE / 2;
             bool p, q;
-            p = u < MOD / 2;
-            q = u > MOD - IE / 2;
+            p = u < Config::config->MOD / 2;
+            q = u > Config::config->MOD - Config::config->IE / 2;
             ret(i, j) = u_add * (!(!p & !q) ? 1 : 0);
-            q = u > IE / 2;
+            q = u > Config::config->IE / 2;
             ret(i, j) -= u_sub * ((p & q) ? 1 : 0);
             ret(i, j) = Constant::Util::get_residual(ret(i, j));
         }
@@ -854,8 +887,8 @@ Mat Mat::LTZ() {
         for (int j=0;j<c;j++){
             ll128 u=this->get(i,j);
             u = Constant::Util::get_residual(u);
-            if (u>MOD/2)
-                ret(i,j)=IE;
+            if (u>Config::config->MOD/2)
+                ret(i,j)=Config::config->IE;
             else
                 ret(i,j)=0;
         }
@@ -878,9 +911,9 @@ Mat Mat::chebyshev_tanh() {
         for (int j=0;j<c;j++){
             ll128 u=this->get(i,j);
             u = Constant::Util::get_residual(u);
-            if (u>MOD/2)
-                u=u-MOD;
-            temp=(u*1.0)/IE;
+            if (u>Config::config->MOD/2)
+                u=u-Config::config->MOD;
+            temp=(u*1.0)/Config::config->IE;
             if (temp>1)
                 ans=1;
             else if (temp<-1)
@@ -893,7 +926,7 @@ Mat Mat::chebyshev_tanh() {
                 ans*=temp;
                 ans = (ans + 1) / 2;
             }
-            temp_l=ans*IE;
+            temp_l=ans*Config::config->IE;
             temp_l=Constant::Util::get_residual(temp_l);
             ret(i,j)=temp_l;
         }
@@ -908,12 +941,12 @@ Mat Mat::raw_tanh(){
         for (int j=0;j<c;j++){
             ll128 u=this->get(i,j);
             u = Constant::Util::get_residual(u);
-            if (u>MOD/2)
-                u=u-MOD;
-            temp=(u*1.0)/IE;
+            if (u>Config::config->MOD/2)
+                u=u-Config::config->MOD;
+            temp=(u*1.0)/Config::config->IE;
             temp=(exp(temp)-exp(-temp))/(exp(temp)+exp(-temp));
             //temp=(temp+1)/2;
-            temp_l=temp*IE;
+            temp_l=temp*Config::config->IE;
             temp_l= Constant::Util::get_residual(temp_l);
 
             ret(i,j)=temp_l;
@@ -937,7 +970,7 @@ Mat Mat::row(int st, int ed) const {
     if(st >= 0 && st <= r && ed >= 0 && ed <= r && (ed - st) % r != 0)
     {
         Mat ret((ed - st + r) % r, c);
-        if (order == MatColMajor || 1) {
+        if (order == Config::config->MatColMajor || 1) {
             if (st < ed) {
                 int tmp_r = ed - st;
                 for (int i = 0; i < c; i++) {
@@ -996,7 +1029,7 @@ Mat Mat::opposite() const {
     Mat ret(r, c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        ret.val[i] = MOD - val[i];
+        ret.val[i] = Config::config->MOD - val[i];
     }
     return ret;
 }
@@ -1008,7 +1041,7 @@ Mat Mat::opposite() const {
 //        for (int j=0;j<c;j++){
 //            ll128 u=this->get(i,j);
 //            u = Constant::Util::get_residual(u);
-//            if (u>MOD/2)
+//            if (u>Config::config->MOD/2)
 //                ret(i,j)=IE;
 //            else
 //                ret(i,j)=0;
@@ -1022,9 +1055,9 @@ Mat Mat::SmoothLevel() {
     for (int i=0;i<r;i++)
         for (int j=0;j<c;j++){
             ll128 u=this->get(i,j);
-            u = log(IE/Constant::Util::get_residual(u));
-            if (u>MAX_SMOOTHING_LEVEL) {
-                u = MAX_SMOOTHING_LEVEL;
+            u = log(Config::config->IE/Constant::Util::get_residual(u));
+            if (u>Config::config->MAX_SMOOTHING_LEVEL) {
+                u = Config::config->MAX_SMOOTHING_LEVEL;
             }
             ret(i,j)=u;
         }
@@ -1034,8 +1067,8 @@ Mat Mat::SmoothLevel() {
 Mat Mat::toOneHot() const {
     Mat ret(10, c);
     for (int i = 0; i < c; i++) {
-        int y = val[i] >> DECIMAL_PLACES;
-        ret(y, i) = IE;
+        int y = val[i] >> Config::config->DECIMAL_PLACES;
+        ret(y, i) = Config::config->IE;
     }
     return ret;
 }
@@ -1167,7 +1200,7 @@ void Mat::cp(const Mat &a, const Mat &mask) {
 void Mat::residual() {
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        val[i] = (val[i] % MOD + MOD) % MOD;
+        val[i] = (val[i] % Config::config->MOD + Config::config->MOD) % Config::config->MOD;
     }
 }
 
@@ -1186,7 +1219,7 @@ void Mat::AddDot(int k, ll128 *x, int incx, ll128 *y, ll128 *gamma) {
 void Mat::sign() {
     int l = r * c;
     for (int i = 0; i < l; i++) {
-        val[i] = (val[i] > MOD / 2) ? val[i] - MOD : val[i];
+        val[i] = (val[i] > Config::config->MOD / 2) ? val[i] - Config::config->MOD : val[i];
     }
 }
 
@@ -1196,7 +1229,7 @@ void Mat::reorder() {         //将行存转为列存或者列存转为行存
     vector<ll128> v(r * c);
     int tmp_r = r;
     int tmp_c = c;
-    if (order == MatRowMajor) {
+    if (order == Config::config->MatRowMajor) {
         swap(tmp_r, tmp_c);
     }
     for (int i = 0; i < tmp_r; i++) {
@@ -1218,7 +1251,7 @@ void Mat::transorder() {    //将矩阵转置并改变排序方式
 void Mat::truncated_normal(double mean, double stddev) {
     for (int i = 0; i < r; i++)
         for (int j = 0; j < c; j++)
-            this->operator()(i, j) = floor(generateGaussianNoise(mean, stddev) * IE);
+            this->operator()(i, j) = floor(generateGaussianNoise(mean, stddev) * Config::config->IE);
 }
 
 void Mat::constant(double b) {
@@ -1329,8 +1362,8 @@ void Mat::addFrom_pos(char *&p) {     // 将该矩阵加上从p中取出的矩�
 //    cout << "l: " << l << endl;
     for (int i = 0; i < l; i++) {
         val[i] += Constant::Util::char_to_ll(p);
-        val[i] = val[i] >= MOD ? val[i] - MOD : val[i];
-        val[i] = val[i] <= -MOD ? val[i] + MOD : val[i];
+        val[i] = val[i] >= Config::config->MOD ? val[i] - Config::config->MOD : val[i];
+        val[i] = val[i] <= -Config::config->MOD ? val[i] + Config::config->MOD : val[i];
     }
 }
 
@@ -1471,10 +1504,10 @@ void Mat::random_neg(Mat *a) {
     int c = a->cols();
     Mat ret(r, c);
     for (int i = 0; i < r*c; i++) {
-        ret.val[i] = Constant::Util::randomlong() % IE;
+        ret.val[i] = Constant::Util::randomlong() % Config::config->IE;
         if (rand() % 2)
         {
-            ret.val[i] = MOD - ret.val[i];
+            ret.val[i] = Config::config->MOD - ret.val[i];
         }
     }
     *a = ret;

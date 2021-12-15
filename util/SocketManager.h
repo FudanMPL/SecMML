@@ -24,7 +24,7 @@ public:
         string* ip;
         int* port;
         SOCK serv_sock;
-        SOCK clnt_sock[M];
+        SOCK clnt_sock[Config::config->M];
         SOCK sock;
         int epoch;
     public:

@@ -1676,22 +1676,22 @@ void MathOp::Equal::back() {}
 void MathOp::broadcast(Mat *a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->send_message(a[i]); 
+            SocketManager::socket_io[node_type][i]->send_message(a[i]); 
         }
     }
 }
 void MathOp::broadcast_share(Mat *a, int target) {
-    socket_io[node_type][target]->send_message(a);
+    SocketManager::socket_io[node_type][target]->send_message(a);
 }
 
 void MathOp::receive_share(Mat* a, int from) {
-    socket_io[node_type][from]->recv_message(*a);
+    SocketManager::socket_io[node_type][from]->recv_message(*a);
 }
 
 void MathOp::broadcase_rep(Mat *a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->send_message(a);
+            SocketManager::socket_io[node_type][i]->send_message(a);
         }
     }
 }
@@ -1699,7 +1699,7 @@ void MathOp::broadcase_rep(Mat *a) {
 void MathOp::receive(Mat* a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            a[i] = socket_io[node_type][i]->recv_message();
+            a[i] = SocketManager::socket_io[node_type][i]->recv_message();
         }
     }
 }
@@ -1707,7 +1707,7 @@ void MathOp::receive(Mat* a) {
 void MathOp::receive_add(Mat *a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->recv_message(a);
+            SocketManager::socket_io[node_type][i]->recv_message(a);
         }
     }
 }
@@ -1715,7 +1715,7 @@ void MathOp::receive_add(Mat *a) {
 void MathOp::receive_rep(Mat *a) {
     for (int i = 0; i < M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->recv_message(*(a+i));
+            SocketManager::socket_io[node_type][i]->recv_message(*(a+i));
         }
     }
 }

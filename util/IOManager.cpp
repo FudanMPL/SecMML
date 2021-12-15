@@ -356,7 +356,7 @@ Mat* IOManager::secret_share_mat_data(Mat &data, int size) {
 void IOManager::init() {
     DBGprint("load training data......\n");
 
-    ifstream infile( "../datasets/mnist/mnist_train.csv" );
+    ifstream infile( "datasets/mnist/mnist_train.csv" );
     load(infile, train_data, train_label, Config::config->N);
     secret_share(train_data, train_label, "train");
 
@@ -364,7 +364,7 @@ void IOManager::init() {
     // load_ss(infile, train_data, train_label, Config::config->N);
     infile.close();
 
-    ifstream intest( "../datasets/mnist/mnist_test.csv" );
+    ifstream intest( "datasets/mnist/mnist_test.csv" );
     load(intest, test_data, test_label, Config::config->NM);
     secret_share(test_data, test_label, "test");
     // ifstream intest( "mnist/mnist_test_"+to_string(node_type)+".csv" );

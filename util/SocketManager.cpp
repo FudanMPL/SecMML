@@ -4,7 +4,10 @@
 
 #include "SocketManager.h"
 
-SocketOnline *socket_io[Config::config->M][Config::config->M];
+
+//SocketOnline *socket_io[Config::config->M][Config::config->M];
+
+
 
 void SocketManager::init_windows_socket() {
 #ifdef UNIX_PLATFORM
@@ -136,6 +139,9 @@ void SocketManager::SMMLF::init(string* ip, int* port) {
 }
 
 void SocketManager::SMMLF::server() {
+    clnt_sock = new SOCK[Config::config->M];
+    for(int i = 0; i < Config::config->M;i++)
+        socket_io[i].resize(Config::config->M);
     server_init(serv_sock, *(ip+node_type), *(port + node_type));
     char buffer[101];
     for (int i = node_type + 1; i < Config::config->M; i++) {

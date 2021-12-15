@@ -14,8 +14,8 @@ SocketOnline::~SocketOnline() {
 SocketOnline::SocketOnline(int id, SOCK sock) {
     this->id = id;
     this->sock = sock;
-    buffer = new char[BUFFER_MAX];
-    header = new char[max(HEADER_LEN, HEADER_LEN_OPT) + 1];
+    buffer = new char[Config::config->BUFFER_MAX];
+    header = new char[max(Config::config->HEADER_LEN, Config::config->HEADER_LEN_OPT) + 1];
     send_num = 0;
     recv_num = 0;
     init();
@@ -24,8 +24,8 @@ SocketOnline::SocketOnline(int id, SOCK sock) {
 SocketOnline& SocketOnline::operator=(const SocketOnline &u) {
     id = u.id;
     sock = u.sock;
-    buffer = new char[BUFFER_MAX];
-    header = new char[max(HEADER_LEN, HEADER_LEN_OPT) + 1];
+    buffer = new char[Config::config->BUFFER_MAX];
+    header = new char[max(Config::config->HEADER_LEN, Config::config->HEADER_LEN_OPT) + 1];
     send_num = 0;
     recv_num = 0;
 }
@@ -33,8 +33,8 @@ SocketOnline& SocketOnline::operator=(const SocketOnline &u) {
 void SocketOnline::init(int id, SOCK sock) {
     this->id = id;
     this->sock = sock;
-    buffer = new char[BUFFER_MAX];
-    header = new char[HEADER_LEN + 1];
+    buffer = new char[Config::config->BUFFER_MAX];
+    header = new char[Config::config->HEADER_LEN + 1];
     send_num = 0;
     recv_num = 0;
 #ifdef UNIX_PLATFORM
@@ -129,7 +129,7 @@ void SocketOnline::send_message(const Mat &a) {
     int len_buffer;
     len_buffer = a.toString_pos(buffer);
     Constant::Util::int_to_header(header, len_buffer);
-    send_message_n(sock, header, HEADER_LEN);
+    send_message_n(sock, header, Config::config->HEADER_LEN);
     send_message_n(sock, buffer, len_buffer);
 }
 
@@ -140,7 +140,7 @@ void SocketOnline::send_message(Mat *a) {
 //    Constant::Util::int_to_header(header, a->rows());
 //    Constant::Util::int_to_header(header + 4, a->cols());
     Constant::Util::int_to_header(header, len_buffer);
-    send_message_n(sock, header, HEADER_LEN);
+    send_message_n(sock, header, Config::config->HEADER_LEN);
 //    send_message_n(sock, header, HEADER_LEN_OPT);
     send_message_n(sock, buffer, len_buffer);
 }
@@ -153,7 +153,7 @@ void SocketOnline::send_message(int b) {
 
 Mat SocketOnline::recv_message() {
     Mat ret;
-    int len_header = recv_message_n(sock, header, HEADER_LEN);
+    int len_header = recv_message_n(sock, header, Config::config->HEADER_LEN);
     int l = Constant::Util::header_to_int(header);
     int len_buffer = recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
     char* p = buffer;
@@ -162,7 +162,7 @@ Mat SocketOnline::recv_message() {
 }
 
 void SocketOnline::recv_message(Mat *a) {
-    recv_message_n(sock, header, HEADER_LEN);
+    recv_message_n(sock, header, Config::config->HEADER_LEN);
     recv_message_n(sock, buffer, a->getStringLen());
     char* p = buffer;
     a->addFrom_pos(p);
@@ -171,7 +171,7 @@ void SocketOnline::recv_message(Mat *a) {
 
 void SocketOnline::recv_message(Mat &a) {
     // add this to receive share, added by curious 2020.6.3
-    recv_message_n(sock, header, HEADER_LEN);
+    recv_message_n(sock, header, Config::config->HEADER_LEN);
 //    int r = Constant::Util::char_to_int(header);
 //    int c = Constant::Util::char_to_int(header);
     recv_message_n(sock, buffer, Constant::Util::header_to_int(header));

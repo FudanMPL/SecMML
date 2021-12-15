@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-15 20:47:52
+ * @LastEditTime: 2021-12-15 21:01:39
  */
 
 #include <cstdio>
@@ -14,6 +14,7 @@
 #include <iostream>
 #include "../core/Player.h"
 #include "../util/IOManager.h"
+#include "../util/SocketManager.h"
 using namespace std;
 
 int main()
@@ -27,5 +28,10 @@ int main()
 
     Player::init();
     IOManager::init();
-    
+    SocketManager::SMMLF tel;
+    if (!Config::config->LOCAL_TEST) {
+        tel.init(Config::config->IP,Config::config->PORT);
+    } else {
+        tel.init();
+    }
 }   

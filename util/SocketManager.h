@@ -1,3 +1,9 @@
+/*
+ * @Author: Xinyu Tu
+ * @Date: 2021-12-15 20:59:40
+ * @LastEditors: Xinyu Tu
+ * @LastEditTime: 2021-12-15 21:03:11
+ */
 //
 // Created by tangdingyi on 2019/12/25.
 //
@@ -23,8 +29,8 @@ public:
     static void print_socket();
     static void print();
     class SMMLF {
-        string* ip;
-        int* port;
+        vector<string> ip;
+        vector<int> port;
         SOCK serv_sock;
         SOCK *clnt_sock;
         SOCK sock;
@@ -32,7 +38,7 @@ public:
     public:
         SMMLF();
         void init();
-        void init(string* ip, int* port);
+        void init(vector<string> ip, vector<int> port);
         void server();
         void client();
         void server_exit();

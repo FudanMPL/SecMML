@@ -1,7 +1,7 @@
 //
 // Created by tangdingyi on 2019/12/25.
 //
-
+#include <math.h>
 #include "Constant.h"
 
 int node_type;
@@ -95,7 +95,14 @@ int Constant::Util::getNext(char *p, int begin)
     while (!isdigit(p[begin]))
         begin++;
     while (isdigit(p[begin]))
+    {
         begin++;
+        if (p[begin] == '.')
+        {
+            // 下一位是小数点，直接跳过
+            ++begin;
+        }
+    }
 
     return begin;
 }
@@ -130,15 +137,55 @@ int Constant::Util::getint(char *p, int &begin)
 
 ll Constant::Util::getll(char *p, int &begin)
 {
-    while (!isdigit(*p))
-        p++;
-    ll ret = 0;
-    while (isdigit(*p))
+    bool isP = true;
+    while (!isdigit(p[begin]))
     {
-        ret = 10 * ret + *p - '0';
-        p++;
+        // 读到负号，是负数
+        if (p[begin] == '-')
+            isP = false;
+        begin++;
     }
-    return ret;
+
+    ll ret = 0;
+    while (isdigit(p[begin]))
+    {
+        ret = 10 * ret + p[begin] - '0';
+        begin++;
+    }
+
+    return isP ? ret : -ret;
+}
+
+int Constant::Util::getfixpoint(char *p, int &begin)
+{
+    bool isP = true;
+    while (!isdigit(p[begin]))
+    {
+        // 读到负号，是负数
+        if (p[begin] == '-')
+            isP = false;
+        begin++;
+    }
+
+    ll ret = 0;
+    int pointnum = 0;         // 小数点的位数
+    int isfloat = 0;          // 是否是小数点部分，是：给pointnum+1
+    while (isdigit(p[begin])) // is number, begin to read
+    {
+        ret = 10 * ret + (p[begin] - '0');
+        pointnum += isfloat;
+        begin++;
+
+        if (p[begin] == '.') // 下一位是小数点，直接跳过
+        {                    // 浮点数
+            isfloat = 1;
+            begin++;
+        }
+    }
+    // 先除掉小数点的位数，再乘定点数位数
+    int result = (ret * 1.0 / pow(10, pointnum)) * IE;
+
+    return isP ? result : -result;
 }
 
 ll Constant::Util::randomlong()

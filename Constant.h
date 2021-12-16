@@ -69,7 +69,7 @@
 #define TN 2
 #define MAX_NODE_NUM 2001
 #define MASTER 0
-#define IE 1048576                  //定点数的精度 2的100次方
+#define IE 1048576                  //定点数的精度 2的20次方
 #define NM 1                    //测试集的数量
 #define BIT_LENGTH 64               //bit length
 #define REDUNDANCY 3                
@@ -176,6 +176,7 @@ public:
         static int getNext(char *p, int begin);
         static int getint(char* p,int &begin);
         static ll getll(char* p,int &begin);
+        static int getfixpoint(char *p, int &begin);
         static ll randomlong();
         static ll128 get_residual(ll128 a);
         static ll128 get_sign(ll128 a);

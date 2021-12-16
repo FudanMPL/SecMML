@@ -52,8 +52,8 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
 
         if (!LABEL_P)
         { // 第一列是标签
-            temp = Constant::Util::getint(ch, begin);
-            label(0, i) = temp * IE;
+            temp = Constant::Util::getfixpoint(ch, begin);
+            label(0, i) = temp;
         }
 
         // 获得特征值
@@ -61,8 +61,9 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         int j;
         for (j = 0; j < USE_D; j++)
         {
-            temp = Constant::Util::getint(ch, begin);
-            data(j, i) = temp * IE / 256; // 这里可以改成位移   
+            temp = Constant::Util::getfixpoint(ch, begin);
+            /// TODO: 这里本来有一个除256，是因为是像素数据
+            data(j, i) = temp; // 这里可以改成位移   
         }
 
         if (LABEL_P)// 最后一列是标签
@@ -76,8 +77,8 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
             }
             // else 获取了所有的特征维度，那么下一个位置就是标签值
 
-            temp = Constant::Util::getint(ch, begin);
-            label(0, i) = temp * IE;
+            temp = Constant::Util::getfixpoint(ch, begin);
+            label(0, i) = temp;
         }
 
         i++;

@@ -13,46 +13,46 @@ Cell::Cell(NN* nn, int c_in, int h_in, int x_in){
     this->h_in=h_in;
     this->x_in=x_in;
     cout<<"cout"<<endl;
-    c_out=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    c_out=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"hout"<<endl;
-    h_out=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    h_out=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
 
     cout<<"st_m"<<endl;
-    st_m=nn->addnode(D2+CH+1,B,NeuronMat::NODE_OP);
+    st_m=nn->addnode(Config::config->D2+Config::config->CH+1,Config::config->B,NeuronMat::NODE_OP);
     cout<<"st_f"<<endl;
-    st_f=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    st_f=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"st_i"<<endl;
-    st_i=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    st_i=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"st_c"<<endl;
-    st_c=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    st_c=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"st_o"<<endl;
-    st_o=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    st_o=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
 
     cout<<"sig_f"<<endl;
-    sig_f=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    sig_f=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"sig_i"<<endl;
-    sig_i=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    sig_i=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"tanh_cc"<<endl;
-    tanh_cc=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    tanh_cc=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"sig_o"<<endl;
-    sig_o=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    sig_o=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
 
     cout<<"mul_f"<<endl;
-    mul_f=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    mul_f=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
     cout<<"mul_i"<<endl;
-    mul_i=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    mul_i=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
 
     cout<<"w_f"<<endl;
-    w_f=nn->addnode(CH,D2+CH+1,NeuronMat::NODE_NET);
+    w_f=nn->addnode(Config::config->CH,Config::config->D2+Config::config->CH+1,NeuronMat::NODE_NET);
     cout<<"w_i"<<endl;
-    w_i=nn->addnode(CH,D2+CH+1,NeuronMat::NODE_NET);
+    w_i=nn->addnode(Config::config->CH,Config::config->D2+Config::config->CH+1,NeuronMat::NODE_NET);
     cout<<"w_c"<<endl;
-    w_c=nn->addnode(CH,D2+CH+1,NeuronMat::NODE_NET);
+    w_c=nn->addnode(Config::config->CH,Config::config->D2+Config::config->CH+1,NeuronMat::NODE_NET);
     cout<<"w_o"<<endl;
-    w_o=nn->addnode(CH,D2+CH+1,NeuronMat::NODE_NET);
+    w_o=nn->addnode(Config::config->CH,Config::config->D2+Config::config->CH+1,NeuronMat::NODE_NET);
 
     cout<<"tanh_c"<<endl;
-    tanh_c=nn->addnode(CH,B,NeuronMat::NODE_OP);
+    tanh_c=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_OP);
 
 }
 

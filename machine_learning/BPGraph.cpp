@@ -21,7 +21,7 @@ void BPGraph::LR::graph() {
     int hidden_num = 10;
     int output_num = 1;
     input = nn->addnode(Config::config->D+1, Config::config->B, NeuronMat::NODE_INPUT);
-    output = nn->addnode(output_num, B, NeuronMat::NODE_INPUT);
+    output = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_INPUT);
     // todo 添加正态随机分布的权重初始化值
     st_w = nn->addnode(hidden_num, Config::config->D+1, NeuronMat::NODE_NET);
     st_mul = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
@@ -136,9 +136,9 @@ void BPGraph::LR::logistic_graph() {
     DBGprint("initialized!\n");
 
     nn->addOpMul_Mat(st_mul, st_w, input);
-    if(ACTIVATION==SIGMOID){
+    if(Config::config->ACTIVATION==Config::config->SIGMOID){
         nn->addOpSigmoid(out_sig,st_mul);
-    }else if (ACTIVATION==Config::config->TANH){
+    }else if (Config::config->ACTIVATION==Config::config->TANH){
         nn->addOpHybrid_Tanh(out_sig,st_mul);
     }
 
@@ -234,8 +234,8 @@ void BPGraph::LR::print_perd(int round) {
     ll tot_send = 0, tot_recv = 0;
     for (int i = 0; i < Config::config->M; i++) {
         if (node_type != i) {
-            tot_send += socket_io[node_type][i]->send_num;
-            tot_recv += socket_io[node_type][i]->recv_num;
+            tot_send += SocketManager::socket_io[node_type][i]->send_num;
+            tot_recv += SocketManager::socket_io[node_type][i]->recv_num;
         }
     }
     DBGprint("round: %d tot_time: %.3f ",

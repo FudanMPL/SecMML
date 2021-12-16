@@ -180,7 +180,7 @@ public:
     class Reveal: public Op {
         Mat *res, *a;
         Mat *b;
-        reed_solomn* rs = new reed_solomn(MOD);
+        reed_solomn* rs = new reed_solomn(Config::config->MOD);
     public:
         Reveal();
         Reveal(Mat* res, Mat* a);

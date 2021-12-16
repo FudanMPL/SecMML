@@ -13,13 +13,14 @@ link_directories(${PROJECT_SOURCE_DIR})
 
 
 set(MALICIOUS_LIB malicious_lib/reed_solomn_reconstruct.h malicious_lib/reed_solomn_reconstruct.cpp malicious_lib/feldman_vss.cpp malicious_lib/feldman_vss.h)
-set(SOURCE_FILES_BASE Constant.cpp Constant.h util/SocketOnline.cpp util/SocketOnline.h util/SocketManager.cpp util/SocketManager.h core/Mat.cpp core/Mat.h core/Player.cpp core/Player.h core/Op.cpp core/Op.h core/NeuronMat.cpp core/NeuronMat.h machine_learning/NN.cpp machine_learning/NN.h machine_learning/BPGraph.cpp machine_learning/BPGraph.h core/MathOp.cpp core/MathOp.h util/IOManager.cpp util/IOManager.h)
+set(SOURCE_FILES_BASE Constant.cpp Constant.h util/SocketOnline.cpp util/SocketOnline.h util/SocketManager.cpp util/SocketManager.h core/Mat.cpp core/Mat.h core/Player.cpp core/Player.h core/Op.cpp core/Op.h core/NeuronMat.cpp core/NeuronMat.h machine_learning/NN.cpp machine_learning/NN.h machine_learning/BPGraph.cpp machine_learning/BPGraph.h core/MathOp.cpp core/MathOp.h util/IOManager.cpp util/IOManager.h config/Config.cpp config/Config.hpp)
 
 
 #add_executable(reed malicious_lib/reed_solomn_reconstruct.cpp malicious_lib/reed_solomn_reconstruct.h Constant.h Constant.cpp malicious_lib/feldman_vss.h malicious_lib/feldman_vss.cpp)
 #add_executable(feldman malicious_lib/feldman_vss.cpp malicious_lib/feldman_vss.h)
 add_executable(MPL main.cpp ${SOURCE_FILES_BASE} ${MALICIOUS_LIB} machine_learning/LSTMGraph.cpp machine_learning/Cell.cpp)
 target_link_libraries(MPL core_lib)
+
 # target_link_libraries(MPL ws2_32)
 
 option(queqiao "Option to provide python interfaces." OFF)

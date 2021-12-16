@@ -37,6 +37,10 @@
 #include <winsock2.h>
 #endif
 
+#define PM 3
+#define PL 2
+#define PNM 10000
+
 #define DEBUG
 #ifdef DEBUG
 #define DBGprint(...) printf(__VA_ARGS__)

@@ -7,11 +7,11 @@
 NN::NN() {
     tot = 0;
     cur = 0;
-    adj.resize(MAX_NODE_NUM, vector<int>(0));
-    neuron.resize(MAX_NODE_NUM);
-    vst.resize(MAX_NODE_NUM);
-    q.resize(MAX_NODE_NUM);
-    to.resize(MAX_NODE_NUM);
+    adj.resize(Config::config->MAX_NODE_NUM, vector<int>(0));
+    neuron.resize(Config::config->MAX_NODE_NUM);
+    vst.resize(Config::config->MAX_NODE_NUM);
+    q.resize(Config::config->MAX_NODE_NUM);
+    to.resize(Config::config->MAX_NODE_NUM);
 }
 
 NN& NN::operator=(NN &a) {
@@ -221,17 +221,17 @@ void NN::addOpReLU(int res, int a) {
 
 void NN::addOpLTZ(int res, int a) {
     addedge(a, res);
-    setOp(res, new MathOp::LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+    setOp(res, new MathOp::LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
 }
 
 void NN::addOpEQZ(int res, int a) {
     addedge(a, res);
-    setOp(res, new MathOp::EQZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+    setOp(res, new MathOp::EQZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
 }
 
 void NN::addOpEQZ_2LTZ(int res, int a) {
     addedge(a, res);
-    setOp(res, new MathOp::EQZ_2LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+    setOp(res, new MathOp::EQZ_2LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
 }
 
 void NN::addOpArgmax(int res, int a) {
@@ -247,7 +247,7 @@ void NN::addOpEqual(int res, int a, int b) {
 
 void NN::toposort() {
     int l, r;
-    vst = vector<bool>(MAX_NODE_NUM, 0);
+    vst = vector<bool>(Config::config->MAX_NODE_NUM, 0);
     l = r = 0;
     for (int i = 1; i <= tot; i++) {
         if (!to[i]) {

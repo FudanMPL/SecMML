@@ -124,15 +124,18 @@ void SocketManager::print() {
 SocketManager::SMMLF::SMMLF() {}
 
 void SocketManager::SMMLF::init() {
-    // init(new string[3]{"127.0.0.1","127.0.0.1","127.0.0.1"}, new int[3]{1234,1235,1236});
+    init({"10.176.34.170","10.176.34.170","10.176.34.170"}, {1234,1235,1236});
 }
 
-void SocketManager::SMMLF::init(vector<string> ip, vector<int> port) {
+void SocketManager::SMMLF::init(const vector<string> &ip, const vector<int> &port) {
+    DBGprint("ip,port init begins");
     this->ip = ip;
     this->port = port;
+    
     init_windows_socket();
     server();
     client();
+    DBGprint("ip,port init ends");
 }
 
 void SocketManager::SMMLF::server() {

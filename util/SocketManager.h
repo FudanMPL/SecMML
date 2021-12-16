@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-15 20:59:40
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-15 21:03:11
+ * @LastEditTime: 2021-12-16 21:51:05
  */
 //
 // Created by tangdingyi on 2019/12/25.
@@ -38,7 +38,7 @@ public:
     public:
         SMMLF();
         void init();
-        void init(vector<string> ip, vector<int> port);
+        void init(const vector<string>& ip, const vector<int>& port);
         void server();
         void client();
         void server_exit();

@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-11 14:41:29
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-14 18:03:43
+ * @LastEditTime: 2021-12-16 21:44:51
  */
 #include "Config.hpp"
 
@@ -23,11 +23,11 @@ Config* Config::init(std::string file_name){
         //Initialize vectors of ip and port
         std::vector<std::string> ip;
         std::vector<int> port;
-        int sz = root["IP"].size();
-        for(int i = 0; i < sz; i++){
-            ip.push_back(root["IP"][i].asString().c_str());
+        for(int i = 0; i < root["M"].asInt(); i++){
+            ip.push_back(root["IP"][i].asString());
             port.push_back(root["PORT"][i].asInt());
         }
+        std::cout<<"ip[0]:"<<ip[0]<<std::endl;
       Config::config = new Config(root, ip, port);
     }
     return Config::config;

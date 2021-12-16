@@ -871,12 +871,12 @@ void MathOp::DegRed::forward() {
                 if (i == node_type) {
                     continue;
                 }
-                tmp[i] = *a * metadata(node_type, i);
+                tmp[i] = *a * Player::metadata(node_type, i);
             }
             broadcast(tmp);
             break;
         case 2:
-            *res = *a * metadata(node_type, node_type);
+            *res = *a * Player::metadata(node_type, node_type);
             receive(tmp);
             for (int i = 0; i < Config::config->M; i++) {
                 if (i != node_type) {

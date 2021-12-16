@@ -6,7 +6,7 @@
 
 
 /// Degree Reduction, TODO: modify, 现在的方式会导致安全风险
-Mat metadata(Config::config->M, Config::config->M);
+Mat Player::metadata;
 vector<Player> Player::player;
 
 Player::Player(){}
@@ -19,6 +19,7 @@ Player::Player(int id, ll128 key, ll128 lagrange) {
 }
 
 void Player::init() {
+    metadata.init(Config::config->M, Config::config->M);
     ll128 key[Config::config->M], lagrange[Config::config->M];
     Mat vandermonde(Config::config->M, Config::config->M), vandermonde_inv(Config::config->M, Config::config->M), des(Config::config->M, Config::config->M), pol(Config::config->M, Config::config->M), van_inv2(Config::config->TN, Config::config->TN), van2(Config::config->TN, Config::config->M);
     for (int i = 0; i < Config::config->M; i++) {

@@ -7,10 +7,10 @@
 //Mat train_data(N,D), train_label(N,1);
 //Mat test_data(NM,D), test_label(NM,1);
 
-Mat IOManager::train_data = Mat(Config::config->D + 1,Config::config->N + Config::config->B - 1);
-Mat IOManager::train_label = Mat(1, Config::config->N + Config::config->B - 1);
-Mat IOManager::test_data = Mat(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
-Mat IOManager::test_label = Mat(1, Config::config->NM + Config::config->B - 1);
+Mat IOManager::train_data;
+Mat IOManager::train_label;
+Mat IOManager::test_data;
+Mat IOManager::test_label;
 
 ll poly_eval(vector<ll>coefficients, ll x) {
     ll res = coefficients[Config::config->TN-1];
@@ -354,6 +354,11 @@ Mat* IOManager::secret_share_mat_data(Mat &data, int size) {
 }
 
 void IOManager::init() {
+    train_data.init(Config::config->D + 1,Config::config->N + Config::config->B - 1);
+    train_label.init(1, Config::config->N + Config::config->B - 1);
+    test_data.init(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
+    test_label.init(1, Config::config->NM + Config::config->B - 1);
+
     DBGprint("load training data......\n");
 
     // ifstream infile( "../datasets/mnist/mnist_train.csv" );

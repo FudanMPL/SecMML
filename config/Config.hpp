@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-14 18:05:51
+ * @LastEditTime: 2021-12-19 11:25:14
  */
 
 #include <cstdio>
@@ -74,7 +74,9 @@ class Config{
                                     PORT(port),
                                     SQRTINV( (__int128_t)(atol(root["MOD"].asString().c_str())+1>>2) * (atol(root["MOD"].asString().c_str())-2) % (atol(root["MOD"].asString().c_str())-1) ),
                                     INV2(Config::inverse(2, atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str()))),
-                                    INV2_M(1<<Config::inverse(1<<root["DECIMAL_PLACES"].asInt(), atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str())))
+                                    INV2_M(1<<Config::inverse(1<<root["DECIMAL_PLACES"].asInt(), atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str()))),
+                                    USE_D(root["USE_D"].asInt()),
+                                    LABEL_P(root["LABEL_P"].asInt())
                                     {};
         const int B;
         const int D;
@@ -131,6 +133,8 @@ class Config{
         const long long SQRTINV;
         const long long INV2;
         const long long INV2_M;
+        const int USE_D;
+        const int LABEL_P;
     private:
         
 };

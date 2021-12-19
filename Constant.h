@@ -95,8 +95,10 @@ public:
         static ll char_to_ll(char* &p);
         static void int_to_header(char* p, int u);
         static int header_to_int(char* p);
-        static int getint(char* &p);
-        static ll getll(char* &p);
+        static int getNext(char *p, int begin);
+        static int getint(char* p,int &begin);
+        static ll getll(char* p,int &begin);
+        static int getfixpoint(char *p, int &begin);
         static ll randomlong();
         static ll128 get_residual(ll128 a);
         static ll128 get_sign(ll128 a);

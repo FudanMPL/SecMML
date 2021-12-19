@@ -19,7 +19,8 @@ public:
     static Mat* secret_share_vector(int* data, int size);
     static Mat* secret_share_kv_data(int* data, int size, string prefix, bool isFreq);
     static Mat* secret_share_mat_data(Mat &data, int size);
-    static void init();
+    static void init(string train_filename, string test_filename);
+    static void init(string filename);
 };
 
 

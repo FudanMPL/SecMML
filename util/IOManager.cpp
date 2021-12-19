@@ -362,6 +362,10 @@ Mat* IOManager::secret_share_mat_data(Mat &data, int size) {
 // test和train放在同一个文件中
 void IOManager::init(string filename)
 {
+    train_data.init(Config::config->D + 1,Config::config->N + Config::config->B - 1);
+    train_label.init(1, Config::config->N + Config::config->B - 1);
+    test_data.init(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
+    test_label.init(1, Config::config->NM + Config::config->B - 1);
     DBGprint("load training data......\n");
 
     ifstream infile(filename);
@@ -375,23 +379,25 @@ void IOManager::init(string filename)
 // train 和 test 数据放在两个文件中
 void IOManager::init(string train_filename, string test_filename)
 {
+    train_data.init(Config::config->D + 1,Config::config->N + Config::config->B - 1);
+    train_label.init(1, Config::config->N + Config::config->B - 1);
+    test_data.init(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
+    test_label.init(1, Config::config->NM + Config::config->B - 1);
     DBGprint("load training data......\n");
 
-    // ifstream infile(train_filename);
-    // ifstream infile( "datasets/mnist/mnist_train.csv" );
-    // load(infile, train_data, train_label, Config::config->N);
-    // secret_share(train_data, train_label, "train");
+    ifstream infile(train_filename);
+    load(infile, train_data, train_label, Config::config->N);
+    secret_share(train_data, train_label, "train");
 
-    ifstream infile( "mnist/mnist_train_"+to_string(node_type)+".csv" );
-    load_ss(infile, train_data, train_label, Config::config->N);
+    // ifstream infile( "../datasets/mnist/mnist_train_"+to_string(node_type)+".csv" );
+    // load_ss(infile, train_data, train_label, Config::config->N);
     infile.close();
 
-    // ifstream intest(test_filename);
-    //    ifstream intest( "datasets/mnist/mnist_test.csv" );
-    // load(intest, test_data, test_label, Config::config->NM);
-    //    secret_share(test_data, test_label, "test");
-    ifstream intest( "mnist/mnist_test_"+to_string(node_type)+".csv" );
-    load_ss(intest, test_data, test_label, Config::config->NM);
+    ifstream intest(test_filename);
+    load(intest, test_data, test_label, Config::config->NM);
+    secret_share(test_data, test_label, "test");
+    // ifstream intest( "../datasets/mnist/mnist_test_"+to_string(node_type)+".csv" );
+    // load_ss(intest, test_data, test_label, Config::config->NM);
     intest.close();
 
     /// TODO: secret sharing save file

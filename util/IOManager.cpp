@@ -377,21 +377,21 @@ void IOManager::init(string train_filename, string test_filename)
 {
     DBGprint("load training data......\n");
 
-    ifstream infile(train_filename);
-    //    ifstream infile( "datasets/mnist/mnist_train.csv" );
-    load(infile, train_data, train_label, Config::config->N);
-    //    secret_share(train_data, train_label, "train");
+    // ifstream infile(train_filename);
+    // ifstream infile( "datasets/mnist/mnist_train.csv" );
+    // load(infile, train_data, train_label, Config::config->N);
+    // secret_share(train_data, train_label, "train");
 
-    //    ifstream infile( "mnist/mnist_train_"+to_string(node_type)+".csv" );
-    //    load_ss(infile, train_data, train_label, Config::config->N);
+    ifstream infile( "mnist/mnist_train_"+to_string(node_type)+".csv" );
+    load_ss(infile, train_data, train_label, Config::config->N);
     infile.close();
 
-    ifstream intest(test_filename);
+    // ifstream intest(test_filename);
     //    ifstream intest( "datasets/mnist/mnist_test.csv" );
-    load(intest, test_data, test_label, Config::config->NM);
+    // load(intest, test_data, test_label, Config::config->NM);
     //    secret_share(test_data, test_label, "test");
-    //    ifstream intest( "mnist/mnist_test_"+to_string(node_type)+".csv" );
-    //    load_ss(intest, test_data, test_label, Config::config->NM);
+    ifstream intest( "mnist/mnist_test_"+to_string(node_type)+".csv" );
+    load_ss(intest, test_data, test_label, Config::config->NM);
     intest.close();
 
     /// TODO: secret sharing save file

@@ -1,20 +1,21 @@
 /*
  * @Author: Xinyu Tu
- * @Date: 2021-12-15 16:49:00
+ * @Date: 2021-12-19 11:02:28
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-15 16:49:01
+ * @LastEditTime: 2021-12-19 11:30:59
  */
-#include <vector>
-using namespace std;
+#include <iostream>
+#include "../util/IOManager.h"
 
-class Player {
-public:
-    int id;
-    ll128 key, lagrange;
-    Player();
-    Player(int id, ll128 key, ll128 lagrange);
-};
-
-int main(){
+int main()
+{
+    IOManager iOManager = IOManager();
+    iOManager.init("../datasets/mnist/mnist_train.csv","../datasets/mnist/mnist_test.csv");
+    // iOManager.init("../datasets/test/test_int.csv");
+    iOManager.train_data.print();
+    iOManager.test_data.print();
+    iOManager.train_label.print();
+    iOManager.test_label.print();
     
+    return 0;
 }

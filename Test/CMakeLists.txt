@@ -15,5 +15,5 @@ target_link_libraries(test_Mat ~/SecMML/config/json/libjsoncpp.so)
 add_executable(test_Config test_Config.cpp ${SOURCE_FILES_BASE} )
 target_link_libraries(test_Config ~/SecMML/config/json/libjsoncpp.so)  
 
-add_executable(test_IOManager test.cpp ${SOURCE_FILES_BASE})
+add_executable(test_IOManager test_IOManager.cpp ${SOURCE_FILES_BASE})
 target_link_libraries(test_IOManager ~/SecMML/config/json/libjsoncpp.so)  

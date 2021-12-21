@@ -58,6 +58,7 @@ public:
     Mat softmax();
     Mat sqrt();
     Mat inverse();
+    vector<double> backtoFloat();
     Mat sqrt_inv();
     Mat divideBy2();
     Mat relu();

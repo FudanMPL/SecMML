@@ -51,6 +51,8 @@ public:
         NeuronMat *res, *a, *b;
         Mat *temp_a,*temp_b;
         Div2mP *div2mP_f;
+
+        Reveal *reveal;
         Div2mP *div2mP_b_a, *div2mP_b_b;
     public:
         Mul_Mat();

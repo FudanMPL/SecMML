@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-21 14:51:53
+ * @LastEditTime: 2021-12-21 16:55:22
  */
 
 #include <cstdio>
@@ -48,10 +48,10 @@ int main(int argc, char** argv)
     }
     BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
 
-    if(Config::config->GRAPH_TYPE == Config::config->LOGISTIC){
+    if(Config::config->LOGISTIC==1){
         bp->logistic_graph();
     }
-    else if(Config::config->GRAPH_TYPE == Config::config->LINEAR){
+    else if(Config::config->LINEAR==1){
         bp->linear_graph();
     }
     bp->train();

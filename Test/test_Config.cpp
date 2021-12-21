@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-19 11:32:56
+ * @LastEditTime: 2021-12-21 14:51:53
  */
 
 #include <cstdio>
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     Player::init();
     IOManager::init("../datasets/mnist/mnist_train.csv", "../datasets/mnist/mnist_test.csv");
     SocketManager::SMMLF tel;
-    if (!Config::config->LOCAL_TEST) {
+    if (Config::config->LOCAL_TEST) {
         cout<<node_type<<endl;
         tel.init(Config::config->IP,Config::config->PORT);
     } else {

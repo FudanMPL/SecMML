@@ -667,7 +667,7 @@ Mat Mat::equal(const Mat &a) {
             tmp = (tmp % Config::config->MOD + Config::config->MOD) % Config::config->MOD;
             tmp = tmp > Config::config->MOD / 2 ? tmp - Config::config->MOD : tmp;
             tmp = tmp < 0 ? -tmp : tmp;
-            ret.val[i] = tmp < Config::config->IE / 2 ? 1 : 0;
+            ret.val[j] = tmp < Config::config->IE / 2 ? 1 : 0;
         }
 //    for (int j = 0; j < 10; ++j) {
 //        DBGprint("%d: %lld, %lld, %lld\n", j, (ll)val[j], (ll)a.val[j], (ll)ret.val[j]);

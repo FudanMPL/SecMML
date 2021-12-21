@@ -46,6 +46,9 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         if (!Config::config->LABEL_P)
         { // 第一列是标签
             temp = Constant::Util::getfixpoint(ch, begin);
+            if (temp >=Config::config->IE) {
+                temp = Config::config->IE;
+            }
             label(0, i) = temp;
         }
 
@@ -56,7 +59,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         {
             temp = Constant::Util::getfixpoint(ch, begin);
             /// TODO: 这里本来有一个除256，是因为是像素数据
-            data(j, i) = temp; // 这里可以改成位移   
+            data(j, i) = temp / 256; // 这里可以改成位移   
         }
 
         if (Config::config->LABEL_P)// 最后一列是标签
@@ -71,6 +74,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
             // else 获取了所有的特征维度，那么下一个位置就是标签值
 
             temp = Constant::Util::getfixpoint(ch, begin);
+           
             label(0, i) = temp;
         }
 
@@ -387,7 +391,7 @@ void IOManager::init(string train_filename, string test_filename)
 
     ifstream infile(train_filename);
     load(infile, train_data, train_label, Config::config->N);
-    secret_share(train_data, train_label, "train");
+    // secret_share(train_data, train_label, "train");
 
     // ifstream infile( "../datasets/mnist/mnist_train_"+to_string(node_type)+".csv" );
     // load_ss(infile, train_data, train_label, Config::config->N);
@@ -395,7 +399,11 @@ void IOManager::init(string train_filename, string test_filename)
 
     ifstream intest(test_filename);
     load(intest, test_data, test_label, Config::config->NM);
-    secret_share(test_data, test_label, "test");
+
+    for ( int i = 0 ; i < 10; i++) {
+       test_data.col(i, i+1).print();
+    }
+    // secret_share(test_data, test_label, "test");
     // ifstream intest( "../datasets/mnist/mnist_test_"+to_string(node_type)+".csv" );
     // load_ss(intest, test_data, test_label, Config::config->NM);
     intest.close();

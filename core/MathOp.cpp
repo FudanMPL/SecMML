@@ -60,7 +60,8 @@ MathOp::Mul_Mat::Mul_Mat(NeuronMat *res, NeuronMat *a, NeuronMat *b) {
     div2mP_f = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     div2mP_b_a = new Div2mP(temp_a,temp_a, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     div2mP_b_b = new Div2mP(temp_b,temp_b, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
-    init(2, 3);
+    reveal = new Reveal(res->getForward(), res->getForward());
+    init(4, 3);
 }
 
 void MathOp::Mul_Mat::forward() {
@@ -75,8 +76,31 @@ void MathOp::Mul_Mat::forward() {
             if (div2mP_f->forwardHasNext()) {
                 forwardRound--;
             }
-        }
             break;
+        }
+        case 3:{
+            reveal->forward();
+            if (reveal->forwardHasNext()) {
+                forwardRound--;
+            }
+            break;
+        }
+        case 4: {
+            double output = 0;
+            vector<double> tmp = res->getForward()->backtoFloat();
+            for(int j=0;j<tmp.size();j++){
+                // if (j>res.size()-130)
+                // {
+                //     DBGprint("gradient L_1 norm: %f \n",res[j]);
+                // }
+                output += tmp[j];
+            }
+            // DBGprint("forwordoutput: %f \n",output);
+            break;
+        }
+
+        
+            
     }
 }
 

@@ -257,6 +257,24 @@ Mat Mat::operator+(const Mat &a) {     //矩阵加法
    
 }
 
+/* convert the ll128 matrix to the double matrix, output results from the first column to the last column*/
+vector<double> Mat::backtoFloat(){
+    int l = r*c;
+    vector<double> ret(l);
+    for (int i = 0; i < l; i++)
+    {
+        if (val[i]>Config::config->MOD/2)
+        {
+            ret[i] = (val[i]-Config::config->MOD)*1.0/Config::config->IE;
+           // DBGprint("%f\n", ret[i]);
+           continue;
+        }
+        //DBGprint("gradient L_1 norm: %d \n",val[i]);
+        ret[i] = val[i]*1.0/Config::config->IE;
+    }
+    return ret;
+}
+
 //Overload the operator '+='
 
 void Mat::operator+=(const Mat &a) {   //矩阵+=操作
@@ -667,11 +685,14 @@ Mat Mat::equal(const Mat &a) {
             tmp = (tmp % Config::config->MOD + Config::config->MOD) % Config::config->MOD;
             tmp = tmp > Config::config->MOD / 2 ? tmp - Config::config->MOD : tmp;
             tmp = tmp < 0 ? -tmp : tmp;
-            ret.val[i] = tmp < Config::config->IE / 2 ? 1 : 0;
+          
+            ret.val[j] = tmp < Config::config->IE / 2 ? 1 : 0;
+
         }
 //    for (int j = 0; j < 10; ++j) {
 //        DBGprint("%d: %lld, %lld, %lld\n", j, (ll)val[j], (ll)a.val[j], (ll)ret.val[j]);
 //    }
+  
     return ret;
 }
 

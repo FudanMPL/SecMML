@@ -11,7 +11,7 @@ void test1(int node_type)
     if (node_type == 0)
     {
         //party0 and party 1 for test
-        stringstream ss1,ss2,ss3;
+        stringstream ss1, ss2, ss3;
         std::vector<ll128> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         std::vector<ll128> b = {9, 8, 7, 6, 5, 4, 3, 2, 1};
         std::vector<ll128> c = {11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -71,8 +71,8 @@ void test1(int node_type)
             std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
             std::cout << "False" << std::endl;
         }
-        SocketManager::send(0,1,mat1);
-        SocketManager::receive(0,1,mat1);
+        SocketManager::send(0, 1, mat1);
+        SocketManager::receive(0, 1, mat1);
         for (int i = 0; i < 9; i++)
         {
             ss3 << mat1->getVal(i) << " ";
@@ -101,19 +101,19 @@ void test1(int node_type)
         mat[1] = mat6;
         SocketManager::send(0, 2, mat[1]);
         mat[0] = SocketManager::receive(0, 2);
-        SocketManager::send(0,2,mat4);
-        SocketManager::receive(0,2,mat5);
+        SocketManager::send(0, 2, mat4);
+        SocketManager::receive(0, 2, mat5);
         free(mat1);
         free(mat4);
     }
     else if (node_type == 1)
     {
 
-        stringstream ss1,ss2,ss3;
+        stringstream ss1, ss2, ss3;
         std::vector<ll128> a = {9, 8, 7, 6, 5, 4, 3, 2, 1};
         Mat mat1(3, 3), *mat2, mat3(3, 3);
-        mat2 = new Mat(3,3);
-        *mat2 = a; 
+        mat2 = new Mat(3, 3);
+        *mat2 = a;
         mat1 = a;
         SocketManager::receive(1, 0, mat1);
         SocketManager::send(1, 0, mat1);
@@ -163,8 +163,8 @@ void test1(int node_type)
             std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
             std::cout << "False" << std::endl;
         }
-        SocketManager::receive(1,0,mat2);
-        SocketManager::send(1,0,mat2);
+        SocketManager::receive(1, 0, mat2);
+        SocketManager::send(1, 0, mat2);
         for (int i = 0; i < 9; i++)
         {
             ss3 << mat2->getVal(i) << " ";
@@ -182,13 +182,13 @@ void test1(int node_type)
             std::cout << "False" << std::endl;
         }
     }
-    else if(node_type == 2)
+    else if (node_type == 2)
     {
-        stringstream ss1,ss2,ss3;
+        stringstream ss1, ss2, ss3;
         std::vector<ll128> a = {9, 8, 7, 6, 5, 4, 3, 2, 1};
         Mat mat1(3, 3), *mat2, mat3(3, 3);
-        mat2 = new Mat(3,3);
-        *mat2 = a; 
+        mat2 = new Mat(3, 3);
+        *mat2 = a;
         mat1 = a;
         SocketManager::receive(2, 0, mat1);
         SocketManager::send(2, 0, mat1);
@@ -238,8 +238,8 @@ void test1(int node_type)
             std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
             std::cout << "False" << std::endl;
         }
-        SocketManager::receive(2,0,mat2);
-        SocketManager::send(2,0,mat2);
+        SocketManager::receive(2, 0, mat2);
+        SocketManager::send(2, 0, mat2);
         for (int i = 0; i < 9; i++)
         {
             ss3 << mat2->getVal(i) << " ";

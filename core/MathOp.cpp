@@ -61,7 +61,7 @@ MathOp::Mul_Mat::Mul_Mat(NeuronMat *res, NeuronMat *a, NeuronMat *b) {
     div2mP_b_a = new Div2mP(temp_a,temp_a, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     div2mP_b_b = new Div2mP(temp_b,temp_b, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     reveal = new Reveal(res->getForward(), res->getForward());
-    init(4, 3);
+    init(2, 3);
 }
 
 void MathOp::Mul_Mat::forward() {
@@ -77,30 +77,7 @@ void MathOp::Mul_Mat::forward() {
                 forwardRound--;
             }
             break;
-        }
-        case 3:{
-            reveal->forward();
-            if (reveal->forwardHasNext()) {
-                forwardRound--;
-            }
-            break;
-        }
-        case 4: {
-            double output = 0;
-            vector<double> tmp = res->getForward()->backtoFloat();
-            for(int j=0;j<tmp.size();j++){
-                // if (j>res.size()-130)
-                // {
-                //     DBGprint("gradient L_1 norm: %f \n",res[j]);
-                // }
-                output += tmp[j];
-            }
-            // DBGprint("forwordoutput: %f \n",output);
-            break;
-        }
-
-        
-            
+        }            
     }
 }
 
@@ -926,8 +903,11 @@ MathOp::PreMulC::PreMulC(Mat *res, Mat *a, int k) {
     u = new Mat[k];
     for (int i = 0; i < k; i++) {
         r[i].init(tmp_r, tmp_c);
+        r[i] = r[i] + 1;
         s[i].init(tmp_r, tmp_c);
+        s[i] = s[i] + 1;
         u[i].init(tmp_r, tmp_c);
+        u[i] = u[i] + 1;
     }
     pRandFld_r = new PRandFld *[k];
     pRandFld_s = new PRandFld *[k];

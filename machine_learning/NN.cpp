@@ -275,26 +275,7 @@ void NN::toposort() {
 
 void NN::gradUpdate() {
     for (int i = 1; i <= tot; i++) {
-        neuron[i]->update();
-        if (neuron[i]->getIsNet())
-        {
-            Mat store(neuron[i]->getGrad()->rows(),neuron[i]->getGrad()->cols());
-            Mat xxxx = *neuron[i]->getGrad();
-            MathOp::Reveal tmp(&store,&xxxx);
-            while (tmp.forwardHasNext())
-            {
-                tmp.forward();
-            }
-            vector<double> res = store.backtoFloat();
-            double output = 0;
-            for(int j=0;j<res.size();j++){
-                // if (j>res.size()-130)
-                // {
-                //     DBGprint("gradient L_1 norm: %f \n",res[j]);
-                // }
-                output += res[j];
-            }
-        }     
+        neuron[i]->update();     
     }
 }
 

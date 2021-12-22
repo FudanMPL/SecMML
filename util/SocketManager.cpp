@@ -199,3 +199,28 @@ void SocketManager::SMMLF::exit_all() {
     server_exit();
     client_exit();
 }
+
+void SocketManager::send(int node_type, int target, Mat *a)
+{
+    socket_io[node_type][target]->send_message(a);
+}
+
+void SocketManager::send(int node_type, int target, Mat &a)
+{
+    socket_io[node_type][target]->send_message(a);
+}
+
+void SocketManager::receive(int node_type, int from, Mat *a)
+{
+    socket_io[node_type][from]->recv_message(a);
+}
+
+void SocketManager::receive(int node_type, int from, Mat &a)
+{
+    socket_io[node_type][from]->recv_message(a);
+}
+
+Mat SocketManager::receive(int node_type, int from)
+{
+    return socket_io[node_type][from]->recv_message();
+}

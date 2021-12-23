@@ -4,12 +4,19 @@
 
 #include "SocketOnline.h"
 
+
+// non-parameter Constructor Function 
+
 SocketOnline::SocketOnline() {}
+
+// Destructor Function
 
 SocketOnline::~SocketOnline() {
     delete buffer;
     delete header;
 }
+
+// Parameterized Constructor
 
 SocketOnline::SocketOnline(int id, SOCK sock) {
     this->id = id;
@@ -21,6 +28,8 @@ SocketOnline::SocketOnline(int id, SOCK sock) {
     init();
 }
 
+// Overload Operator '='
+
 SocketOnline& SocketOnline::operator=(const SocketOnline &u) {
     id = u.id;
     sock = u.sock;
@@ -29,6 +38,8 @@ SocketOnline& SocketOnline::operator=(const SocketOnline &u) {
     send_num = 0;
     recv_num = 0;
 }
+
+// Initialization Function (call setsockopt function to set socket)
 
 void SocketOnline::init(int id, SOCK sock) {
     this->id = id;
@@ -52,6 +63,8 @@ void SocketOnline::init(int id, SOCK sock) {
 #endif
 }
 
+// non-parameters Initialization Function 
+
 void SocketOnline::init() {
 #ifdef UNIX_PLATFORM
     int flag, ret_flag, ret_sol;
@@ -68,10 +81,14 @@ void SocketOnline::init() {
 #endif
 }
 
+// Function reset
+
 void SocketOnline::reset() {
     send_num = 0;
     recv_num = 0;
 }
+
+// call function write to write l bytes from *p to sock
 
 int SocketOnline::send_message(SOCK sock, char *p, int l) {
     int ret;
@@ -82,6 +99,8 @@ int SocketOnline::send_message(SOCK sock, char *p, int l) {
 #endif
     return ret;
 }
+
+// call function write to write l bytes from *p to sock(use while to avoid l > max(bytes the function write can write))
 
 int SocketOnline::send_message_n(SOCK sock, char *p, int l) {
     int tot = 0, cur = 0;
@@ -99,6 +118,9 @@ int SocketOnline::send_message_n(SOCK sock, char *p, int l) {
     return tot;
 }
 
+
+// call function read to read l bytes from *p to sock
+
 int SocketOnline::recv_message(SOCK sock, char *p, int l) {
     int ret;
 #ifdef UNIX_PLATFORM
@@ -108,6 +130,8 @@ int SocketOnline::recv_message(SOCK sock, char *p, int l) {
 #endif
     return ret;
 }
+
+// call function write to write l bytes from *p to sock(use while to avoid l > max(bytes the function write can write))
 
 int SocketOnline::recv_message_n(SOCK sock, char *p, int l) {
     int tot = 0, cur = 0;
@@ -125,6 +149,8 @@ int SocketOnline::recv_message_n(SOCK sock, char *p, int l) {
     return tot;
 }
 
+// convert matrix(&a) to char* and send by socket
+
 void SocketOnline::send_message(const Mat &a) {
     int len_buffer;
     len_buffer = a.toString_pos(buffer);
@@ -132,6 +158,8 @@ void SocketOnline::send_message(const Mat &a) {
     send_message_n(sock, header, Config::config->HEADER_LEN);
     send_message_n(sock, buffer, len_buffer);
 }
+
+// convert matrix(*a) to char* and send by socket
 
 void SocketOnline::send_message(Mat *a) {
     int len_buffer;
@@ -145,11 +173,15 @@ void SocketOnline::send_message(Mat *a) {
     send_message_n(sock, buffer, len_buffer);
 }
 
+// convert int to char* and send by socket
+
 void SocketOnline::send_message(int b) {
     char* p = buffer;
     Constant::Util::int_to_char(p, b);
     send_message_n(sock, buffer, 4);
 }
+
+// receive message from socket and convet to matrix, then return
 
 Mat SocketOnline::recv_message() {
     Mat ret;
@@ -161,6 +193,8 @@ Mat SocketOnline::recv_message() {
     return ret;
 }
 
+// receive message from socket and convet to matrix, add this matrix to a
+
 void SocketOnline::recv_message(Mat *a) {
     recv_message_n(sock, header, Config::config->HEADER_LEN);
     recv_message_n(sock, buffer, a->getStringLen());
@@ -168,6 +202,8 @@ void SocketOnline::recv_message(Mat *a) {
     a->addFrom_pos(p);
 //    cout << "--------------" << endl;
 }
+
+// receive message from socket and convet to matrix, assign this matrix to a
 
 void SocketOnline::recv_message(Mat &a) {
     // add this to receive share, added by curious 2020.6.3
@@ -180,6 +216,8 @@ void SocketOnline::recv_message(Mat &a) {
     char* p = buffer;
     a.getFrom_pos(p);
 }
+
+//receive messgage from socket and convert to int, then return 
 
 int SocketOnline::recv_message_int() {
     recv_message_n(sock, buffer, 4);

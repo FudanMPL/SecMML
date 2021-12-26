@@ -8,20 +8,30 @@
 #include "../core/Mat.h"
 #include "../Constant.h"
 // extern int node_type;
-class IOManager {
+class IOManager
+{
 public:
     static Mat train_data, train_label;
     static Mat test_data, test_label;
-    static void load(ifstream& in, Mat& data, Mat& label, int size);
-    static void secret_share(Mat& data, Mat& label, string category);
-    static void load_ss(ifstream& in, Mat& data, Mat& label, int size);
-    static Mat* secret_share_ngram(int* data, int size, string prefix);
-    static Mat* secret_share_vector(int* data, int size);
-    static Mat* secret_share_kv_data(int* data, int size, string prefix, bool isFreq);
-    static Mat* secret_share_mat_data(Mat &data, int size);
-    static void init(string train_filename, string test_filename);
+    static void load(ifstream &in, Mat &data, Mat &label, int size);
+    static void secret_share(Mat &data, Mat &label, string category);
+    static void load_ss(ifstream &in, Mat &data, Mat &label, int size);
+    static Mat *secret_share_ngram(int *data, int size, string prefix);
+    static Mat *secret_share_vector(int *data, int size);
+    static Mat *secret_share_kv_data(int *data, int size, string prefix, bool isFreq);
+    static Mat *secret_share_mat_data(Mat &data, int size);
+    static void init_mat();
+    static void cache_mat(string basedir);
+    static void load_cache_to_mat(string basedir);
+    static void load(string train_filename, string test_filename);
+    static void load(string filename);
     static void init(string filename);
+    static void init(string train_filename, string test_filename);
+
+protected:
+
+    static string TEST;
+    static string TRAIN;
 };
 
-
-#endif //MPC_ML_IOMANAGER_H
+#endif // MPC_ML_IOMANAGER_H

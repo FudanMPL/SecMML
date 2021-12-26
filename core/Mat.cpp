@@ -1344,23 +1344,24 @@ void Mat::toString(char *p) {
     *p = 0;
 }
 
-// Read the matrix into char *  return the size of matrix(include row and column of matrix)
+// Read the matrix into char *  return the size of matrix(include row, column and order of matrix)
 
-int Mat::toString_pos(char *p) const {      // 将矩阵读入char *中,返回矩阵长度（包括矩阵的行和列）
+int Mat::toString_pos(char *p) const {      // 将矩阵读入char *中,返回矩阵长度（包括矩阵的行和列和order）
     Constant::Util::int_to_char(p, r);
     Constant::Util::int_to_char(p, c);
-    int l = r * c;
+    Constant::Util::int_to_char(p, order);
+    int l = r * c; 
     for (int i = 0; i < l; i++) {
         Constant::Util::ll_to_char(p, val[i]);
     }
     *p = 0;
-    return 2 * 4 + r * c * 8;
+    return 3 * 4 + r * c * 8;
 }
 
-// Return the size of matrix(include row and column of matrix)
+// Return the size of matrix(include row, column and order of matrix)
 
-int Mat::getStringLen() {     // 返回矩阵的长度（包括矩阵的行和列）
-    return 2 * 4 + r * c * 8;
+int Mat::getStringLen() {     // 返回矩阵的长度（包括矩阵的行和列和order）
+    return 3 * 4 + r * c * 8;
 }
 
 // Read the matrix from char *
@@ -1368,6 +1369,7 @@ int Mat::getStringLen() {     // 返回矩阵的长度（包括矩阵的行和�
 void Mat::getFrom_pos(char *&p) {    // 从char *中读出矩阵
     r = Constant::Util::char_to_int(p);
     c = Constant::Util::char_to_int(p);
+    order = Constant::Util::char_to_int(p);
     val.resize(r * c);
     int l = r * c;
     for (int i = 0; i < l; i++) {
@@ -1378,16 +1380,29 @@ void Mat::getFrom_pos(char *&p) {    // 从char *中读出矩阵
 // Add matrix(taken from p) to the matrix
 
 void Mat::addFrom_pos(char *&p) {     // 将该矩阵加上从p中取出的矩阵
-    int tmp_r, tmp_c;
+    int tmp_r, tmp_c, tmp_order;
     tmp_r = Constant::Util::char_to_int(p);
     tmp_c = Constant::Util::char_to_int(p);
+    tmp_order = Constant::Util::char_to_int(p);
     int l = r * c;
 //    cout << "l: " << l << endl;
-    for (int i = 0; i < l; i++) {
+    if(tmp_c == c && tmp_r == r)
+    {
+        if(order != tmp_order)
+        {
+            this->reorder();
+        }
+        for (int i = 0; i < l; i++) {
         val[i] += Constant::Util::char_to_ll(p);
         val[i] = val[i] >= Config::config->MOD ? val[i] - Config::config->MOD : val[i];
         val[i] = val[i] <= -Config::config->MOD ? val[i] + Config::config->MOD : val[i];
+        }
     }
+    else
+    {
+        DBGprint("Function addFrom_pos The input matrix format is illegal\n" );
+    }
+    
 }
 
 // 使用a_r矩阵中的非0元素填充a（按元素顺序逐一填充 遇0则选择下一个），如果未能完全填充则返回0，完全填充返回1，同时使用b_r填充b，填充元素顺序和a完全对应

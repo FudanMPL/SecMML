@@ -1,9 +1,9 @@
 {
     "B":128,
     "D":784,
-    "PRINT_PRE_ITE":100,
+    "PRINT_PRE_ITE":10,
     "OFFLINE_PHASE_ON":0,
-    "LOCAL_TEST":0,
+    "LOCAL_TEST":1,
     "GRAPH_TYPE":0,
     "ACTIVATION":0,
     "SIGMOID":0,
@@ -28,7 +28,7 @@
     "ND":784,
     "DECIMAL_PLACES":20,
     "HEADER_LEN_OPT":2,
-    "TRAIN_ITE":10000,
+    "TRAIN_ITE":100,
     "THREAD_NUM":20,
     "MatColMajor":0,
     "MatRowMajor":1,
@@ -48,8 +48,9 @@
     "FEATURE_DIM":4,
     "USE_D":784,
     "LABEL_P":-1,
+    "LEARNING_RATE":0.0001,
 
     "M":3,
-    "IP":["10.176.34.170","10.176.34.170","10.176.34.170"],
+    "IP":["127.0.0.1","127.0.0.1","127.0.0.1"],
     "PORT":[13579,13580,13581]
 }

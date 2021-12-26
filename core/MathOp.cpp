@@ -60,6 +60,7 @@ MathOp::Mul_Mat::Mul_Mat(NeuronMat *res, NeuronMat *a, NeuronMat *b) {
     div2mP_f = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     div2mP_b_a = new Div2mP(temp_a,temp_a, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     div2mP_b_b = new Div2mP(temp_b,temp_b, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    reveal = new Reveal(res->getForward(), res->getForward());
     init(2, 3);
 }
 
@@ -75,8 +76,8 @@ void MathOp::Mul_Mat::forward() {
             if (div2mP_f->forwardHasNext()) {
                 forwardRound--;
             }
-        }
             break;
+        }            
     }
 }
 
@@ -902,8 +903,11 @@ MathOp::PreMulC::PreMulC(Mat *res, Mat *a, int k) {
     u = new Mat[k];
     for (int i = 0; i < k; i++) {
         r[i].init(tmp_r, tmp_c);
+        r[i] = r[i] + 1;
         s[i].init(tmp_r, tmp_c);
+        s[i] = s[i] + 1;
         u[i].init(tmp_r, tmp_c);
+        u[i] = u[i] + 1;
     }
     pRandFld_r = new PRandFld *[k];
     pRandFld_s = new PRandFld *[k];
@@ -1676,22 +1680,22 @@ void MathOp::Equal::back() {}
 void MathOp::broadcast(Mat *a) {
     for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            SocketManager::socket_io[node_type][i]->send_message(a[i]); 
+            SocketManager::send(node_type, i, a[i]); 
         }
     }
 }
 void MathOp::broadcast_share(Mat *a, int target) {
-    SocketManager::socket_io[node_type][target]->send_message(a);
+    SocketManager::send(node_type, target, a);
 }
 
 void MathOp::receive_share(Mat* a, int from) {
-    SocketManager::socket_io[node_type][from]->recv_message(*a);
+    SocketManager::receive(node_type, from, *a);
 }
 
 void MathOp::broadcase_rep(Mat *a) {
     for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            SocketManager::socket_io[node_type][i]->send_message(a);
+            SocketManager::send(node_type, i, a);
         }
     }
 }
@@ -1699,7 +1703,7 @@ void MathOp::broadcase_rep(Mat *a) {
 void MathOp::receive(Mat* a) {
     for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            a[i] = SocketManager::socket_io[node_type][i]->recv_message();
+            a[i] = SocketManager::receive(node_type, i);
         }
     }
 }
@@ -1707,7 +1711,7 @@ void MathOp::receive(Mat* a) {
 void MathOp::receive_add(Mat *a) {
     for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            SocketManager::socket_io[node_type][i]->recv_message(a);
+            SocketManager::receive(node_type, i, a);
         }
     }
 }
@@ -1715,7 +1719,7 @@ void MathOp::receive_add(Mat *a) {
 void MathOp::receive_rep(Mat *a) {
     for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            SocketManager::socket_io[node_type][i]->recv_message(*(a+i));
+           SocketManager::receive(node_type, i, *(a+i));
         }
     }
 }

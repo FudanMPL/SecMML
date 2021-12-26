@@ -28,6 +28,11 @@ public:
     static SOCK accept_sock(SOCK sock);
     static void print_socket();
     static void print();
+    static void send(int node_type, int targrt, Mat *a);
+    static void send(int node_type, int target, Mat &a);
+    static void receive(int node_type, int from, Mat *a);
+    static void receive(int node_type, int from, Mat &a);
+    static Mat receive(int node_type, int from);
     class SMMLF {
         vector<string> ip;
         vector<int> port;

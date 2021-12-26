@@ -33,7 +33,7 @@ void NN::global_variables_initializer() {
             neuron[i]->initGrad();
         }
         if (neuron[i]->getIsNet()) {
-            neuron[i]->setOpUpdate(new MathOp::Mul_Const_Trunc(getNeuron(i)->getGrad(), getNeuron(i)->getGrad(), 0.0001));
+            neuron[i]->setOpUpdate(new MathOp::Mul_Const_Trunc(getNeuron(i)->getGrad(), getNeuron(i)->getGrad(), Config::config->LEARNING_RATE));
         }
     }
     curForward = 1;
@@ -274,8 +274,9 @@ void NN::toposort() {
 }
 
 void NN::gradUpdate() {
-    for (int i = 1; i <= tot; i++)
-        neuron[i]->update();
+    for (int i = 1; i <= tot; i++) {
+        neuron[i]->update();     
+    }
 }
 
 bool NN::forwardHasNext() {

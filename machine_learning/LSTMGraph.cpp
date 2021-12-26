@@ -7,7 +7,6 @@
 // Created by tangdingyi on 2019/12/26.
 //
 
-
 LSTMGraph::LSTM::LSTM() {}
 
 LSTMGraph::LSTM::LSTM(Mat *train_data, Mat *train_label, Mat *test_data, Mat *test_label) {
@@ -20,6 +19,8 @@ LSTMGraph::LSTM::LSTM(Mat *train_data, Mat *train_label, Mat *test_data, Mat *te
 }
 
 void LSTMGraph::LSTM::graph() {
+    cells.resize(Config::config->L);
+    x.resize(Config::config->L);
     int hidden_num = 1;
     //cout<<"h0"<<endl;
     h0=nn->addnode(Config::config->CH,Config::config->B,NeuronMat::NODE_NET);
@@ -52,9 +53,9 @@ void LSTMGraph::LSTM::graph() {
     DBGprint("initializing!\n");
     nn->global_variables_initializer();
     w_f=new Mat(Config::config->CH,Config::config->D2+Config::config->CH+1,Config::config->IE/4);
-    w_c=new Mat(Config::config->CH,Config::config->D+Config::config->CH+1,Config::config->IE/4);
-    w_i=new Mat(Config::config->CH,Config::config->D+Config::config->CH+1,Config::config->IE/4);
-    w_o=new Mat(Config::config->CH,Config::config->D+Config::config->CH+1,Config::config->IE/4);
+    w_c=new Mat(Config::config->CH,Config::config->D2+Config::config->CH+1,Config::config->IE/4);
+    w_i=new Mat(Config::config->CH,Config::config->D2+Config::config->CH+1,Config::config->IE/4);
+    w_o=new Mat(Config::config->CH,Config::config->D2+Config::config->CH+1,Config::config->IE/4);
     DBGprint("weight initializing!\n");
     nn->getNeuron(st_w)->setForward(new Mat(hidden_num, Config::config->CH+1,Config::config->IE/4));
     Mat::random_neg(w_f);
@@ -83,9 +84,10 @@ void LSTMGraph::LSTM::graph() {
 
 
 void LSTMGraph::LSTM::train() {
-    Mat x_batch[PL];
-    for (int i=0;i<Config::config->L;i++)
-        x_batch[i]=*(new Mat(Config::config->D2 + 1, Config::config->B));
+    vector<Mat> x_batch;
+    for (int i=0;i<Config::config->L;i++){
+        x_batch.push_back(*(new Mat(Config::config->D2 + 1, Config::config->B)));
+    }
     Mat y_batch(1, Config::config->B);
     clock_train = new Constant::Clock(Config::config->CLOCK_TRAIN);
     globalRound = 0;
@@ -94,7 +96,7 @@ void LSTMGraph::LSTM::train() {
         cout<<i<<endl;
         globalRound++;
         next_batch(x_batch, i * Config::config->B, train_data, Config::config->N);
-        next_batch(y_batch, i * Config::config->B, train_label, Config::config->N);
+        next_batch(y_batch, i * Config::config->B, train_label, Config::config->N);        
         feed(nn, x_batch, y_batch, x, output);
         DBGprint("batch %d feeded ...\n",i);
         {
@@ -132,7 +134,7 @@ void LSTMGraph::LSTM::train() {
 }
 
 void LSTMGraph::LSTM::test() {
-    Mat x_batch[PL];
+    vector<Mat> x_batch(Config::config->L);
     for (int i=0;i<Config::config->L;i++)
         x_batch[i]=*(new Mat(Config::config->D2 + 1, Config::config->B));
     Mat y_batch(1, Config::config->B);
@@ -142,8 +144,8 @@ void LSTMGraph::LSTM::test() {
     for (int i = 0; i < Config::config->NM / Config::config->B; i++) {
         signal(SIGINT, SIG_DFL);
         globalRound++;
-        next_batch(x_batch, i * Config::config->B, train_data);
-        next_batch(y_batch, i * Config::config->B, train_label);
+        next_batch(x_batch, i * Config::config->B, train_data, Config::config->NM);
+        next_batch(y_batch, i * Config::config->B, train_label, Config::config->NM);
         feed(nn, x_batch, y_batch, x, output);
         nn->epoch_init();
         DBGprint("forwarding ...\n",i);
@@ -163,7 +165,7 @@ void LSTMGraph::LSTM::test() {
     out_file.close();
 }
 
-void LSTMGraph::LSTM::LSTM::feed(NN* nn, Mat (&x_batch)[PL], Mat &y_batch, int *input, int output) {
+void LSTMGraph::LSTM::LSTM::feed(NN* nn, vector<Mat> &x_batch, Mat &y_batch, vector<int> input, int output) {
     for (int i=0;i<Config::config->L;i++)
         *nn->getNeuron(input[i])->getForward() = x_batch[i];
     *nn->getNeuron(output)->getForward() = y_batch;
@@ -172,7 +174,7 @@ void LSTMGraph::LSTM::LSTM::feed(NN* nn, Mat (&x_batch)[PL], Mat &y_batch, int *
 void LSTMGraph::LSTM::next_batch(Mat &batch, int start, Mat *A, int mod) {
     A->col(start % mod, start % mod + Config::config->B, batch);
 }
-void LSTMGraph::LSTM::next_batch(Mat (&batch)[PL], int start, Mat *A, int mod) {
+void LSTMGraph::LSTM::next_batch(vector<Mat> &batch, int start, Mat *A, int mod) {
     Mat *temp,*temp_IE,*tempI;
     temp=new Mat(Config::config->D+1,Config::config->B);
     temp_IE=new Mat(1,Config::config->B,Config::config->IE);

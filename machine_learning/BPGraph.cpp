@@ -156,7 +156,7 @@ void BPGraph::LR::train() {
     clock_train = new Constant::Clock(Config::config->CLOCK_TRAIN);
     globalRound = 0;
     double IOtime=0;
-    // test();
+    test();
     cout << "Train\n";
     for (int i = 0; i < 110000 && i < Config::config->TRAIN_ITE; i++) {
         signal(SIGINT, SIG_DFL);
@@ -179,7 +179,7 @@ void BPGraph::LR::train() {
             }
             nn->gradUpdate();
         }
-        if ((i+1)%Config::config->PRINT_PRE_ITE == 0) {
+        if ((i)%Config::config->PRINT_PRE_ITE == 0) {
             test();
             print_perd(i+1);
             DBGprint("IOTime: %.3f\n",IOtime);
@@ -217,6 +217,7 @@ void BPGraph::LR::test() {
 //        DBGprint("-------------\n");
 //        nn->getNeuron(output)->getForward()->print();
         total += nn->getNeuron(output)->getForward()->equal(*nn->getNeuron(out_sig)->getForward()).count();
+        // cout << "count:" << total << endl;
     }
     DBGprint("accuracy: %f\n", total * 1.0 / (Config::config->NM / Config::config->B * Config::config->B));
 }

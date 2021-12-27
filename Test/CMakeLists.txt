@@ -1,8 +1,24 @@
 cmake_minimum_required(VERSION 3.15)
 project(MPL)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g -pthread")
+if (CMAKE_SYSTEM_NAME MATCHES "Windows" )
+    set( my_std_pre "/std:" )
+else()
+    set( my_std_pre "-std=" )
+endif()
+
+set( basic_cxx17 "c++17" )
+set( str_cxx17 "${my_std_pre}${basic_cxx17}" )
+
+include( CheckCXXCompilerFlag )
+check_cxx_compiler_flag( "${str_cxx17}" _cpp_17_flag_supported)
+if ( _cpp_17_flag_supported )
+    set( CMAKE_CXX_STANDARD 17 )
+endif()
+
+# set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -pthread")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g -pthread")
 
 
 set(SOURCE_FILES_BASE ../Constant.cpp ../Constant.h ../util/Cache.cpp ../util/Cache.h ../util/SocketOnline.cpp ../util/SocketOnline.h ../util/SocketManager.cpp ../util/SocketManager.h ../core/Mat.cpp ../core/Mat.h ../core/Player.cpp ../core/Player.h ../core/MathOp.cpp ../core/MathOp.h ../core/MathOpCore.cpp ../core/Op.cpp ../core/Op.h ../core/NeuronMat.cpp ../core/NeuronMat.h ../machine_learning/NN.cpp ../machine_learning/NN.h ../machine_learning/BPGraph.cpp ../machine_learning/BPGraph.h ../util/IOManager.cpp ../util/IOManager.h ../config/Config.cpp ../config/Config.hpp ../malicious_lib/reed_solomn_reconstruct.h ../malicious_lib/reed_solomn_reconstruct.cpp)

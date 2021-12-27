@@ -1,10 +1,19 @@
 //
 // Created by tangdingyi on 2019/12/26.
+// Modified by chenshuyu on 2021/12/27.
 //
 
 #include "IOManager.h"
 #include "../core/Mat.h"
 #include "Cache.h"
+#include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <fstream>
+#include <filesystem>
+#include <string>
+
+using namespace std::chrono_literals;
 
 // Mat train_data(N,D), train_label(N,1);
 // Mat test_data(NM,D), test_label(NM,1);
@@ -36,6 +45,26 @@ ll poly_eval(vector<ll> coefficients, ll x)
     return res;
 }
 
+Mat IOManager::get_train_data()
+{
+    return train_data;
+}
+
+Mat IOManager::get_test_data()
+{
+    return test_data;
+}
+
+Mat IOManager::get_train_label()
+{
+    return train_label;
+}
+
+Mat IOManager::get_test_label()
+{
+    return test_label;
+}
+
 /**
  * @brief 根据输入文件载入数据，载入 test 数据 或者载入 train 数据（含label）
  * @param in 输入的含有特征和标签的数据文件
@@ -61,7 +90,8 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         if (!Config::config->LABEL_P)
         { // 第一列是标签
             temp = Constant::Util::getfixpoint(ch, begin);
-            if (temp > Config::config->IE) { //转化成二分类应该在main函数里面做
+            if (temp > Config::config->IE)
+            { //转化成二分类应该在main函数里面做
                 temp = Config::config->IE;
             }
             label(0, i) = temp;
@@ -74,7 +104,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         {
             temp = Constant::Util::getfixpoint(ch, begin);
             /// TODO: 这里本来有一个除256，是因为是像素数据
-            data(j, i) = temp / 256;  //归一化应该在main函数里面做，调用mat中的算子
+            data(j, i) = temp / 256; //归一化应该在main函数里面做，调用mat中的算子
         }
 
         if (Config::config->LABEL_P) // 最后一列是标签
@@ -89,7 +119,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
             // else 获取了所有的特征维度，那么下一个位置就是标签值
 
             temp = Constant::Util::getfixpoint(ch, begin);
-           
+
             label(0, i) = temp;
         }
 
@@ -97,7 +127,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         if (i >= size)
             break;
     }
-    //    cout<<"n= "<<i<<endl;
+
     for (i; i < size + Config::config->B - 1; i++)
     {
         int tmp_r;
@@ -133,7 +163,7 @@ void IOManager::secret_share(Mat &data, Mat &label, string category)
 
     int r = data.rows();
     int c = data.cols();
-    cout << r << " : " << c << endl;
+    // cout << r << " : " << c << endl;
     for (int i = 0; i < c; ++i)
     {
         for (int j = 1; j < Config::config->TN; ++j)
@@ -147,7 +177,7 @@ void IOManager::secret_share(Mat &data, Mat &label, string category)
                 if (j == 0)
                 {
                     coefficients[0] = label.getVal(i);
-                    cout << i << " : " << poly_eval(coefficients, k + 2) << endl;
+                    // cout << i << " : " << poly_eval(coefficients, k + 2) << endl;
                     out_files[k] << poly_eval(coefficients, k + 2) << ",";
                 }
                 if (j == r - 1)
@@ -386,7 +416,7 @@ Mat *IOManager::secret_share_mat_data(Mat &data, int size)
     }
     /// 简化计算，TODO，delete
 
-    cout << r << " : " << c << endl;
+    // cout << r << " : " << c << endl;
     for (int i = 0; i < r; ++i)
     {
         for (int j = 0; j < c; ++j)
@@ -424,22 +454,6 @@ void IOManager::init_mat()
     train_label.init(1, Config::config->N + Config::config->B - 1);
     test_data.init(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
     test_label.init(1, Config::config->NM + Config::config->B - 1);
-}
-
-void IOManager::cache_mat(string basedir)
-{
-    Cache::tocache(train_data, basedir + "/train_data.bat");
-    Cache::tocache(train_label, basedir + "/train_label.bat");
-    Cache::tocache(test_data, basedir + "/test_data.bat");
-    Cache::tocache(test_label, basedir + "/train_label.bat");
-}
-
-void IOManager::load_cache_to_mat(string basedir)
-{
-    Cache::load_cache(basedir + "/train_data.bat", train_data);
-    Cache::load_cache(basedir + "/train_label.bat", train_label);
-    Cache::load_cache(basedir + "/test_data.bat", test_data);
-    Cache::load_cache(basedir + "/test_label.bat", test_label);
 }
 
 // test和train放在同一个文件中
@@ -485,12 +499,199 @@ void IOManager::load(string train_filename, string test_filename)
     //    test_label.reoeder();
 }
 
-void IOManager::init(string filename){
-    init_mat();
-    load(filename);
+// Get the time period from the last modification of the file to the present
+ll128 get_file_modified_time2now(string filepath, auto now)
+{
+    ll128 ftime = (now - std::filesystem::last_write_time(filepath).time_since_epoch()).count(); // read back from the filesyste
+    return ftime;
 }
 
-void IOManager::init(string train_filename, string test_filename){
+// according to filename,get the cache filenames
+void get_cache_name(string filename, string cachefiles[])
+{
+    int i;
+    for (i = filename.length() - 1; i >= 0; i--)
+    {
+        if (filename[i] == '.')
+            break;
+    }
+    string basename = filename.substr(0, i);
+    cachefiles[0] = basename + "_traind.bat";
+    cachefiles[1] = basename + "_trainl.bat";
+    cachefiles[2] = basename + "_testd.bat";
+    cachefiles[3] = basename + "_testl.bat";
+}
+
+void get_cache_name(string train_filename, string test_filename, string cachefiles[])
+{
+    int i;
+    for (i = train_filename.length() - 1; i >= 0; i--)
+    {
+        if (train_filename[i] == '.')
+            break;
+    }
+    string basename = train_filename.substr(0, i);
+    cachefiles[0] = basename + "_traind.bat";
+    cachefiles[1] = basename + "_trainl.bat";
+
+    for (i = test_filename.length() - 1; i >= 0; i--)
+    {
+        if (test_filename[i] == '.')
+            break;
+    }
+    basename = test_filename.substr(0, i);
+    cachefiles[2] = basename + "_testd.bat";
+    cachefiles[3] = basename + "_testl.bat";
+}
+
+// Jude whether there is a cache
+bool judgecache(string filename)
+{
+    string cachefiles[4];
+    get_cache_name(filename, cachefiles);
+
+    if (!std::filesystem::exists(cachefiles[0]))
+    {
+        return false;
+    }
+
+    // get the right now time
+    auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
+
+    // if the modified time of filename is smaller than the cache file, so the cache is valid, return true
+    return get_file_modified_time2now(filename, now) > get_file_modified_time2now(cachefiles[0], now) ? true : false;
+}
+
+// convert the content of mat to the binary cache ile
+// filename: xxx.bat
+void tocache(Mat &mat, string filename)
+{
+    ofstream cachefile(filename, ios::out | ios::binary);
+    cachefile.write((char *)&mat, sizeof(mat));
+    cachefile.close();
+}
+
+// load the cache from filename to mat
+// filename: xxx.bat
+void load_cache(string filename, Mat &mat)
+{
+    ifstream cachefile(filename, ios::in | ios::binary);
+    try
+    {
+        cachefile.read((char *)&mat, sizeof(mat));
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << " error\n";
+    }
+    cachefile.close();
+}
+
+void IOManager::cache_all_mat(string filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(filename, cachefiles);
+
+    tocache(train_data, cachefiles[0]);
+    tocache(train_label, cachefiles[1]);
+    tocache(test_data, cachefiles[2]);
+    tocache(test_label, cachefiles[3]);
+}
+
+void IOManager::cache_all_mat(string train_filename, string test_filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(train_filename, test_filename, cachefiles);
+
+    tocache(train_data, cachefiles[0]);
+    tocache(train_label, cachefiles[1]);
+    tocache(test_data, cachefiles[2]);
+    tocache(test_label, cachefiles[3]);
+}
+
+void IOManager::load_all_cache_to_mat(string filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(filename, cachefiles);
+
+    load_cache(cachefiles[0], train_data);
+    load_cache(cachefiles[1], train_label);
+    load_cache(cachefiles[2], test_data);
+    load_cache(cachefiles[3], test_label);
+}
+
+void IOManager::load_all_cache_to_mat(string train_filename, string test_filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(train_filename, test_filename, cachefiles);
+
+    load_cache(cachefiles[0], train_data);
+    load_cache(cachefiles[1], train_label);
+    load_cache(cachefiles[2], test_data);
+    load_cache(cachefiles[3], test_label);
+}
+
+// remove all cache
+void IOManager::remove_cache(string filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(filename, cachefiles);
+
+    for (string cachefile : cachefiles)
+    {
+        if (std::filesystem::exists(cachefile))
+        {
+            std::filesystem::remove(cachefile);
+        }
+    }
+}
+
+// remove all cache
+void IOManager::remove_cache(string train_filename, string test_filename)
+{
+    // get the name list of cache files
+    string cachefiles[4];
+    get_cache_name(train_filename, test_filename, cachefiles);
+
+    for (string cachefile : cachefiles)
+    {
+        if (std::filesystem::exists(cachefile))
+        {
+            std::filesystem::remove(cachefile);
+        }
+    }
+}
+
+void IOManager::init(string filename)
+{
     init_mat();
-    load(train_filename,test_filename);
+
+    if (judgecache(filename)) // If there exits a cache, load the cached binary file into mat
+    {
+        load_all_cache_to_mat(filename);
+    }
+    else
+    {
+        load(filename);
+        cache_all_mat(filename);
+    }
+}
+
+void IOManager::init(string train_filename, string test_filename)
+{
+    init_mat();
+    if (judgecache(train_filename)) // If there exits a cache, load the cached binary file into matƒ
+    {
+        load_all_cache_to_mat(train_filename, test_filename);
+    }
+    else
+    {
+        load(train_filename, test_filename);
+        cache_all_mat(train_filename, test_filename);
+    }
 }

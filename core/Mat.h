@@ -8,28 +8,32 @@
 #include "../Constant.h"
 #include <thread>
 
-class Mat {
+class Mat
+{
     int r, c;
-    int order;   //0为列存 1为行存
+    int order; // 0为列存 1为行存
+private:
     vector<ll128> val;
+
 public:
-    Config* config;
+    Config *config;
     Mat(int r, int c);
     Mat(int r, int c, ll128 b);
     Mat();
     Mat(const Mat &a);
     ~Mat();
     void init(int r, int c);
-    ll128&operator()(int a, int b);
+    ll128 &operator()(int a, int b);
+    vector<ll128> getVal();
     ll128 get(int a, int b) const;
-    ll128&getVal(int a);
+    ll128 &getVal(int a);
     void setVal(int index, ll128 v);
     int rows() const;
     int cols() const;
     int size() const;
-    Mat& operator=(const Mat &a);
-    Mat& operator=(vector<ll128> &a);
-    Mat& operator=(char* &p);
+    Mat &operator=(const Mat &a);
+    Mat &operator=(vector<ll128> &a);
+    Mat &operator=(char *&p);
     bool operator==(Mat p);
     Mat transpose() const;
     Mat operator+(const Mat &a);
@@ -90,7 +94,7 @@ public:
     void cp(const Mat &a, int st, int len);
     void cp(const Mat &a, const Mat &mask);
     void residual();
-    void AddDot(int k, ll128* x, int incx, ll128* y, ll128* gamma);
+    void AddDot(int k, ll128 *x, int incx, ll128 *y, ll128 *gamma);
     void sign();
     void reorder();
     void transorder();
@@ -98,27 +102,26 @@ public:
     void truncated_normal(double mean, double stddev);
     void random_normal();
     void constant(double b);
-    void col(int u, vector<ll128>& a);
+    void col(int u, vector<ll128> &a);
     void clear();
     void print() const;
     void printSign();
-    void toString(char* p);
-    int toString_pos(char* p) const;
+    void toString(char *p);
+    int toString_pos(char *p) const;
     int getStringLen();
-    void getFrom_pos(char* &p);
-    void addFrom_pos(char* &p);
+    void getFrom_pos(char *&p);
+    void addFrom_pos(char *&p);
     Mat SmoothLevel();
     ll count_sum();
-    static bool fill(Mat* a, Mat* a_r, Mat* b, Mat* b_r);
-    static void concat(Mat* res, Mat* a, Mat* b);
-    static void reconcat(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static void vstack(Mat* res, Mat* a, Mat* b);
-    static void re_vstack(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static void hstack(Mat* res, Mat* a, Mat* b);
-    static void re_hstack(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static int pair_order_type(Mat* a, const Mat* b);
+    static bool fill(Mat *a, Mat *a_r, Mat *b, Mat *b_r);
+    static void concat(Mat *res, Mat *a, Mat *b);
+    static void reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static void vstack(Mat *res, Mat *a, Mat *b);
+    static void re_vstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static void hstack(Mat *res, Mat *a, Mat *b);
+    static void re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static int pair_order_type(Mat *a, const Mat *b);
     static void random_neg(Mat *a);
 };
 
-
-#endif //MPC_ML_MAT_H
+#endif // MPC_ML_MAT_H

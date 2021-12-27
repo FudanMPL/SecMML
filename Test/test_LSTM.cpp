@@ -37,11 +37,11 @@ int main(int argc, char** argv) {
     }
 
     /** LSTM **/
-    LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-    DBGprint("LSTM constructing ...\n");
-    lstm->graph();
-    DBGprint("LSTM constructed ...\n");
-    lstm->train();
+    // LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+    // DBGprint("LSTM constructing ...\n");
+    // lstm->graph();
+    // DBGprint("LSTM constructed ...\n");
+    // lstm->train();
 
     return 0;
 }

@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-21 19:43:15
+ * @LastEditTime: 2021-12-28 16:40:42
  */
 
 #include <cstdio>
@@ -77,7 +77,11 @@ class Config{
                                     INV2_M(1<<Config::inverse(1<<root["DECIMAL_PLACES"].asInt(), atoll(root["MOD"].asString().c_str()), atoll(root["MOD"].asString().c_str()))),
                                     USE_D(root["USE_D"].asInt()),
                                     LABEL_P(root["LABEL_P"].asInt()),
-                                    LEARNING_RATE(root["LEARNING_RATE"].asDouble())
+                                    LEARNING_RATE(root["LEARNING_RATE"].asDouble()),
+                                    TRAIN_TEST_SAME(root["TRAIN_TEST_SAME"].asInt()),
+                                    TRAIN_FILENAME(root["TRAIN_FILENAME"].asString()),
+                                    TEST_FILENAME(root["TEST_FILENAME"].asString()),
+                                    FILENAME(root["FILENAME"].asString())
                                     {};
         const int B;
         const int D;
@@ -137,6 +141,10 @@ class Config{
         const int USE_D;
         const int LABEL_P;
         const double LEARNING_RATE;
+        const std::string TRAIN_FILENAME;
+        const std::string TEST_FILENAME;
+        const std::string FILENAME;
+        const int TRAIN_TEST_SAME;
     private:
         
 };

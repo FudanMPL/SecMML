@@ -13,3 +13,5 @@ __pycache__/
 *queqiao*.so
 *.pyi
 *.csv
+*.o
+*.bat

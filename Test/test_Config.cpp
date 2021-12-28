@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-21 16:55:22
+ * @LastEditTime: 2021-12-28 16:41:22
  */
 
 #include <cstdio>
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
     DBGprint("party index: %d\n", node_type);
 
     Player::init();
-    IOManager::init("../datasets/mnist/mnist_train.csv", "../datasets/mnist/mnist_test.csv");
+    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
     SocketManager::SMMLF tel;
     if (Config::config->LOCAL_TEST) {
         cout<<node_type<<endl;

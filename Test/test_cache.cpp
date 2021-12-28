@@ -7,16 +7,38 @@
 #include <ctime>
 #include <time.h>
 
+void print_part_data(Mat mat)
+{
+    cout << mat.cols() << " " << mat.rows() << endl;
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < mat.rows() && j < 20; j++)
+        {
+            // Get the value of row and column
+            cout << mat.get(j, i) << " ";
+        }
+        cout << endl;
+    }
+}
+
 void test_cache_twofile()
 {
 
-    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
     Mat train_data = Mat(IOManager::train_data);
     Mat train_label = Mat(IOManager::train_label);
     Mat test_data = Mat(IOManager::test_data);
     Mat test_label = Mat(IOManager::test_label);
+    print_part_data(train_data);
+    print_part_data(train_label);
+    print_part_data(test_data);
+    print_part_data(test_label);
 
-    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
+    print_part_data(IOManager::train_data);
+    print_part_data(IOManager::train_label);
+    print_part_data(IOManager::test_data);
+    print_part_data(IOManager::test_label);
     assert(train_data == IOManager::train_data);
     assert(train_label == IOManager::train_label);
     assert(test_data == IOManager::test_data);
@@ -26,11 +48,11 @@ void test_cache_twofile()
 void test_cache_onefile()
 {
     IOManager iOManager = IOManager();
-    iOManager.remove_cache("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
-    iOManager.init("../datasets/test/mnist_train.csv");
+    iOManager.remove_cache(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
+    iOManager.init(Config::config->TRAIN_FILENAME);
 
     IOManager iOManager2 = IOManager();
-    iOManager2.init("../datasets/test/mnist_train.csv");
+    iOManager2.init(Config::config->TRAIN_FILENAME);
     assert(iOManager.train_data == iOManager2.train_data);
     assert(iOManager.train_label == iOManager2.train_label);
     assert(iOManager.test_data == iOManager2.test_data);

@@ -10,9 +10,9 @@
 
 class Mat
 {
+private:
     int r, c;
     int order; // 0为列存 1为行存
-private:
     vector<ll128> val;
 
 public:
@@ -27,9 +27,14 @@ public:
     vector<ll128> getVal();
     ll128 get(int a, int b) const;
     ll128 &getVal(int a);
+    void setVal(vector<ll128> v);
     void setVal(int index, ll128 v);
     int rows() const;
     int cols() const;
+    int getorder() const;
+    void setrow(int row);
+    void setcol(int col);
+    void setorder(int order);
     int size() const;
     Mat &operator=(const Mat &a);
     Mat &operator=(vector<ll128> &a);
@@ -113,6 +118,7 @@ public:
     void addFrom_pos(char *&p);
     Mat SmoothLevel();
     ll count_sum();
+    ll get_memory_size();
     static bool fill(Mat *a, Mat *a_r, Mat *b, Mat *b_r);
     static void concat(Mat *res, Mat *a, Mat *b);
     static void reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb);

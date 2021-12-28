@@ -515,10 +515,10 @@ void get_cache_name(string filename, string cachefiles[])
             break;
     }
     string basename = filename.substr(0, i);
-    cachefiles[0] = basename + "_traind.bat";
-    cachefiles[1] = basename + "_trainl.bat";
-    cachefiles[2] = basename + "_testd.bat";
-    cachefiles[3] = basename + "_testl.bat";
+    cachefiles[0] = basename + "_traind.dat";
+    cachefiles[1] = basename + "_trainl.dat";
+    cachefiles[2] = basename + "_testd.dat";
+    cachefiles[3] = basename + "_testl.dat";
 }
 
 void get_cache_name(string train_filename, string test_filename, string cachefiles[])
@@ -530,8 +530,8 @@ void get_cache_name(string train_filename, string test_filename, string cachefil
             break;
     }
     string basename = train_filename.substr(0, i);
-    cachefiles[0] = basename + "_traind.bat";
-    cachefiles[1] = basename + "_trainl.bat";
+    cachefiles[0] = basename + "_traind.dat";
+    cachefiles[1] = basename + "_trainl.dat";
 
     for (i = test_filename.length() - 1; i >= 0; i--)
     {
@@ -539,8 +539,8 @@ void get_cache_name(string train_filename, string test_filename, string cachefil
             break;
     }
     basename = test_filename.substr(0, i);
-    cachefiles[2] = basename + "_testd.bat";
-    cachefiles[3] = basename + "_testl.bat";
+    cachefiles[2] = basename + "_testd.dat";
+    cachefiles[3] = basename + "_testl.dat";
 }
 
 // Jude whether there is a cache
@@ -562,22 +562,52 @@ bool judgecache(string filename)
 }
 
 // convert the content of mat to the binary cache ile
-// filename: xxx.bat
+// filename: xxx.dat
 void tocache(Mat &mat, string filename)
 {
     ofstream cachefile(filename, ios::out | ios::binary);
-    cachefile.write((char *)&mat, sizeof(mat));
+    int r = mat.rows();
+    int c = mat.cols();
+    int order = mat.getorder();
+    cachefile.write((char *)&r, sizeof(r));
+    cachefile.write((char *)&c, sizeof(c));
+    cachefile.write((char *)&order, sizeof(order));
+    ll128 temp;
+    vector<ll128> v = mat.getVal();
+    for (int i = 0; i < r * c; i++) // every row
+    {
+        temp = v[i];
+        cachefile.write((char *)&temp, sizeof(temp));
+    }
+    // cachefile.write((char *)&mat, mat.get_memory_size());
     cachefile.close();
 }
 
 // load the cache from filename to mat
-// filename: xxx.bat
+// filename: xxx.dat
 void load_cache(string filename, Mat &mat)
 {
     ifstream cachefile(filename, ios::in | ios::binary);
     try
     {
-        cachefile.read((char *)&mat, sizeof(mat));
+        int r, c, order = 0;
+        cachefile.read((char *)&r, sizeof(int));
+        cachefile.read((char *)&c, sizeof(int));
+        cachefile.read((char *)&order, sizeof(int));
+        cout << r << " " << c << " " << order << endl;
+        mat.setrow(r);
+        mat.setcol(c);
+        mat.setorder(order);
+        vector<ll128> v;
+        ll128 temp;
+        for (int i = 0; i < r * c; i++)
+        {
+            cachefile.read((char *)&temp, sizeof(temp));
+            v.push_back(temp);
+        }
+        mat.setVal(v);
+
+        // cachefile.read((char *)&mat, mat.get_memory_size());
     }
     catch (const std::exception &e)
     {
@@ -687,10 +717,12 @@ void IOManager::init(string train_filename, string test_filename)
     // load(train_filename, test_filename);
     if (judgecache(train_filename)) // If there exits a cache, load the cached binary file into matƒ
     {
+        DBGprint("load cache\n");
         load_all_cache_to_mat(train_filename, test_filename);
     }
     else
     {
+        DBGprint("load file\n");
         load(train_filename, test_filename);
         cache_all_mat(train_filename, test_filename);
     }

@@ -154,6 +154,11 @@ void Mat::setVal(int index, ll128 v)
     }
 }
 
+void Mat::setVal(vector<ll128> v)
+{
+    this->val.assign(v.begin(), v.end());
+}
+
 // Get the number of rows of the matrix
 
 int Mat::rows() const
@@ -168,8 +173,27 @@ int Mat::cols() const
     return c;
 }
 
-// Get the size of the matrix
+int Mat::getorder() const
+{
+    return order;
+}
 
+void Mat::setrow(int row)
+{
+    this->r = row;
+}
+
+void Mat::setcol(int col)
+{
+    this->c = col;
+}
+
+void Mat::setorder(int order)
+{
+    this->order = order;
+}
+
+// Get the size of the matrix
 int Mat::size() const
 {
     return r * c;
@@ -390,10 +414,6 @@ Mat Mat::operator-(ll128 b)
 
 Mat Mat::operator*(const Mat &a)
 { //不同矩阵存储方式的乘法操作
-    // cout << "cols" << c << endl;
-    // cout << "rows" << r << endl;
-    // cout << "a cols" << a.cols() << endl;
-    // cout << "a rows" << a.rows() << endl;
     if (c == a.rows())
     {
         int tmp_c;
@@ -1360,8 +1380,6 @@ void Mat::init(const ll128 &b)
     }
 }
 
-
-
 void Mat::cp(const Mat &a, int st, int len)
 {
     copy(a.val.begin() + st, a.val.begin() + st + len, val.begin());
@@ -1756,4 +1774,12 @@ void Mat::random_neg(Mat *a)
         }
     }
     *a = ret;
+}
+
+ll Mat::get_memory_size()
+{
+    ll memory_size = sizeof(int) * 3;
+    memory_size += sizeof(ll128) * val.size();
+    std::cout << memory_size << std::endl;
+    return memory_size;
 }

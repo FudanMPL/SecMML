@@ -2,7 +2,6 @@
 // Created by chenshuyu on 2021/12/24.
 //
 
-#include "../util/Cache.h"
 #include "../util/IOManager.h"
 #include <assert.h>
 #include <ctime>
@@ -10,16 +9,18 @@
 
 void test_cache_twofile()
 {
-    IOManager iOManager = IOManager();
-    iOManager.remove_cache("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
-    iOManager.init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
 
-    IOManager iOManager2 = IOManager();
-    iOManager2.init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
-    assert(iOManager.train_data == iOManager2.train_data);
-    assert(iOManager.train_label == iOManager2.train_label);
-    assert(iOManager.test_data == iOManager2.test_data);
-    assert(iOManager.test_label == iOManager2.test_label);
+    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    Mat train_data = Mat(IOManager::train_data);
+    Mat train_label = Mat(IOManager::train_label);
+    Mat test_data = Mat(IOManager::test_data);
+    Mat test_label = Mat(IOManager::test_label);
+
+    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    assert(train_data == IOManager::train_data);
+    assert(train_label == IOManager::train_label);
+    assert(test_data == IOManager::test_data);
+    assert(test_label == IOManager::test_label);
 }
 
 void test_cache_onefile()

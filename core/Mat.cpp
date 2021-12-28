@@ -390,10 +390,10 @@ Mat Mat::operator-(ll128 b)
 
 Mat Mat::operator*(const Mat &a)
 { //不同矩阵存储方式的乘法操作
-    cout << "cols" << c << endl;
-    cout << "rows" << r << endl;
-    cout << "a cols" << a.cols() << endl;
-    cout << "a rows" << a.rows() << endl;
+    // cout << "cols" << c << endl;
+    // cout << "rows" << r << endl;
+    // cout << "a cols" << a.cols() << endl;
+    // cout << "a rows" << a.rows() << endl;
     if (c == a.rows())
     {
         int tmp_c;
@@ -1359,6 +1359,8 @@ void Mat::init(const ll128 &b)
         val[i] = b;
     }
 }
+
+
 
 void Mat::cp(const Mat &a, int st, int len)
 {

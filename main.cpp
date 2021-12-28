@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 
 
     Player::init();
-    IOManager::init();
+    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
     SocketManager::SMMLF tel;
     if (!Config::config->LOCAL_TEST) {
         tel.init(Config::config->IP,Config::config->PORT);

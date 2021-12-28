@@ -5,7 +5,6 @@
 
 #include "IOManager.h"
 #include "../core/Mat.h"
-#include "Cache.h"
 #include <iostream>
 #include <chrono>
 #include <iomanip>
@@ -685,6 +684,7 @@ void IOManager::init(string filename)
 void IOManager::init(string train_filename, string test_filename)
 {
     init_mat();
+    // load(train_filename, test_filename);
     if (judgecache(train_filename)) // If there exits a cache, load the cached binary file into matƒ
     {
         load_all_cache_to_mat(train_filename, test_filename);

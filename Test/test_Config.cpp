@@ -38,7 +38,7 @@ int main(int argc, char** argv)
     DBGprint("party index: %d\n", node_type);
 
     Player::init();
-    IOManager::init("../datasets/mnist/mnist_train.csv", "../datasets/mnist/mnist_test.csv");
+    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
     SocketManager::SMMLF tel;
     if (Config::config->LOCAL_TEST) {
         cout<<node_type<<endl;

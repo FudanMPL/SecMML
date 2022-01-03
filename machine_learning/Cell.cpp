@@ -4,7 +4,11 @@
 
 #include "Cell.h"
 
+// non-parameter constructor function
+
 Cell::Cell(){};
+
+// Constructor function(add nodes to initialize)
 
 Cell::Cell(NN* nn, int c_in, int h_in, int x_in){
     this->nn=nn;
@@ -56,6 +60,8 @@ Cell::Cell(NN* nn, int c_in, int h_in, int x_in){
 
 }
 
+// add edges to initialize
+
 void Cell::addEdges() {
     nn->addOpVstack(st_m,h_in,x_in);
 
@@ -84,12 +90,16 @@ void Cell::addEdges() {
     nn->addOpHada_Mat(h_out,tanh_c,sig_o);
 }
 
+// set weight for corresponding neurons
+
 void Cell::setWeight(Mat *w_f, Mat *w_i, Mat *w_c, Mat *w_o){
     nn->getNeuron(this->w_f)->setForward(w_f);
     nn->getNeuron(this->w_i)->setForward(w_i);
     nn->getNeuron(this->w_c)->setForward(w_c);
     nn->getNeuron(this->w_o)->setForward(w_o);
 }
+
+// get the corresponding parameters
 
 int Cell::getC_out(){
     return c_out;

@@ -4,7 +4,11 @@
 
 #include "BPGraph.h"
 
+// non-parameter Constructor Function
+
 BPGraph::LR::LR() {}
+
+// Constructor Function
 
 BPGraph::LR::LR(Mat *train_data, Mat *train_label, Mat *test_data, Mat *test_label) {
     DBGprint("LR constructor\n");
@@ -17,6 +21,8 @@ BPGraph::LR::LR(Mat *train_data, Mat *train_label, Mat *test_data, Mat *test_lab
     //train_label->print();
 }
 
+// add nodes and edges to initialize graph
+
 void BPGraph::LR::graph() {
     int hidden_num = 10;
     int output_num = 1;
@@ -26,14 +32,14 @@ void BPGraph::LR::graph() {
     st_w = nn->addnode(hidden_num, Config::config->D+1, NeuronMat::NODE_NET);
     st_mul = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
 
-   nd_hidden = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
-   nd_b = nn->addnode(1, Config::config->B, NeuronMat::NODE_NET);
-   nd_add = nn->addnode(hidden_num+1, Config::config->B, NeuronMat::NODE_OP);
-   nd_w = nn->addnode(output_num, hidden_num+1, NeuronMat::NODE_NET);
+    nd_hidden = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
+    nd_b = nn->addnode(1, Config::config->B, NeuronMat::NODE_NET);
+    nd_add = nn->addnode(hidden_num+1, Config::config->B, NeuronMat::NODE_OP);
+    nd_w = nn->addnode(output_num, hidden_num+1, NeuronMat::NODE_NET);
     // nd_mul = nn->addnode(1, Config::config->B, NeuronMat::NODE_OP);
-//    activation = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
+    // activation = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
     out_sig = nn->addnode(output_num, Config::config->B, NeuronMat::NODE_OP);
-//    activation_out = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
+    // activation_out = nn->addnode(hidden_num, Config::config->B, NeuronMat::NODE_OP);
     int sd = nn->addnode(1, 1, NeuronMat::NODE_OP);
     argmax = nn->addnode(1, 1, NeuronMat::NODE_OP);
     DBGprint("initializing!\n");
@@ -42,19 +48,18 @@ void BPGraph::LR::graph() {
 
     nn->addOpMul_Mat(st_mul, st_w, input);
 
-   nn->addOpSigmoid(nd_hidden, st_mul);
+    nn->addOpSigmoid(nd_hidden, st_mul);
 
-   nn->addOpVstack(nd_add, nd_hidden, nd_b);
-//
-//    nn->addOpMul_Mat(out_sig, nd_w, nd_add);
+    nn->addOpVstack(nd_add, nd_hidden, nd_b);
+    // nn->addOpMul_Mat(out_sig, nd_w, nd_add);
 
     // nn->addOpReLU(out_sig, st_mul);
     nn->addOpMul_Mat(out_sig, nd_w, nd_add);
 
-    //nn->addOpVia(out_sig, st_mul);
-//    nn->addOpTanh(activation_out,st_mul);
-    //nn->addOpHybrid_Tanh(out_sig,st_mul);
-    //nn->addOpTanh_ex(out_sig,st_mul);
+    // nn->addOpVia(out_sig, st_mul);
+    // nn->addOpTanh(activation_out,st_mul);
+    // nn->addOpHybrid_Tanh(out_sig,st_mul);
+    // nn->addOpTanh_ex(out_sig,st_mul);
     // nn->addOpSigmoid(out_sig,st_mul);
 
 //    nn->addOpHybrid_Tanh(activation_out, st_mul);
@@ -65,9 +70,11 @@ void BPGraph::LR::graph() {
     nn->toposort();
 
     nn->reveal_init(out_sig);
-    /// if the output is secret-shared as well
+    // if the output is secret-shared as well
     nn->reveal_init(output);
 }
+
+// initialize the graph of linear
 
 void BPGraph::LR::linear_graph() {
     DBGprint("Linear Regression constructor\n");
@@ -117,6 +124,8 @@ void BPGraph::LR::linear_graph() {
     // nn->output_init(st_w);
 }
 
+// initialize the graph of logistic
+
 void BPGraph::LR::logistic_graph() {
     DBGprint("Logistic Regression constructor\n");
     int hidden_num = 1;
@@ -150,6 +159,8 @@ void BPGraph::LR::logistic_graph() {
     /// if the output is secret-shared as well
     nn->reveal_init(output);
 }
+
+// training of Linear regression or Logistic regression  
 
 void BPGraph::LR::train() {
     Mat x_batch(Config::config->D + 1, Config::config->B), y_batch(1, Config::config->B);
@@ -194,6 +205,8 @@ void BPGraph::LR::train() {
     
 }
 
+// testing of Linear regression or Logistic regression
+
 void BPGraph::LR::test() {
     Mat x_batch(Config::config->D + 1, Config::config->B), y_batch(1, Config::config->B);
     int total = 0;
@@ -222,14 +235,20 @@ void BPGraph::LR::test() {
     DBGprint("accuracy: %f\n", total * 1.0 / (Config::config->NM / Config::config->B * Config::config->B));
 }
 
+// Import data and label into Neurons
+
 void BPGraph::LR::feed(NN* nn, Mat &x_batch, Mat &y_batch, int input, int output) {
     *nn->getNeuron(input)->getForward() = x_batch;
     *nn->getNeuron(output)->getForward() = y_batch;
 }
 
+// take data and label of the next batch
+
 void BPGraph::LR::next_batch(Mat &batch, int start, Mat *A, int mod) {
     A->col(start%mod, start%mod + Config::config->B, batch);
 }
+
+// print transmitted data size, round and time
 
 void BPGraph::LR::print_perd(int round) {
     ll tot_send = 0, tot_recv = 0;

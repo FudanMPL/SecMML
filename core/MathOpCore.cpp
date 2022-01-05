@@ -1,6 +1,9 @@
-//
-// Created by haoqi wu on 2021/4/3.
-//
+/*
+ * @Author: Xinyu Tu
+ * @Date: 2021-12-28 16:31:02
+ * @LastEditors: Xinyu Tu
+ * @LastEditTime: 2022-01-05 19:37:15
+ */
 
 #include "MathOp.h"
 

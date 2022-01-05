@@ -7,7 +7,11 @@
 // Created by tangdingyi on 2019/12/26.
 //
 
+// non-parameter constructor function
+
 LSTMGraph::LSTM::LSTM() {}
+
+// Constructor function
 
 LSTMGraph::LSTM::LSTM(Mat *train_data, Mat *train_label, Mat *test_data, Mat *test_label) {
     DBGprint("LSTM constructor\n");
@@ -17,6 +21,8 @@ LSTMGraph::LSTM::LSTM(Mat *train_data, Mat *train_label, Mat *test_data, Mat *te
     this->test_data = test_data;
     this->test_label = test_label;
 }
+
+// add nodes and edges to initialize the graph
 
 void LSTMGraph::LSTM::graph() {
     cells.resize(Config::config->L);
@@ -82,6 +88,7 @@ void LSTMGraph::LSTM::graph() {
     nn->reveal_init(out_sig);
 }
 
+// Training of LSTM
 
 void LSTMGraph::LSTM::train() {
     vector<Mat> x_batch;
@@ -133,6 +140,8 @@ void LSTMGraph::LSTM::train() {
     }
 }
 
+// Testing of LSTM
+
 void LSTMGraph::LSTM::test() {
     vector<Mat> x_batch(Config::config->L);
     for (int i=0;i<Config::config->L;i++)
@@ -165,15 +174,22 @@ void LSTMGraph::LSTM::test() {
     out_file.close();
 }
 
+// Import data and label into Neurons
+
 void LSTMGraph::LSTM::LSTM::feed(NN* nn, vector<Mat> &x_batch, Mat &y_batch, vector<int> input, int output) {
     for (int i=0;i<Config::config->L;i++)
         *nn->getNeuron(input[i])->getForward() = x_batch[i];
     *nn->getNeuron(output)->getForward() = y_batch;
 }
 
+// Get the label of next batch
+
 void LSTMGraph::LSTM::next_batch(Mat &batch, int start, Mat *A, int mod) {
     A->col(start % mod, start % mod + Config::config->B, batch);
 }
+
+// Get the data of next batch
+
 void LSTMGraph::LSTM::next_batch(vector<Mat> &batch, int start, Mat *A, int mod) {
     Mat *temp,*temp_IE,*tempI;
     temp=new Mat(Config::config->D+1,Config::config->B);
@@ -189,7 +205,7 @@ void LSTMGraph::LSTM::next_batch(vector<Mat> &batch, int start, Mat *A, int mod)
     delete tempI;
 }
 
-
+// print transmitted data size, round and time
 
 void LSTMGraph::LSTM::print_perd(int round) {
     ll tot_send = 0, tot_recv = 0;

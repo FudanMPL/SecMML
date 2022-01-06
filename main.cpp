@@ -2,16 +2,17 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 09:52:08
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-14 19:36:05
+ * @LastEditTime: 2022-01-06 14:50:53
  */
 #include <iostream>
 
+#include "json/json.h"
 #include "util/SocketManager.h"
 #include "core/Player.h"
 #include "util/IOManager.h"
 #include "machine_learning/BPGraph.h"
 #include "machine_learning/LSTMGraph.h"
-
+#include <iostream>
 
 int main(int argc, char** argv) {
     srand(time(NULL)); // random seed
@@ -25,9 +26,10 @@ int main(int argc, char** argv) {
     }
     DBGprint("party index: %d\n", node_type);
 
-
+    
+    Config::config = Config::init("config/parameter/constant.json");
     Player::init();
-    IOManager::init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    IOManager::init("datasets/mnist/mnist_train.csv", "datasets/mnist/mnist_test.csv");
     SocketManager::SMMLF tel;
     if (!Config::config->LOCAL_TEST) {
         tel.init(Config::config->IP,Config::config->PORT);

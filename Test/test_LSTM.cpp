@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-23 16:19:36
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-23 16:22:25
+ * @LastEditTime: 2022-01-06 14:38:54
  */
 
 #include <iostream>
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
 
     Player::init();
-    IOManager::init("../datasets/mnist/mnist_train.csv", "../datasets/mnist/mnist_test.csv");
+    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
     SocketManager::SMMLF tel;
     if (!Config::config->LOCAL_TEST) {
         tel.init(Config::config->IP,Config::config->PORT);
@@ -37,11 +37,11 @@ int main(int argc, char** argv) {
     }
 
     /** LSTM **/
-    // LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-    // DBGprint("LSTM constructing ...\n");
-    // lstm->graph();
-    // DBGprint("LSTM constructed ...\n");
-    // lstm->train();
+    LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+    DBGprint("LSTM constructing ...\n");
+    lstm->graph();
+    DBGprint("LSTM constructed ...\n");
+    lstm->train();
 
     return 0;
 }

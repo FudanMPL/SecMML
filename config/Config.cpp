@@ -2,13 +2,13 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-11 14:41:29
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-16 21:44:51
+ * @LastEditTime: 2022-01-06 14:47:24
  */
 #include "Config.hpp"
 
 
 
-Config* Config::config = Config::init("../config/parameter/constant.json");
+Config* Config::config = nullptr;
 //jsonfile path
 Config* Config::init(std::string file_name){
     if(Config::config == nullptr){

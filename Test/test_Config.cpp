@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-28 16:41:22
+ * @LastEditTime: 2022-01-06 14:27:13
  */
 
 #include <cstdio>
@@ -17,7 +17,6 @@
 #include "../util/IOManager.h"
 #include "../machine_learning/BPGraph.h"
 #include <typeinfo>
-// #include "../machine_learning/LSTMGraph.h"
 using namespace std;
 
 int main(int argc, char** argv)

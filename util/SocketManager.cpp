@@ -150,14 +150,14 @@ void SocketManager::SMMLF::init() {
 // Function init(get ip and port)
 
 void SocketManager::SMMLF::init(const vector<string> &ip, const vector<int> &port) {
-    DBGprint("ip,port init begins");
+    DBGprint("ip,port init begins\n");
     this->ip = ip;
     this->port = port;
     
     init_windows_socket();
     server();
     client();
-    DBGprint("ip,port init ends");
+    DBGprint("ip,port init ends\n");
 }
 
 // construct server side and socket_io[node_type][M-1],[node_type][M-2]……[node_type][node_type+1]

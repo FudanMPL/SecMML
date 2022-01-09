@@ -24,7 +24,7 @@ public:
     ~Mat();
     void init(int r, int c);
     ll128 &operator()(int a, int b);
-    vector<ll128> getVal();
+    vector<ll128> getVal() const;
     ll128 get(int a, int b) const;
     ll128 &getVal(int a);
     void setVal(vector<ll128> v);
@@ -113,8 +113,17 @@ public:
     void printSign();
     void toString(char *p);
     int toString_pos(char *p) const;
+    void toBuffer_pos(char *p) const;
+    void toBuffer(char *p, int i) const;
+    void to_Buffer(char *p, int i) const;
     int getStringLen();
+    void get_Buffer(char *&p ,int i);
+    void getBuffer(char *&p, int i);
+    void getFrom_buf(char *&p);
     void getFrom_pos(char *&p);
+    void add_Buffer(char *&p, int i);
+    void addBuffer(char *&p, int i);
+    void addFrom_buf(char *&p);
     void addFrom_pos(char *&p);
     Mat SmoothLevel();
     ll count_sum();

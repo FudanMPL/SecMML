@@ -153,24 +153,60 @@ int SocketOnline::recv_message_n(SOCK sock, char *p, int l) {
 
 void SocketOnline::send_message(const Mat &a) {
     int len_buffer;
-    len_buffer = a.toString_pos(buffer);
-    Constant::Util::int_to_header(header, len_buffer);
+    int size = a.size() * 8 + 3 * 4;
+    Constant::Util::int_to_header(header, size);
     send_message_n(sock, header, Config::config->HEADER_LEN);
-    send_message_n(sock, buffer, len_buffer);
+    if(size < Config::config->BUFFER_MAX)
+    {
+        len_buffer = a.toString_pos(buffer);
+        send_message_n(sock, buffer, len_buffer);
+    }
+    else
+    {
+        a.toBuffer_pos(buffer);
+        int i = (Config::config->BUFFER_MAX - 3 * 4) / 8;
+        send_message_n(sock, buffer, i * 8 + 12);
+        while(i + Config::config->BUFFER_MAX / 8 < a.size())
+        {
+            char* p = buffer;
+            a.toBuffer(p,i);
+            send_message_n(sock, buffer, (Config::config->BUFFER_MAX / 8) * 8);
+            i += Config::config->BUFFER_MAX / 8;
+        }
+        char* p = buffer;
+        a.to_Buffer(p,i);
+        send_message_n(sock, buffer, (a.size() - i) * 8);
+    }
 }
 
 // convert matrix(*a) to char* and send by socket
 
 void SocketOnline::send_message(Mat *a) {
     int len_buffer;
-    len_buffer = a->toString_pos(buffer);
-//    header = new char[max(HEADER_LEN, HEADER_LEN_OPT) + 1];
-//    Constant::Util::int_to_header(header, a->rows());
-//    Constant::Util::int_to_header(header + 4, a->cols());
-    Constant::Util::int_to_header(header, len_buffer);
+    int size = a->size() * 8 + 3 * 4;
+    Constant::Util::int_to_header(header, size);
     send_message_n(sock, header, Config::config->HEADER_LEN);
-//    send_message_n(sock, header, HEADER_LEN_OPT);
-    send_message_n(sock, buffer, len_buffer);
+    if(size < Config::config->BUFFER_MAX)
+    {
+        len_buffer = a->toString_pos(buffer);
+        send_message_n(sock, buffer, len_buffer);
+    }
+    else
+    {
+        a->toBuffer_pos(buffer);
+        int i = (Config::config->BUFFER_MAX - 3 * 4) / 8;
+        send_message_n(sock, buffer, i * 8 + 12);
+        while(i + Config::config->BUFFER_MAX / 8 < a->size())
+        {
+            char* p = buffer;
+            a->toBuffer(p,i);
+            send_message_n(sock, buffer, (Config::config->BUFFER_MAX / 8) * 8);
+            i += Config::config->BUFFER_MAX / 8;
+        }
+        char* p = buffer;
+        a->to_Buffer(p,i);
+        send_message_n(sock, buffer, (a->size() - i) * 8);
+    }
 }
 
 // convert int to char* and send by socket
@@ -187,34 +223,91 @@ Mat SocketOnline::recv_message() {
     Mat ret;
     int len_header = recv_message_n(sock, header, Config::config->HEADER_LEN);
     int l = Constant::Util::header_to_int(header);
-    int len_buffer = recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
-    char* p = buffer;
-    ret.getFrom_pos(p);
-    return ret;
+    if(l < Config::config->BUFFER_MAX)
+    {
+        int len_buffer = recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
+        char* p = buffer;
+        ret.getFrom_pos(p);
+        return ret;
+    }
+    else
+    {
+        int i = (Config::config->BUFFER_MAX - 3 * 4) / 8;
+        recv_message_n(sock, buffer, i * 8 + 12);
+        char* p = buffer;
+        ret.getFrom_buf(p);
+        while(i + Config::config->BUFFER_MAX / 8 < ret.size())
+        {
+            recv_message_n(sock,buffer,(Config::config->BUFFER_MAX / 8)*8);
+            char* p = buffer;
+            ret.getBuffer(p,i);
+            i += Config::config->BUFFER_MAX / 8;
+        }
+        recv_message_n(sock,buffer,(ret.size() - i) * 8);
+        char* pos = buffer;
+        ret.get_Buffer(pos,i);
+        return ret;
+    }
 }
 
 // receive message from socket and convet to matrix, add this matrix to a
 
 void SocketOnline::recv_message(Mat *a) {
-    recv_message_n(sock, header, Config::config->HEADER_LEN);
-    recv_message_n(sock, buffer, a->getStringLen());
-    char* p = buffer;
-    a->addFrom_pos(p);
-//    cout << "--------------" << endl;
+    int len_header = recv_message_n(sock, header, Config::config->HEADER_LEN);
+    int l = Constant::Util::header_to_int(header);
+    if(l < Config::config->BUFFER_MAX)
+    {
+        int len_buffer = recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
+        char* p = buffer;
+        a->addFrom_pos(p);
+    }
+    else
+    {
+        int i = (Config::config->BUFFER_MAX - 3 * 4) / 8;
+        recv_message_n(sock, buffer, i * 8 + 12);
+        char* p = buffer;
+        a->addFrom_buf(p);
+        while(i + Config::config->BUFFER_MAX / 8 < a->size())
+        {
+            recv_message_n(sock,buffer,(Config::config->BUFFER_MAX / 8)*8);
+            char* p = buffer;
+            a->addBuffer(p, i);
+            i += Config::config->BUFFER_MAX / 8;
+        }
+        recv_message_n(sock,buffer,(a->size() - i) * 8);
+        char* pos = buffer;
+        a->add_Buffer(pos, i);
+    }
 }
 
 // receive message from socket and convet to matrix, assign this matrix to a
 
 void SocketOnline::recv_message(Mat &a) {
-    // add this to receive share, added by curious 2020.6.3
-    recv_message_n(sock, header, Config::config->HEADER_LEN);
-//    int r = Constant::Util::char_to_int(header);
-//    int c = Constant::Util::char_to_int(header);
-    recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
-//    recv_message_n(sock, header, HEADER_LEN_OPT);
-//    recv_message_n(sock, buffer, a.getStringLen());
-    char* p = buffer;
-    a.getFrom_pos(p);
+    int len_header = recv_message_n(sock, header, Config::config->HEADER_LEN);
+    int l = Constant::Util::header_to_int(header);
+    if(l < Config::config->BUFFER_MAX)
+    {
+        int len_buffer = recv_message_n(sock, buffer, Constant::Util::header_to_int(header));
+        char* p = buffer;
+        a.getFrom_pos(p);
+    }
+    else
+    {
+        int i = (Config::config->BUFFER_MAX - 3 * 4) / 8;
+        recv_message_n(sock, buffer, i * 8 + 12);
+        char* p = buffer;
+        a.getFrom_buf(p);
+        while(i + Config::config->BUFFER_MAX / 8 < a.size())
+        {
+            recv_message_n(sock,buffer,(Config::config->BUFFER_MAX / 8)*8);
+            char* p = buffer;
+            a.getBuffer(p,i);
+            i += Config::config->BUFFER_MAX / 8;
+        }
+        recv_message_n(sock,buffer,(a.size() - i) * 8);
+        char* pos = buffer;
+        a.get_Buffer(pos,i);
+    }
 }
 
 //receive messgage from socket and convert to int, then return 

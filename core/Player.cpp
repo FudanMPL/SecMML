@@ -9,7 +9,11 @@
 Mat Player::metadata;
 vector<Player> Player::player;
 
+// non-parameter Constructor Function
+
 Player::Player(){}
+
+// Constructor Function
 
 Player::Player(int id, ll128 key, ll128 lagrange) {
     this->id = id;
@@ -17,6 +21,8 @@ Player::Player(int id, ll128 key, ll128 lagrange) {
     /// lagrange polynomial coefficients， TODO： modify for reed_solomn reconstruct
     this->lagrange = lagrange;
 }
+
+// initialize each player and generate vandermonde matrix for Dimensionality reduction
 
 void Player::init() {
     metadata.init(Config::config->M, Config::config->M);
@@ -111,6 +117,8 @@ void Player::init() {
     DBGprint("\n");
     DBGprint("init complete\n");
 }
+
+// Get the reduced dimensionality matrix 
 
 Mat Player::getMetadata() {
     return metadata;

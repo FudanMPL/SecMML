@@ -104,7 +104,7 @@ ll128 &Mat::operator()(int row, int col)
     }
 }
 
-vector<ll128> Mat::getVal()
+vector<ll128> Mat::getVal() const
 {
     return val;
 }
@@ -1561,10 +1561,44 @@ int Mat::toString_pos(char *p) const
     int l = r * c;
     for (int i = 0; i < l; i++)
     {
+        //std::cout << val[i]<<std::endl;
         Constant::Util::ll_to_char(p, val[i]);
     }
     *p = 0;
     return 3 * 4 + r * c * 8;
+}
+
+// Used for large Matrix whose size more than buffer size
+
+void Mat::toBuffer_pos(char *p) const
+{
+    Constant::Util::int_to_char(p, r);
+    Constant::Util::int_to_char(p, c);
+    Constant::Util::int_to_char(p, order);
+    for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+    {
+        //std::cout<<val[i]<<std::endl;
+        Constant::Util::ll_to_char(p,val[i]);
+    }
+    *p = 0;
+}
+
+void Mat::toBuffer(char *p, int i) const
+{
+    for(int j = 0; j < Config::config->BUFFER_MAX/8; j++)
+    {
+        Constant::Util::ll_to_char(p, val[i+j]);
+        // std::cout << val[i+j]<<std::endl;
+    }
+}
+
+void Mat::to_Buffer(char *p, int i) const
+{
+    for(int j = i; j < this->size(); j++)
+    {
+        Constant::Util::ll_to_char(p,val[j]);
+        // std::cout << val[j] << std::endl;
+    }
 }
 
 // Return the size of matrix(include row, column and order of matrix)
@@ -1572,6 +1606,36 @@ int Mat::toString_pos(char *p) const
 int Mat::getStringLen()
 { // 返回矩阵的长度（包括矩阵的行和列和order）
     return 3 * 4 + r * c * 8;
+}
+
+void Mat::get_Buffer(char *&p, int i)
+{
+    for(int j = i; j < this->size();j++)
+    {
+        val[j] = Constant::Util::char_to_ll(p);
+        // std::cout << val[j] << std::endl;
+    }
+}
+
+void Mat::getBuffer(char *&p, int i)
+{
+    for(int j = 0; j < Config::config->BUFFER_MAX / 8;j++)
+    {
+        val[i+j] = Constant::Util::char_to_ll(p);
+        // std::cout << val[i+j] << std::endl;
+    }
+}
+
+void Mat::getFrom_buf(char *&p)
+{
+    r = Constant::Util::char_to_int(p);
+    c = Constant::Util::char_to_int(p);
+    order = Constant::Util::char_to_int(p);
+    val.resize(r * c);
+    for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+    {
+        val[i] = Constant::Util::char_to_ll(p);
+    }
 }
 
 // Read the matrix from char *
@@ -1588,6 +1652,53 @@ void Mat::getFrom_pos(char *&p)
         val[i] = Constant::Util::char_to_ll(p);
     }
 }
+
+void Mat::add_Buffer(char *&p, int i)
+{
+     for(int j = i; j < this->size();j++)
+    {
+        val[j] += Constant::Util::char_to_ll(p);
+        val[j] = val[j] >= Config::config->MOD ? val[j] - Config::config->MOD : val[j];
+        val[j] = val[j] <= -Config::config->MOD ? val[j] + Config::config->MOD : val[j];
+    }
+}
+
+void Mat::addBuffer(char *&p, int i)
+{
+     for(int j = 0; j < Config::config->BUFFER_MAX / 8;j++)
+    {
+        val[i+j] += Constant::Util::char_to_ll(p);
+        val[i+j] = val[i+j] >= Config::config->MOD ? val[i+j] - Config::config->MOD : val[i+j];
+        val[i+j] = val[i+j] <= -Config::config->MOD ? val[i+j] + Config::config->MOD : val[i+j];
+    }
+}
+
+void Mat::addFrom_buf(char *&p)
+{
+    int tmp_r, tmp_c, tmp_order;
+    tmp_r = Constant::Util::char_to_int(p);
+    tmp_c = Constant::Util::char_to_int(p);
+    tmp_order = Constant::Util::char_to_int(p);
+    //    cout << "l: " << l << endl;
+    if (tmp_c == c && tmp_r == r)
+    {
+        if (order != tmp_order)
+        {
+            this->reorder();
+        }
+        for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+        {
+            val[i] += Constant::Util::char_to_ll(p);
+            val[i] = val[i] >= Config::config->MOD ? val[i] - Config::config->MOD : val[i];
+            val[i] = val[i] <= -Config::config->MOD ? val[i] + Config::config->MOD : val[i];
+        }
+    }
+    else
+    {
+        DBGprint("Function addFrom_pos The input matrix format is illegal\n");
+    }
+}
+
 
 // Add matrix(taken from p) to the matrix
 

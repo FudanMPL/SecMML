@@ -440,7 +440,7 @@ void test2(int node_type)
             std::cout << "False" << std::endl;
         }
     }
-    else if(node_type == 2)
+    else if (node_type == 2)
     {
         stringstream ss1, ss2, ss3;
         std::vector<ll128> a = {9, 8, 7, 6, 5, 4, 3, 2, 1};
@@ -519,8 +519,146 @@ void test2(int node_type)
     }
 }
 
+void test3(int node_type, Mat test)
+{
+    Mat *test1;
+    test1 = new Mat(20000, 785);
+    Mat::random_neg(test1);
+    if (node_type == 0)
+    {
+        //test.print();
+        SocketManager::send(0, 1, test);
+        SocketManager::send(0, 2, test);
+        SocketManager::send(0, 1, test1);
+        SocketManager::send(0, 2, test1);
+        SocketManager::send(0, 1, test);
+        SocketManager::send(0, 2, test);
+    }
+    else if (node_type == 1)
+    {
+        Mat mat1;
+        mat1 = SocketManager::receive(1, 0);
+        if (mat1 == test)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat &a)" << std::endl;
+            std::cout << "True" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat &a)" << std::endl;
+            std::cout << "False" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
+            std::cout << "False" << std::endl;
+        }
+        Mat mat2;
+        SocketManager::receive(1, 0, mat2);
+        if (mat2 == *test1)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat *a)" << std::endl;
+            std::cout << "True" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat &a) " << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat *a)" << std::endl;
+            std::cout << "False" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat &a) " << std::endl;
+            std::cout << "False" << std::endl;
+        }
+        Mat *mat3;
+        mat3 = new Mat(20000, 785);
+        Mat::random_neg(mat3);
+        Mat mat4 = *mat3;
+        SocketManager::receive(1, 0, mat3);
+        if (*mat3 == mat4 + test)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat *a)" << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat *a)" << std::endl;
+            std::cout << "False" << std::endl;
+        }
+    }
+    else
+    {
+        Mat mat1;
+        mat1 = SocketManager::receive(2, 0);
+        if (mat1 == test)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat &a)" << std::endl;
+            std::cout << "True" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat &a)" << std::endl;
+            std::cout << "False" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from) " << std::endl;
+            std::cout << "False" << std::endl;
+        }
+        Mat mat2;
+        SocketManager::receive(2, 0, mat2);
+        if (mat2 == *test1)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat *a)" << std::endl;
+            std::cout << "True" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat &a) " << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::send(int node_type, int target, Mat *a)" << std::endl;
+            std::cout << "False" << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat &a) " << std::endl;
+            std::cout << "False" << std::endl;
+        }
+        Mat *mat3;
+        mat3 = new Mat(20000, 785);
+        Mat::random_neg(mat3);
+        Mat mat4 = *mat3;
+        SocketManager::receive(2, 0, mat3);
+        if (*mat3 == mat4 + test)
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat *a)" << std::endl;
+            std::cout << "True" << std::endl;
+        }
+        else
+        {
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "Test for function SocketManager::receive(int node_type, int from, Mat *a)" << std::endl;
+            std::cout << "False" << std::endl;
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
+    Config::config = Config::init("../config/parameter/constant.json");
     if (argc < 2)
     {
         DBGprint("Please enter party index:\n");
@@ -547,5 +685,13 @@ int main(int argc, char **argv)
               << std::endl;
     std::cout << "Test for different matrix storage methods before and after transmission" << std::endl;
     test2(node_type);
+    std::cout << std::endl
+              << std::endl
+              << std::endl;
+    std::cout << "Test for larger matrix whose size larger than socket buffer" << std::endl;
+    Mat test(20000, 785, 1);
+    Mat::random_neg(&test);
+    //test.print();
+    test3(node_type, test);
     return 0;
 }

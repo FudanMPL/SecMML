@@ -5,6 +5,7 @@
 
 #include "IOManager.h"
 #include "../core/Mat.h"
+#include "SocketManager.h"
 #include <iostream>
 #include <chrono>
 #include <iomanip>
@@ -14,13 +15,6 @@
 
 using namespace std::chrono_literals;
 
-// Mat train_data(N,D), train_label(N,1);
-// Mat test_data(NM,D), test_label(NM,1);
-
-// Mat IOManager::train_data = Mat(Config::config->D + 1, Config::config->N + Config::config->B - 1);
-// Mat IOManager::train_label = Mat(1, Config::config->N + Config::config->B - 1);
-// Mat IOManager::test_data = Mat(Config::config->D + 1, Config::config->NM + Config::config->B - 1);
-// Mat IOManager::test_label = Mat(1, Config::config->NM + Config::config->B - 1);
 Mat IOManager::train_data;
 Mat IOManager::train_label;
 Mat IOManager::test_data;
@@ -29,10 +23,9 @@ Mat IOManager::test_label;
 string IOManager::TEST = "test";
 string IOManager::TRAIN = "train";
 
-// Mat IOManager::train_data = Mat(D + 1, N + B - 1);
-// Mat IOManager::train_label = Mat(1, N + B - 1);
-// Mat IOManager::test_data = Mat(D + 1, NM + B - 1);
-// Mat IOManager::test_label = Mat(1, NM + B - 1);
+int IOManager::party_num; // the number of party, except myself
+int IOManager::train_n = 0;
+int IOManager::test_n = 0;
 
 ll poly_eval(vector<ll> coefficients, ll x)
 {
@@ -456,46 +449,30 @@ void IOManager::init_mat()
 }
 
 // test和train放在同一个文件中
-void IOManager::load(string filename)
+void IOManager::load()
 {
     DBGprint("load training data......\n");
+    if (Config::config->TRAIN_TEST_SAME)
+    {
+        ifstream infile(Config::config->FILENAME);
 
-    ifstream infile(filename);
+        load(infile, train_data, train_label, Config::config->N);
+        load(infile, test_data, test_label, Config::config->NM);
 
-    load(infile, train_data, train_label, Config::config->N);
-    load(infile, test_data, test_label, Config::config->NM);
+        infile.close();
+    }
+    else
+    {
+        ifstream infile(Config::config->TRAIN_FILENAME);
+        load(infile, train_data, train_label, Config::config->N);
+        infile.close();
 
-    infile.close();
-}
-
-// train 和 test 数据放在两个文件中
-void IOManager::load(string train_filename, string test_filename)
-{
-    DBGprint("load training data......\n");
-
-    ifstream infile(train_filename);
-    load(infile, train_data, train_label, Config::config->N);
-    secret_share(train_data, train_label, TRAIN);
-    // secret_share(train_data, train_label, "train");
-
-    // ifstream infile( "../datasets/mnist/mnist_train_"+to_string(node_type)+".csv" );
-    // load_ss(infile, train_data, train_label, Config::config->N);
-    infile.close();
-
-    ifstream intest(test_filename);
-    load(intest, test_data, test_label, Config::config->NM);
-    secret_share(test_data, test_label, TEST);
-    // secret_share(test_data, test_label, "test");
-    // ifstream intest( "../datasets/mnist/mnist_test_"+to_string(node_type)+".csv" );
-    // load_ss(intest, test_data, test_label, Config::config->NM);
-    intest.close();
-
-    /// TODO: secret sharing save file
-
-    //    train_data.reoeder();
-    //    train_label.reoeder();
-    //    test_data.reoeder();
-    //    test_label.reoeder();
+        ifstream intest(Config::config->TEST_FILENAME);
+        load(intest, test_data, test_label, Config::config->NM);
+        intest.close();
+    }
+    // secret_share(train_data, train_label, TRAIN);
+    // secret_share(test_data, test_label, TEST);
 }
 
 // Get the time period from the last modification of the file to the present
@@ -506,48 +483,53 @@ ll128 get_file_modified_time2now(string filepath, auto now)
 }
 
 // according to filename,get the cache filenames
-void get_cache_name(string filename, string cachefiles[])
+void get_cache_name(string cachefiles[])
 {
     int i;
-    for (i = filename.length() - 1; i >= 0; i--)
+    if (Config::config->TRAIN_TEST_SAME)
     {
-        if (filename[i] == '.')
-            break;
+        int i;
+        string filename = Config::config->FILENAME;
+        for (i = filename.length() - 1; i >= 0; i--)
+        {
+            if (filename[i] == '.')
+                break;
+        }
+        string basename = filename.substr(0, i);
+        cachefiles[0] = basename + "_traind.dat";
+        cachefiles[1] = basename + "_trainl.dat";
+        cachefiles[2] = basename + "_testd.dat";
+        cachefiles[3] = basename + "_testl.dat";
     }
-    string basename = filename.substr(0, i);
-    cachefiles[0] = basename + "_traind.dat";
-    cachefiles[1] = basename + "_trainl.dat";
-    cachefiles[2] = basename + "_testd.dat";
-    cachefiles[3] = basename + "_testl.dat";
-}
+    else
+    {
+        string train_filename = Config::config->TRAIN_FILENAME;
+        for (i = train_filename.length() - 1; i >= 0; i--)
+        {
+            if (train_filename[i] == '.')
+                break;
+        }
+        string basename = train_filename.substr(0, i);
+        cachefiles[0] = basename + "_traind.dat";
+        cachefiles[1] = basename + "_trainl.dat";
 
-void get_cache_name(string train_filename, string test_filename, string cachefiles[])
-{
-    int i;
-    for (i = train_filename.length() - 1; i >= 0; i--)
-    {
-        if (train_filename[i] == '.')
-            break;
+        string test_filename = Config::config->TEST_FILENAME;
+        for (i = test_filename.length() - 1; i >= 0; i--)
+        {
+            if (test_filename[i] == '.')
+                break;
+        }
+        basename = test_filename.substr(0, i);
+        cachefiles[2] = basename + "_testd.dat";
+        cachefiles[3] = basename + "_testl.dat";
     }
-    string basename = train_filename.substr(0, i);
-    cachefiles[0] = basename + "_traind.dat";
-    cachefiles[1] = basename + "_trainl.dat";
-
-    for (i = test_filename.length() - 1; i >= 0; i--)
-    {
-        if (test_filename[i] == '.')
-            break;
-    }
-    basename = test_filename.substr(0, i);
-    cachefiles[2] = basename + "_testd.dat";
-    cachefiles[3] = basename + "_testl.dat";
 }
 
 // Jude whether there is a cache
-bool judgecache(string filename)
+bool judgecache()
 {
     string cachefiles[4];
-    get_cache_name(filename, cachefiles);
+    get_cache_name(cachefiles);
 
     if (!std::filesystem::exists(cachefiles[0]))
     {
@@ -558,7 +540,14 @@ bool judgecache(string filename)
     auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
 
     // if the modified time of filename is smaller than the cache file, so the cache is valid, return true
-    return get_file_modified_time2now(filename, now) > get_file_modified_time2now(cachefiles[0], now) ? true : false;
+    if (Config::config->TRAIN_TEST_SAME)
+    {
+        return get_file_modified_time2now(Config::config->FILENAME, now) > get_file_modified_time2now(cachefiles[0], now) ? true : false;
+    }
+    else
+    {
+        return get_file_modified_time2now(Config::config->TRAIN_FILENAME, now) > get_file_modified_time2now(cachefiles[0], now) ? true : false;
+    }
 }
 
 // convert the content of mat to the binary cache ile
@@ -573,13 +562,12 @@ void tocache(Mat &mat, string filename)
     cachefile.write((char *)&c, sizeof(c));
     cachefile.write((char *)&order, sizeof(order));
     ll128 temp;
-    vector<ll128> v = mat.getVal();
+    vector<ll128> v = mat.get_val();
     for (int i = 0; i < r * c; i++) // every row
     {
         temp = v[i];
         cachefile.write((char *)&temp, sizeof(temp));
     }
-    // cachefile.write((char *)&mat, mat.get_memory_size());
     cachefile.close();
 }
 
@@ -594,7 +582,6 @@ void load_cache(string filename, Mat &mat)
         cachefile.read((char *)&r, sizeof(int));
         cachefile.read((char *)&c, sizeof(int));
         cachefile.read((char *)&order, sizeof(int));
-        cout << r << " " << c << " " << order << endl;
         mat.setrow(r);
         mat.setcol(c);
         mat.setorder(order);
@@ -616,11 +603,11 @@ void load_cache(string filename, Mat &mat)
     cachefile.close();
 }
 
-void IOManager::cache_all_mat(string filename)
+void IOManager::cache_all_mat()
 {
     // get the name list of cache files
     string cachefiles[4];
-    get_cache_name(filename, cachefiles);
+    get_cache_name(cachefiles);
 
     tocache(train_data, cachefiles[0]);
     tocache(train_label, cachefiles[1]);
@@ -628,35 +615,11 @@ void IOManager::cache_all_mat(string filename)
     tocache(test_label, cachefiles[3]);
 }
 
-void IOManager::cache_all_mat(string train_filename, string test_filename)
+void IOManager::load_all_cache_to_mat()
 {
     // get the name list of cache files
     string cachefiles[4];
-    get_cache_name(train_filename, test_filename, cachefiles);
-
-    tocache(train_data, cachefiles[0]);
-    tocache(train_label, cachefiles[1]);
-    tocache(test_data, cachefiles[2]);
-    tocache(test_label, cachefiles[3]);
-}
-
-void IOManager::load_all_cache_to_mat(string filename)
-{
-    // get the name list of cache files
-    string cachefiles[4];
-    get_cache_name(filename, cachefiles);
-
-    load_cache(cachefiles[0], train_data);
-    load_cache(cachefiles[1], train_label);
-    load_cache(cachefiles[2], test_data);
-    load_cache(cachefiles[3], test_label);
-}
-
-void IOManager::load_all_cache_to_mat(string train_filename, string test_filename)
-{
-    // get the name list of cache files
-    string cachefiles[4];
-    get_cache_name(train_filename, test_filename, cachefiles);
+    get_cache_name(cachefiles);
 
     load_cache(cachefiles[0], train_data);
     load_cache(cachefiles[1], train_label);
@@ -665,11 +628,11 @@ void IOManager::load_all_cache_to_mat(string train_filename, string test_filenam
 }
 
 // remove all cache
-void IOManager::remove_cache(string filename)
+void IOManager::remove_cache()
 {
     // get the name list of cache files
     string cachefiles[4];
-    get_cache_name(filename, cachefiles);
+    get_cache_name(cachefiles);
 
     for (string cachefile : cachefiles)
     {
@@ -680,50 +643,85 @@ void IOManager::remove_cache(string filename)
     }
 }
 
-// remove all cache
-void IOManager::remove_cache(string train_filename, string test_filename)
+void IOManager::init_local_data()
 {
-    // get the name list of cache files
-    string cachefiles[4];
-    get_cache_name(train_filename, test_filename, cachefiles);
+    init_mat();
 
-    for (string cachefile : cachefiles)
+    if (judgecache()) // If there exits a cache, load the cached binary file into mat
     {
-        if (std::filesystem::exists(cachefile))
+        load_all_cache_to_mat();
+    }
+    else
+    {
+        load();
+        cache_all_mat();
+    }
+}
+
+// exchange one mat and merge the mat to get the new mat
+void IOManager::exchange_mat(Mat &mat)
+{
+    // the orginal is supposed to be secret shared
+    // so generate the secret mats for each mat
+    // in fact ,there could be constructed into array, and use foreach to get train and test
+
+    Mat mats[party_num];
+
+    // according the orginal mat to get secret mats
+    mat.get_secret_share(mats, party_num);
+
+    // send secret local data
+    for (int i = 0; i < party_num; i++)
+    {
+        if (i != node_type) // except myself
         {
-            std::filesystem::remove(cachefile);
+            SocketManager::send(node_type, i, mats[i]);
         }
     }
+
+    // receive secret data from other parties
+    for (int i = 0; i < party_num; i++)
+    {
+        if (i != node_type) // send four mat to other
+        {
+            // delete the original data
+            SocketManager::receive(node_type, i, mats[i]);
+        }
+    }
+
+    // merge all secret mats
+    mat.merge_mats(mats, party_num);
+    //mat.print_part();
 }
 
-void IOManager::init(string filename)
+void IOManager::exchange_data()
 {
-    init_mat();
 
-    if (judgecache(filename)) // If there exits a cache, load the cached binary file into mat
-    {
-        load_all_cache_to_mat(filename);
-    }
-    else
-    {
-        load(filename);
-        cache_all_mat(filename);
-    }
+    // exchange the four mats and get new mats
+    exchange_mat(train_data);
+    exchange_mat(train_label);
+    exchange_mat(test_data);
+    exchange_mat(test_label);
+
+    // update the sum of train line and test line
+    train_n = train_data.rows();
+    test_n = test_data.rows();
 }
 
-void IOManager::init(string train_filename, string test_filename)
+void IOManager::init()
 {
-    init_mat();
-    // load(train_filename, test_filename);
-    if (judgecache(train_filename)) // If there exits a cache, load the cached binary file into matƒ
-    {
-        DBGprint("load cache\n");
-        load_all_cache_to_mat(train_filename, test_filename);
-    }
-    else
-    {
-        DBGprint("load file\n");
-        load(train_filename, test_filename);
-        cache_all_mat(train_filename, test_filename);
-    }
+    // init variable
+    IOManager::party_num = Config::config->M; // the number of party, except myself
+    IOManager::train_n = 0;
+    IOManager::test_n = 0;
+
+    // load the local data
+    init_local_data();
+    DBGprint("local data init");
+
+    // generate the secret mat of the local mat
+    // and then
+    // exchange the secret mat
+    exchange_data();
+    DBGprint("finish init");
 }

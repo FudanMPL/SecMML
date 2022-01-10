@@ -104,7 +104,7 @@ ll128 &Mat::operator()(int row, int col)
     }
 }
 
-vector<ll128> Mat::getVal() const
+vector<ll128> Mat::get_val() const
 {
     return val;
 }
@@ -192,6 +192,12 @@ void Mat::setorder(int order)
 {
     this->order = order;
 }
+
+void Mat::set(int p, int x)
+{
+    val[p] = x;
+}
+
 
 // Get the size of the matrix
 int Mat::size() const
@@ -1183,6 +1189,14 @@ Mat Mat::col(int st, int ed) const
     return ret;
 }
 
+vector<ll128> Mat::col(int st, int ed)
+{
+    vector<ll128> v;
+    v.resize((ed - st + 1) * r);
+    v.assign(val.begin() + st * r, val.begin() + ed * r);
+    return v;
+}
+
 // 对矩阵中每个元素进行操作,若该元素第b位(最低位为第1位)为1则该元素置1,为0则置0
 // Operate on each element in the matrix If the b-th position of the element is 1, then the element is set to 1,otherwise set to 0
 // (The lowest bit is the first bit)
@@ -1266,6 +1280,12 @@ void Mat::col(int st, int ed, Mat &a) const
     else
         DBGprint("Function col The input is out of range\n");
 }
+
+void Mat::append(vector<ll128> v)
+{
+    val.insert(val.end(), v.begin(), v.end());
+}
+
 
 void Mat::append(int st, int ed, Mat *a)
 {
@@ -1561,7 +1581,7 @@ int Mat::toString_pos(char *p) const
     int l = r * c;
     for (int i = 0; i < l; i++)
     {
-        //std::cout << val[i]<<std::endl;
+        // std::cout << val[i]<<std::endl;
         Constant::Util::ll_to_char(p, val[i]);
     }
     *p = 0;
@@ -1575,28 +1595,28 @@ void Mat::toBuffer_pos(char *p) const
     Constant::Util::int_to_char(p, r);
     Constant::Util::int_to_char(p, c);
     Constant::Util::int_to_char(p, order);
-    for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+    for (int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
     {
-        //std::cout<<val[i]<<std::endl;
-        Constant::Util::ll_to_char(p,val[i]);
+        // std::cout<<val[i]<<std::endl;
+        Constant::Util::ll_to_char(p, val[i]);
     }
     *p = 0;
 }
 
 void Mat::toBuffer(char *p, int i) const
 {
-    for(int j = 0; j < Config::config->BUFFER_MAX/8; j++)
+    for (int j = 0; j < Config::config->BUFFER_MAX / 8; j++)
     {
-        Constant::Util::ll_to_char(p, val[i+j]);
+        Constant::Util::ll_to_char(p, val[i + j]);
         // std::cout << val[i+j]<<std::endl;
     }
 }
 
 void Mat::to_Buffer(char *p, int i) const
 {
-    for(int j = i; j < this->size(); j++)
+    for (int j = i; j < this->size(); j++)
     {
-        Constant::Util::ll_to_char(p,val[j]);
+        Constant::Util::ll_to_char(p, val[j]);
         // std::cout << val[j] << std::endl;
     }
 }
@@ -1610,7 +1630,7 @@ int Mat::getStringLen()
 
 void Mat::get_Buffer(char *&p, int i)
 {
-    for(int j = i; j < this->size();j++)
+    for (int j = i; j < this->size(); j++)
     {
         val[j] = Constant::Util::char_to_ll(p);
         // std::cout << val[j] << std::endl;
@@ -1619,9 +1639,9 @@ void Mat::get_Buffer(char *&p, int i)
 
 void Mat::getBuffer(char *&p, int i)
 {
-    for(int j = 0; j < Config::config->BUFFER_MAX / 8;j++)
+    for (int j = 0; j < Config::config->BUFFER_MAX / 8; j++)
     {
-        val[i+j] = Constant::Util::char_to_ll(p);
+        val[i + j] = Constant::Util::char_to_ll(p);
         // std::cout << val[i+j] << std::endl;
     }
 }
@@ -1632,7 +1652,7 @@ void Mat::getFrom_buf(char *&p)
     c = Constant::Util::char_to_int(p);
     order = Constant::Util::char_to_int(p);
     val.resize(r * c);
-    for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+    for (int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
     {
         val[i] = Constant::Util::char_to_ll(p);
     }
@@ -1655,7 +1675,7 @@ void Mat::getFrom_pos(char *&p)
 
 void Mat::add_Buffer(char *&p, int i)
 {
-     for(int j = i; j < this->size();j++)
+    for (int j = i; j < this->size(); j++)
     {
         val[j] += Constant::Util::char_to_ll(p);
         val[j] = val[j] >= Config::config->MOD ? val[j] - Config::config->MOD : val[j];
@@ -1665,11 +1685,11 @@ void Mat::add_Buffer(char *&p, int i)
 
 void Mat::addBuffer(char *&p, int i)
 {
-     for(int j = 0; j < Config::config->BUFFER_MAX / 8;j++)
+    for (int j = 0; j < Config::config->BUFFER_MAX / 8; j++)
     {
-        val[i+j] += Constant::Util::char_to_ll(p);
-        val[i+j] = val[i+j] >= Config::config->MOD ? val[i+j] - Config::config->MOD : val[i+j];
-        val[i+j] = val[i+j] <= -Config::config->MOD ? val[i+j] + Config::config->MOD : val[i+j];
+        val[i + j] += Constant::Util::char_to_ll(p);
+        val[i + j] = val[i + j] >= Config::config->MOD ? val[i + j] - Config::config->MOD : val[i + j];
+        val[i + j] = val[i + j] <= -Config::config->MOD ? val[i + j] + Config::config->MOD : val[i + j];
     }
 }
 
@@ -1686,7 +1706,7 @@ void Mat::addFrom_buf(char *&p)
         {
             this->reorder();
         }
-        for(int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
+        for (int i = 0; i < (Config::config->BUFFER_MAX - 3 * 4) / 8; i++)
         {
             val[i] += Constant::Util::char_to_ll(p);
             val[i] = val[i] >= Config::config->MOD ? val[i] - Config::config->MOD : val[i];
@@ -1698,7 +1718,6 @@ void Mat::addFrom_buf(char *&p)
         DBGprint("Function addFrom_pos The input matrix format is illegal\n");
     }
 }
-
 
 // Add matrix(taken from p) to the matrix
 
@@ -1893,4 +1912,64 @@ ll Mat::get_memory_size()
     memory_size += sizeof(ll128) * val.size();
     std::cout << memory_size << std::endl;
     return memory_size;
+}
+
+ll poly_f(vector<ll> coefficients, ll x)
+{
+    ll res = coefficients[Config::config->TN - 1];
+    for (int l = Config::config->TN - 2; l >= 0; --l)
+    {
+        res = res * x + coefficients[l];
+    }
+    return res;
+}
+
+
+void Mat::get_secret_share(Mat *mats, int num)
+{
+    // mats = new Mat[numå];
+    for (int k = 0; k < num; ++k)
+    {
+        mats[k].init(r, c);
+    }
+    vector<ll> coefficients(Config::config->TN); // the coefficients of polynomial
+    srand(time(NULL));
+
+    for (int p = 0; p < r * c; ++p)
+    {
+        // get the random coefficients of f(x)
+        for (int j = 1; j < Config::config->TN; ++j)
+        {
+            coefficients[j] = Constant::Util::randomlong();
+        }
+        // get the f(x) for every party
+        for (int k = 0; k < num; ++k)
+        {
+            coefficients[0] = val[p];
+            mats[k].set(p, poly_f(coefficients, k + 2));
+        }
+    }
+    // return mats;
+}
+
+// merge all mat in mats into myself mat
+// num: the size of mats
+void Mat::merge_mats(Mat *mats, int num)
+{
+    c = 0;
+    for (int i = 0; i < num; i++) // caculate the row of after-merge mat
+    {
+        // row = the lines
+        // cout << mats[i].rows() << endl;
+        c += mats[i].cols();
+    }
+    val.clear();
+    // val.resize(c * r);
+
+    for (int i = 0; i < num; i++) // caculate the row of after-merge mat
+    {
+        vector<ll128> v_temp = mats[i].get_val();
+        val.insert(val.end(), v_temp.begin(), v_temp.end());
+        v_temp.clear();
+    }
 }

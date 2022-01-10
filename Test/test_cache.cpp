@@ -24,7 +24,7 @@ void print_part_data(Mat mat)
 void test_cache_twofile()
 {
 
-    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
+    IOManager::init();
     Mat train_data = Mat(IOManager::train_data);
     Mat train_label = Mat(IOManager::train_label);
     Mat test_data = Mat(IOManager::test_data);
@@ -34,7 +34,7 @@ void test_cache_twofile()
     print_part_data(test_data);
     print_part_data(test_label);
 
-    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
+    IOManager::init();
     print_part_data(IOManager::train_data);
     print_part_data(IOManager::train_label);
     print_part_data(IOManager::test_data);
@@ -48,11 +48,10 @@ void test_cache_twofile()
 void test_cache_onefile()
 {
     IOManager iOManager = IOManager();
-    iOManager.remove_cache(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
-    iOManager.init(Config::config->TRAIN_FILENAME);
+    iOManager.init();
 
     IOManager iOManager2 = IOManager();
-    iOManager2.init(Config::config->TRAIN_FILENAME);
+    iOManager2.init();
     assert(iOManager.train_data == iOManager2.train_data);
     assert(iOManager.train_label == iOManager2.train_label);
     assert(iOManager.test_data == iOManager2.test_data);
@@ -61,19 +60,17 @@ void test_cache_onefile()
 
 void test_cache_time()
 {
-    IOManager iOManager = IOManager();
 
     clock_t startTime, endTime;
-
+    IOManager::remove_cache();
     startTime = clock();
-    iOManager.init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    IOManager::init();
     endTime = clock();
     double time_file = (double)(endTime - startTime) / CLOCKS_PER_SEC; // in second
     std::cout << "The time of load the original file: " << time_file << std::endl;
 
-    IOManager iOManager2 = IOManager();
     startTime = clock();
-    iOManager2.init("../datasets/test/mnist_train.csv", "../datasets/test/mnist_test.csv");
+    IOManager::init();
     endTime = clock();
     double time_cache = (double)(endTime - startTime) / CLOCKS_PER_SEC;
     std::cout << "The time of load the cache file: " << time_cache << std::endl;
@@ -81,6 +78,6 @@ void test_cache_time()
 
 int main()
 {
-    test_cache_twofile();
-    // test_cache_time();
+    // test_cache_twofile();
+    test_cache_time();
 }

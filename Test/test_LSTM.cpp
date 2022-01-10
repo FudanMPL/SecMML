@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
 
     Player::init();
-    IOManager::init(Config::config->TRAIN_FILENAME, Config::config->TEST_FILENAME);
+    IOManager::init();
     SocketManager::SMMLF tel;
     if (!Config::config->LOCAL_TEST) {
         tel.init(Config::config->IP,Config::config->PORT);

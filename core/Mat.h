@@ -24,7 +24,7 @@ public:
     ~Mat();
     void init(int r, int c);
     ll128 &operator()(int a, int b);
-    vector<ll128> getVal() const;
+    vector<ll128> get_val() const;
     ll128 get(int a, int b) const;
     ll128 &getVal(int a);
     void setVal(vector<ll128> v);
@@ -32,6 +32,7 @@ public:
     int rows() const;
     int cols() const;
     int getorder() const;
+    void set(int p, int x);
     void setrow(int row);
     void setcol(int col);
     void setorder(int order);
@@ -86,7 +87,9 @@ public:
     Mat opposite() const;
     Mat toOneHot() const;
     void col(int st, int ed, Mat &a) const;
+    vector<ll128> col(int st, int ed);
     void append(int st, int ed, Mat *a);
+    void append(vector<ll128> v);
     Mat mod(ll b);
     int count();
     int count(const ll128 &b);
@@ -117,7 +120,7 @@ public:
     void toBuffer(char *p, int i) const;
     void to_Buffer(char *p, int i) const;
     int getStringLen();
-    void get_Buffer(char *&p ,int i);
+    void get_Buffer(char *&p, int i);
     void getBuffer(char *&p, int i);
     void getFrom_buf(char *&p);
     void getFrom_pos(char *&p);
@@ -137,6 +140,8 @@ public:
     static void re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
     static int pair_order_type(Mat *a, const Mat *b);
     static void random_neg(Mat *a);
+    void get_secret_share(Mat *mats, int num);
+    void merge_mats(Mat *mats, int num);
 };
 
 #endif // MPC_ML_MAT_H

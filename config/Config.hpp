@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2022-01-11 16:04:57
+ * @LastEditTime: 2022-01-11 16:16:34
  */
 
 #include <cstdio>
@@ -92,8 +92,9 @@ class Config{
         const int ACTIVATION;
         const int SIGMOID;
         const int TANH;
-        const int LINEAR;
-        const int LOGISTIC;
+        // To decide whether to run Linear regression or Logistic regression
+        const int LINEAR;               // Run Linear regression
+        const int LOGISTIC;             // Run Logistic regression
         const int LEAKEY_RELU_BIAS;
         const long MOD;                 // Global mod number
         const int N;                    
@@ -115,7 +116,7 @@ class Config{
         const int ND;
         const int DECIMAL_PLACES;       // The bit length for decimal part
         const int HEADER_LEN_OPT;
-        const int TRAIN_ITE;
+        const int TRAIN_ITE;            // How many iterations will run during the training part
         const int THREAD_NUM;           
         const int MatColMajor;          // if MatColMajor == 1, then Mat is saved with Column major
         const int MatRowMajor;          // if MatRowMajor == 1, then Mat is saved with Row major
@@ -129,13 +130,13 @@ class Config{
         const int MAX_LEN;
         const int INFER_BATCH;
         const int MAX_SMOOTHING_LEVEL;
-        const int ALPHABET_SIZE;
+        const int ALPHABET_SIZE;        // 26, which stands for the size of Alphabet
         const int CLOCK_MAIN;
         const int CLOCK_TRAIN;
         const int FEATURE_DIM;          // the dimension of feature
-        const std::vector<std::string> IP;
-        const std::vector<int> PORT;
-        const long long SQRTINV;
+        const std::vector<std::string> IP;// A vector which restore the IP for each party
+        const std::vector<int> PORT;    // A vector which restore the Port for each party
+        const long long SQRTINV;        // The following there parameter is calculated automatically.
         const long long INV2;
         const long long INV2_M;
         const int USE_D;                // Show how many columns will be read in TRAIN/TEST file

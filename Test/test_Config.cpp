@@ -42,6 +42,8 @@ int main(int argc, char **argv)
 
     Player::init();
 
+    IOManager::init_local_data();
+
     SocketManager::SMMLF tel;
     if (Config::config->LOCAL_TEST)
     {
@@ -52,11 +54,13 @@ int main(int argc, char **argv)
         tel.init();
     }
 
-    IOManager::init();
-    // IOManager::train_data.print_part();
-    // IOManager::test_data.print_part();
-    // IOManager::train_label.print_part();
-    // IOManager::test_label.print_part();
+    // generate the secret mat of the local mat
+    // and then
+    // exchange the secret mat
+    IOManager::exchange_data();
+    cout<<"exchange data end"<<endl;
+
+
     BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
 
     if (Config::config->LOGISTIC == 1)

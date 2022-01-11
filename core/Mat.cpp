@@ -198,7 +198,6 @@ void Mat::set(int p, int x)
     val[p] = x;
 }
 
-
 // Get the size of the matrix
 int Mat::size() const
 {
@@ -1286,7 +1285,6 @@ void Mat::append(vector<ll128> v)
     val.insert(val.end(), v.begin(), v.end());
 }
 
-
 void Mat::append(int st, int ed, Mat *a)
 {
     //    a->val.insert(val.end(), st, ed);
@@ -1924,7 +1922,6 @@ ll poly_f(vector<ll> coefficients, ll x)
     return res;
 }
 
-
 void Mat::get_secret_share(Mat *mats, int num)
 {
     // mats = new Mat[numå];
@@ -1935,18 +1932,25 @@ void Mat::get_secret_share(Mat *mats, int num)
     vector<ll> coefficients(Config::config->TN); // the coefficients of polynomial
     srand(time(NULL));
 
+    cout << "secret share" << endl;
+
     for (int p = 0; p < r * c; ++p)
     {
         // get the random coefficients of f(x)
+        coefficients[0] = val[p];
         for (int j = 1; j < Config::config->TN; ++j)
         {
             coefficients[j] = Constant::Util::randomlong();
         }
+
         // get the f(x) for every party
         for (int k = 0; k < num; ++k)
         {
-            coefficients[0] = val[p];
             mats[k].set(p, poly_f(coefficients, k + 2));
+        }
+        if (p % 100000 == 0)
+        {
+            cout << p << " ";
         }
     }
     // return mats;

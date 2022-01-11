@@ -645,6 +645,11 @@ void IOManager::remove_cache()
 
 void IOManager::init_local_data()
 {
+    // init variable
+    IOManager::party_num = Config::config->M; // the number of party, except myself
+    IOManager::train_n = 0;
+    IOManager::test_n = 0;
+
     init_mat();
 
     if (judgecache()) // If there exits a cache, load the cached binary file into mat
@@ -668,36 +673,55 @@ void IOManager::exchange_mat(Mat &mat)
     Mat mats[party_num];
 
     // according the orginal mat to get secret mats
-    mat.get_secret_share(mats, party_num);
+    // mat.get_secret_share(mats, party_num);
+    cout << party_num << endl;
 
     // send secret local data
+    // for (int i = 0; i < party_num; i++)
+    // {
+    //     if (i != node_type) // except myself
+    //     {
+    //         cout << i << endl;
+    //         // SocketManager::send(node_type, i, mats[i]);
+    //         SocketManager::send(node_type, i, mat);
+    //     }
+    // }
+
+    for (int i = 0; i < node_type; i++)
+    {
+
+        cout << i << endl;
+        // SocketManager::send(node_type, i, mats[i]);
+        SocketManager::receive(node_type, i, mats[i]);
+    }
+
     for (int i = 0; i < party_num; i++)
     {
         if (i != node_type) // except myself
         {
-            SocketManager::send(node_type, i, mats[i]);
+            cout << i << endl;
+            // SocketManager::send(node_type, i, mats[i]);
+            SocketManager::send(node_type, i, mat);
         }
     }
-
     // receive secret data from other parties
-    for (int i = 0; i < party_num; i++)
+    for (int i = node_type + 1; i < party_num; i++)
     {
-        if (i != node_type) // send four mat to other
-        {
-            // delete the original data
-            SocketManager::receive(node_type, i, mats[i]);
-        }
+        // delete the original data
+        SocketManager::receive(node_type, i, mats[i]);
     }
 
     // merge all secret mats
     mat.merge_mats(mats, party_num);
-    //mat.print_part();
+
+    // mat.print_part();
 }
 
 void IOManager::exchange_data()
 {
 
     // exchange the four mats and get new mats
+    cout << "exchange data" << endl;
     exchange_mat(train_data);
     exchange_mat(train_label);
     exchange_mat(test_data);
@@ -710,18 +734,6 @@ void IOManager::exchange_data()
 
 void IOManager::init()
 {
-    // init variable
-    IOManager::party_num = Config::config->M; // the number of party, except myself
-    IOManager::train_n = 0;
-    IOManager::test_n = 0;
-
-    // load the local data
     init_local_data();
-    DBGprint("local data init");
-
-    // generate the secret mat of the local mat
-    // and then
-    // exchange the secret mat
     exchange_data();
-    DBGprint("finish init");
 }

@@ -1,5 +1,5 @@
 {
-    "B": 32,
+    "B": 128,
     "D": 784,
     "PRINT_PRE_ITE": 10,
     "OFFLINE_PHASE_ON": 0,
@@ -11,7 +11,7 @@
     "LINEAR": 0,
     "LOGISTIC": 1,
     "MOD": "100000000000000003",
-    "N": 500,
+    "N": 3000,
     "L": 2,
     "CH": 32,
     "IE_b": 10000,
@@ -19,7 +19,7 @@
     "MAX_NODE_NUM": 2001,
     "MASTER": 0,
     "IE": 1048576,
-    "NM": 500,
+    "NM": 1000,
     "BIT_LENGTH": 64,
     "REDUNDANCY": 3,
     "BIT_P_LEN": 55,
@@ -56,9 +56,9 @@
         "127.0.0.1"
     ],
     "PORT": [
-        13579,
-        13580,
-        13581
+        13687,
+        13688,
+        13689
     ],
     "TRAIN_FILENAME": "../datasets/mnist/mnist_train1.csv",
     "TEST_FILENAME": "../datasets/mnist/mnist_test1.csv",

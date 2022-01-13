@@ -4,13 +4,9 @@
 
 #include "SocketManager.h"
 
-<<<<<<< HEAD
-SocketOnline *socket_io[M][M];
-=======
 vector<vector<SocketOnline*>> SocketManager::socket_io;
 
 // init function in windows
->>>>>>> dev
 
 void SocketManager::init_windows_socket() {
 #ifdef UNIX_PLATFORM
@@ -20,11 +16,8 @@ void SocketManager::init_windows_socket() {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // exit function in windows
 
->>>>>>> dev
 void SocketManager::exit_windows_socket() {
 #ifdef UNIX_PLATFORM
 #else
@@ -32,11 +25,8 @@ void SocketManager::exit_windows_socket() {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // Initialize server side
 
->>>>>>> dev
 void SocketManager::server_init(SOCK &serv_sock, string ip, int port) {
 #ifdef UNIX_PLATFORM
     serv_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -68,11 +58,8 @@ void SocketManager::server_init(SOCK &serv_sock, string ip, int port) {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // Initialize client side
 
->>>>>>> dev
 void SocketManager::client_init(SOCK &sock, string ip, int port) {
 #ifdef UNIX_PLATFORM
     sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -97,11 +84,8 @@ void SocketManager::client_init(SOCK &sock, string ip, int port) {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // close the socket
 
->>>>>>> dev
 void SocketManager::socket_close(SOCK sock) {
 #ifdef UNIX_PLATFORM
     close(sock);
@@ -110,11 +94,8 @@ void SocketManager::socket_close(SOCK sock) {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 // call function accept  to accpet serv_sock
 
->>>>>>> dev
 SOCK SocketManager::accept_sock(SOCK serv_sock) {
     SOCK ret;
 #ifdef UNIX_PLATFORM
@@ -130,17 +111,11 @@ SOCK SocketManager::accept_sock(SOCK serv_sock) {
     return ret;
 }
 
-<<<<<<< HEAD
-void SocketManager::print_socket() {
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < M; j++) {
-=======
 // print the connected socket
 
 void SocketManager::print_socket() {
     for (int i = 0; i < Config::config->M; i++) {
         for (int j = 0; j < Config::config->M; j++) {
->>>>>>> dev
             if (i != j) {
                 DBGprint("socket %d %d:\n");
                 socket_io[i][j]->print();
@@ -149,17 +124,11 @@ void SocketManager::print_socket() {
     }
 }
 
-<<<<<<< HEAD
-void SocketManager::print() {
-    ll tot_send = 0, tot_recv = 0;
-    for (int i = 0; i < M; i++) {
-=======
 // print the number of total bytes sent and receivd by this socket
 
 void SocketManager::print() {
     ll tot_send = 0, tot_recv = 0;
     for (int i = 0; i < Config::config->M; i++) {
->>>>>>> dev
         if (node_type != i) {
             tot_send += socket_io[node_type][i]->send_num;
             tot_recv += socket_io[node_type][i]->recv_num;
@@ -168,26 +137,6 @@ void SocketManager::print() {
     DBGprint("tot_send: %lld tot_recv: %lld\n", tot_send, tot_recv);
 }
 
-<<<<<<< HEAD
-SocketManager::SMMLF::SMMLF() {}
-
-void SocketManager::SMMLF::init() {
-    init(new string[3]{"127.0.0.1","127.0.0.1","127.0.0.1"}, new int[3]{1234,1235,1236});
-}
-
-void SocketManager::SMMLF::init(string* ip, int* port) {
-    this->ip = ip;
-    this->port = port;
-    init_windows_socket();
-    server();
-    client();
-}
-
-void SocketManager::SMMLF::server() {
-    server_init(serv_sock, *(ip+node_type), *(port + node_type));
-    char buffer[101];
-    for (int i = node_type + 1; i < M; i++) {
-=======
 // non-parameters Constructor Function
 
 SocketManager::SMMLF::SMMLF() {}
@@ -223,7 +172,6 @@ void SocketManager::SMMLF::server() {
     server_init(serv_sock, ip[node_type], port[node_type]);
     char buffer[101];
     for (int i = node_type + 1; i < Config::config->M; i++) {
->>>>>>> dev
         sock = accept_sock(serv_sock);
 #ifdef UNIX_PLATFORM
         read(sock, buffer, 1);
@@ -236,19 +184,12 @@ void SocketManager::SMMLF::server() {
     }
 }
 
-<<<<<<< HEAD
-void SocketManager::SMMLF::client() {
-//    printf(" asdasd %d\n", port);
-    for (int i = 0; i < node_type; i++) {
-        client_init(sock, *(ip+i), *(port + i));
-=======
 // construct client side and socket_io[node_type][0],[node_type][1]……[node_type][node_type-1]
 
 void SocketManager::SMMLF::client() {
 //    printf(" asdasd %d\n", port);
     for (int i = 0; i < node_type; i++) {
         client_init(sock, ip[i], port[i]);
->>>>>>> dev
 //        printf("client %d connect to server %d\n", node_type, i);
 //        printf(" port %d\n", port);
 
@@ -266,25 +207,17 @@ void SocketManager::SMMLF::client() {
     }
 }
 
-<<<<<<< HEAD
-=======
 // close server side
 
->>>>>>> dev
 void SocketManager::SMMLF::server_exit() {
     socket_close(serv_sock);
     exit_windows_socket();
 }
 
-<<<<<<< HEAD
-void SocketManager::SMMLF::client_exit() {
-    for (int i = 0; i < M; i++) {
-=======
 // close client side
 
 void SocketManager::SMMLF::client_exit() {
     for (int i = 0; i < Config::config->M; i++) {
->>>>>>> dev
         if (i != node_type) {
             socket_close(clnt_sock[i]);
         }
@@ -292,11 +225,6 @@ void SocketManager::SMMLF::client_exit() {
     exit_windows_socket();
 }
 
-<<<<<<< HEAD
-void SocketManager::SMMLF::exit_all() {
-    server_exit();
-    client_exit();
-=======
 // call server_exit() and client_exit()
 
 void SocketManager::SMMLF::exit_all() {
@@ -331,5 +259,4 @@ void SocketManager::receive(int node_type, int from, Mat &a)
 Mat SocketManager::receive(int node_type, int from)
 {
     return socket_io[node_type][from]->recv_message();
->>>>>>> dev
 }

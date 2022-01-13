@@ -60,8 +60,8 @@
         13688,
         13689
     ],
-    "TRAIN_FILENAME": "datasets/mnist/mnist_train.csv",
-    "TEST_FILENAME": "datasets/mnist/mnist_test.csv",
+    "TRAIN_FILENAME": "../datasets/mnist/mnist_train.csv",
+    "TEST_FILENAME": "../datasets/mnist/mnist_test.csv",
     "FILENAME": "",
     "TRAIN_TEST_SAME": 0
 }

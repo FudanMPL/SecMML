@@ -21,9 +21,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -pthread")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g -pthread")
 
 # core files in shared lib
-set(CORE_SOURCE_FILES ../core/MathOpCore.cpp ../core/MathOp.h)
-add_library(core_lib SHARED ${CORE_SOURCE_FILES}) # do not uncomment this line
-
+# set(CORE_SOURCE_FILES ../core/MathOpCore.cpp ../core/MathOp.h)
+# add_library(core_lib SHARED ${CORE_SOURCE_FILES}) # do not uncomment this line
+link_directories(${PROJECT_SOURCE_DIR})
 include_directories(../config)   #加入json库的路径
 add_library(jsoncpp SHARED 
             ../config/json/reader.h

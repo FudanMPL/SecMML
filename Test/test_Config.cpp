@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:04:24
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2021-12-28 16:41:22
+ * @LastEditTime: 2022-01-13 14:14:07
  */
 
 #include <cstdio>
@@ -23,7 +23,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
     cout << "begin" << endl;
-    Config::config = Config::init("../config/parameter/constant.json");
+    Config::config = Config::init("../constant.json");
     cout << Config::config->B << endl;
     cout << Config::config->SQRTINV << endl;
     cout << Config::config->INV2 << endl;

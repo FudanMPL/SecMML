@@ -24,11 +24,11 @@ set(SOURCE_FILES_BASE Constant.cpp Constant.h util/SocketOnline.cpp util/SocketO
 
 include_directories(config)   #加入json库的路径
 # core files in shared lib
-set(CORE_SOURCE_FILES core/MathOpCore.cpp core/MathOp.h)
+# set(CORE_SOURCE_FILES core/MathOpCore.cpp core/MathOp.h)
 set(JSON_SOURCE_FILES config/json/reader.h config/json/json_reader.cpp config/json/json_value.cpp config/json/json_writer.cpp)
-add_library(core_lib SHARED ${CORE_SOURCE_FILES}) # do not uncomment this line
+# add_library(core_lib SHARED ${CORE_SOURCE_FILES}) # do not uncomment this line
 add_library(jsoncpp SHARED ${JSON_SOURCE_FILES})
-
+link_directories(${PROJECT_SOURCE_DIR})
 
 
 #add_executable(reed malicious_lib/reed_solomn_reconstruct.cpp malicious_lib/reed_solomn_reconstruct.h Constant.h Constant.cpp malicious_lib/feldman_vss.h malicious_lib/feldman_vss.cpp)

@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 09:52:08
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2022-01-13 14:04:48
+ * @LastEditTime: 2022-01-13 14:14:56
  */
 #include <iostream>
 
@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     DBGprint("party index: %d\n", node_type);
 
     
-    Config::config = Config::init("config/parameter/constant.json");
+    Config::config = Config::init("constant.json");
     Player::init();
     IOManager::init_local_data();
     for(int i = 0; i < IOManager::train_label.cols(); i++){

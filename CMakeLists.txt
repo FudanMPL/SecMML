@@ -45,9 +45,5 @@ if(queqiao)
 
     add_library(queqiao_lib SHARED ${MALICIOUS_LIB} ${SOURCE_FILES_BASE} machine_learning/LSTMGraph.cpp machine_learning/Cell.cpp)
     pybind11_add_module(queqiao ${WRAPPER_FILES})
-<<<<<<< HEAD
-    target_link_libraries(queqiao PUBLIC queqiao_lib core_lib)
-=======
     target_link_libraries(queqiao PUBLIC queqiao_lib core_lib jsoncpp)
->>>>>>> dev
 endif()

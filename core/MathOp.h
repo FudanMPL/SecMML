@@ -12,13 +12,13 @@
 #include "../malicious_lib/reed_solomn_reconstruct.h"
 #include "../util/IOManager.h"
 #include "../Constant.h"
+#include "../util/SocketManager.h"
 
 // Multi thread configuration
 #include <thread>
 
+
 // extern int node_type;
-extern SocketOnline *socket_io[M][M];
-extern Player player[M];
 extern Mat metadata;
 //extern Mat *input_table_data;
 class MathOp {
@@ -51,6 +51,8 @@ public:
         NeuronMat *res, *a, *b;
         Mat *temp_a,*temp_b;
         Div2mP *div2mP_f;
+
+        Reveal *reveal;
         Div2mP *div2mP_b_a, *div2mP_b_b;
     public:
         Mul_Mat();
@@ -180,7 +182,7 @@ public:
     class Reveal: public Op {
         Mat *res, *a;
         Mat *b;
-        reed_solomn* rs = new reed_solomn(MOD);
+        reed_solomn* rs = new reed_solomn(Config::config->MOD);
     public:
         Reveal();
         Reveal(Mat* res, Mat* a);

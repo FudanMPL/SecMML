@@ -1,10 +1,18 @@
+/*
+ * @Author: Xinyu Tu
+ * @Date: 2021-12-07 09:52:08
+ * @LastEditors: Xinyu Tu
+ * @LastEditTime: 2022-01-13 14:14:56
+ */
 #include <iostream>
 
+#include "json/json.h"
 #include "util/SocketManager.h"
 #include "core/Player.h"
 #include "util/IOManager.h"
 #include "machine_learning/BPGraph.h"
 #include "machine_learning/LSTMGraph.h"
+#include <iostream>
 
 int main(int argc, char** argv) {
     srand(time(NULL)); // random seed
@@ -18,14 +26,26 @@ int main(int argc, char** argv) {
     }
     DBGprint("party index: %d\n", node_type);
 
-
+    
+    Config::config = Config::init("constant.json");
     Player::init();
-    IOManager::init();
+    IOManager::init_local_data();
+    for(int i = 0; i < IOManager::train_label.cols(); i++){
+        if(IOManager::train_label(0,i) > Config::config->IE){
+            IOManager::train_label(0,i) = Config::config->IE;
+        }
+    }
+    for(int i = 0; i < IOManager::test_label.cols(); i++){
+        if(IOManager::test_label(0,i) > Config::config->IE){
+            IOManager::test_label(0,i) = Config::config->IE;
+        }
+    }
+    // 归一化
+    IOManager::train_data = IOManager::train_data/256;
+    IOManager::test_data = IOManager::test_data/256;
     SocketManager::SMMLF tel;
-    string ips[]={"127.0.0.1","127.0.0.1","127.0.0.1"};
-    int  ports[]={13579,13580,13581};
-    if (!LOCAL_TEST) {
-        tel.init(ips,ports);
+    if (!Config::config->LOCAL_TEST) {
+        tel.init(Config::config->IP,Config::config->PORT);
     } else {
         tel.init();
     }
@@ -43,16 +63,11 @@ int main(int argc, char** argv) {
     /** Three-layer Model **/
     // bp->graph();
 
-switch (GRAPH_TYPE)
-    {
-    case LOGISTIC:
+    if(Config::config->GRAPH_TYPE == Config::config->LOGISTIC){
         bp->logistic_graph();
-        break;
-    case LINEAR:
+    }
+    else if(Config::config->GRAPH_TYPE == Config::config->LINEAR){
         bp->linear_graph();
-        break;
-    default:
-        break;
     }
     bp->train();
     return 0;

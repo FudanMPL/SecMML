@@ -12,7 +12,7 @@
 //#ifndef MAC_OS
 //#define MAC_OS
 //#endif
-
+#include "config/Config.hpp"
 #include <iostream>
 #include <cstdio>
 #include <vector>
@@ -36,78 +36,6 @@
 #else
 #include <winsock2.h>
 #endif
-
-#define B 128
-#define D 784
-#define PRINT_PRE_ITE 100
-
-#define OFFLINE_PHASE_ON 0
-#define LOCAL_TEST 1
-#define GRAPH_TYPE 0
-#define ACTIVATION 0
-
-#define SIGMOID 0
-#define TANH 1
-
-#define LINEAR 0
-#define LOGISTIC 1
-
-#define LEAKEY_RELU_BIAS IE/2
-#define MOD 100000000000000003ll
-#define N 60000
-#define M 3
-
-#define L 2
-// LSTM
-#define D2 D/L
-#define CH 128
-#define IE_b 10000
-
-#define TN 2
-#define MAX_NODE_NUM 2001
-#define MASTER 0
-#define IE 1048576
-#define NM 10000
-#define BIT_LENGTH 64
-#define REDUNDANCY 3
-#define BIT_P_LEN 55
-#define BUFFER_MAX 10000001
-#define HEADER_LEN 4
-#define ND 784
-#define DECIMAL_PLACES 20
-#define HEADER_LEN_OPT 2
-#define TRAIN_ITE 10000
-
-#define THREAD_NUM 20
-
-#define MatColMajor 0
-#define MatRowMajor 1
-
-#define MM_NN 0
-#define MM_NT 1
-#define MM_TN 2
-#define MM_TT 3
-
-
-
-// Markov training
-#define NGRAM 4
-#define KEY_NUM 1
-#define KEY_BATCH 14
-
-// Markov inference
-#define MAX_LEN 10
-#define INFER_BATCH 14
-
-#define MAX_SMOOTHING_LEVEL 10
-#define ALPHABET_SIZE 10
-
-// Time
-#define CLOCK_MAIN 1
-#define CLOCK_TRAIN 2
-
-// DT
-#define FEATURE_DIM 4
 #define DEBUG
 #ifdef DEBUG
 #define DBGprint(...) printf(__VA_ARGS__)
@@ -126,10 +54,6 @@ extern int globalRound;
 extern int DBGtest;
 class Constant {
 public:
-    static const ll SQRTINV = (ll128)(MOD+1>>2) * (MOD-2) % (MOD-1);
-    static const ll inv2;
-    static const ll inv2_m;
-
     static string getDateTime() {
         time_t t = std::time(nullptr);
         struct tm * now = localtime(&t);
@@ -171,8 +95,10 @@ public:
         static ll char_to_ll(char* &p);
         static void int_to_header(char* p, int u);
         static int header_to_int(char* p);
-        static int getint(char* &p);
-        static ll getll(char* &p);
+        static int getNext(char *p, int begin);
+        static int getint(char* p,int &begin);
+        static ll getll(char* p,int &begin);
+        static int getfixpoint(char *p, int &begin);
         static ll randomlong();
         static ll128 get_residual(ll128 a);
         static ll128 get_sign(ll128 a);
@@ -185,5 +111,4 @@ public:
 };
 std::ostream&
 operator<<( std::ostream& dest, __int128_t value );
-
 #endif //MPC_ML_CONSTANT_H

@@ -4,6 +4,7 @@
 
 #include "NN.h"
 
+<<<<<<< HEAD
 NN::NN() {
     tot = 0;
     cur = 0;
@@ -14,6 +15,22 @@ NN::NN() {
     to.resize(MAX_NODE_NUM);
 }
 
+=======
+// non-parameter Constructor Function
+
+NN::NN() {
+    tot = 0;
+    cur = 0;
+    adj.resize(Config::config->MAX_NODE_NUM, vector<int>(0));
+    neuron.resize(Config::config->MAX_NODE_NUM);
+    vst.resize(Config::config->MAX_NODE_NUM);
+    q.resize(Config::config->MAX_NODE_NUM);
+    to.resize(Config::config->MAX_NODE_NUM);
+}
+
+// Overload Operation "="
+
+>>>>>>> dev
 NN& NN::operator=(NN &a) {
     for (int i = 1; i <= tot; i++) {
         *getNeuron(i)->getForward() = *a.getNeuron(i)->getForward();
@@ -22,6 +39,11 @@ NN& NN::operator=(NN &a) {
     return *this;
 }
 
+<<<<<<< HEAD
+=======
+// Initialize the global variables
+
+>>>>>>> dev
 void NN::global_variables_initializer() {
     DBGprint("tot: %d\n",tot);
     for (int i = 1; i <= tot; i++) {
@@ -33,7 +55,11 @@ void NN::global_variables_initializer() {
             neuron[i]->initGrad();
         }
         if (neuron[i]->getIsNet()) {
+<<<<<<< HEAD
             neuron[i]->setOpUpdate(new MathOp::Mul_Const_Trunc(getNeuron(i)->getGrad(), getNeuron(i)->getGrad(), 0.0001));
+=======
+            neuron[i]->setOpUpdate(new MathOp::Mul_Const_Trunc(getNeuron(i)->getGrad(), getNeuron(i)->getGrad(), Config::config->LEARNING_RATE));
+>>>>>>> dev
         }
     }
     curForward = 1;
@@ -41,6 +67,11 @@ void NN::global_variables_initializer() {
     curUpdate=1;
 }
 
+<<<<<<< HEAD
+=======
+// Reinitialize for every epoch
+
+>>>>>>> dev
 void NN::epoch_init() {
     for (int i = 1; i <= tot; i++) {
         if (!neuron[i]->getIsBack()) {
@@ -55,10 +86,20 @@ void NN::epoch_init() {
     curUpdate=1;
 }
 
+<<<<<<< HEAD
+=======
+// use operator Reveal in Mathop to reveal the neuron u
+
+>>>>>>> dev
 void NN::reveal_init(int u) {
     neuron[u]->setOpReveal(new MathOp::Reveal(getNeuron(u)->getForward(), getNeuron(u)->getForward()));
 }
 
+<<<<<<< HEAD
+=======
+// initialize after reveal
+
+>>>>>>> dev
 void NN::reveal_init() {
     curReveal=1;
     for (int i = 1; i <= tot; i++) {
@@ -66,10 +107,20 @@ void NN::reveal_init() {
     }
 }
 
+<<<<<<< HEAD
+=======
+// use operator Reveal in Mathop to output the neuron u
+
+>>>>>>> dev
 void NN::output_init(int u) {
     neuron[u]->setOpOutput(new MathOp::Reveal(getNeuron(u)->getForward(), getNeuron(u)->getForward()));
 }
 
+<<<<<<< HEAD
+=======
+// initialize after output
+
+>>>>>>> dev
 void NN::output_init() {
     curOutput=1;
     for (int i = 1; i <= tot; i++) {
@@ -77,25 +128,50 @@ void NN::output_init() {
     }
 }
 
+<<<<<<< HEAD
+=======
+// add an edge(u,v) into graph
+
+>>>>>>> dev
 void NN::addedge(int u, int v) {
     adj[u].push_back(v);
     to[v]++;
 }
 
+<<<<<<< HEAD
+=======
+// add neuron (row:r col:c type:k )
+
+>>>>>>> dev
 int NN::addnode(int r, int c, int k) {
     neuron[++tot] = new NeuronMat(r, c, k);
     cout<<tot<<endl;
     return tot;
 }
 
+<<<<<<< HEAD
+=======
+// get the uth Neuron 
+
+>>>>>>> dev
 NeuronMat* NN::getNeuron(int u) {
     return neuron[u];
 }
 
+<<<<<<< HEAD
+=======
+// set the operation
+
+>>>>>>> dev
 void NN::setOp(int u, Op *op) {
     neuron[u]->setOp(op);
 }
 
+<<<<<<< HEAD
+=======
+// add the corresponding operator in Mathop(add Minus Mul .....)
+
+>>>>>>> dev
 void NN::addOpAdd_Mat(int res, int a, int b) {
     addedge(a, res);
     addedge(b, res);
@@ -221,17 +297,29 @@ void NN::addOpReLU(int res, int a) {
 
 void NN::addOpLTZ(int res, int a) {
     addedge(a, res);
+<<<<<<< HEAD
     setOp(res, new MathOp::LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+=======
+    setOp(res, new MathOp::LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
+>>>>>>> dev
 }
 
 void NN::addOpEQZ(int res, int a) {
     addedge(a, res);
+<<<<<<< HEAD
     setOp(res, new MathOp::EQZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+=======
+    setOp(res, new MathOp::EQZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
+>>>>>>> dev
 }
 
 void NN::addOpEQZ_2LTZ(int res, int a) {
     addedge(a, res);
+<<<<<<< HEAD
     setOp(res, new MathOp::EQZ_2LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), BIT_P_LEN));
+=======
+    setOp(res, new MathOp::EQZ_2LTZ(getNeuron(res)->getForward(), getNeuron(a)->getForward(), Config::config->BIT_P_LEN));
+>>>>>>> dev
 }
 
 void NN::addOpArgmax(int res, int a) {
@@ -245,9 +333,17 @@ void NN::addOpEqual(int res, int a, int b) {
     setOp(res, new MathOp::Equal(getNeuron(res), getNeuron(a), getNeuron(b)));
 }
 
+<<<<<<< HEAD
 void NN::toposort() {
     int l, r;
     vst = vector<bool>(MAX_NODE_NUM, 0);
+=======
+// sort the neuron and put into vector q
+
+void NN::toposort() {
+    int l, r;
+    vst = vector<bool>(Config::config->MAX_NODE_NUM, 0);
+>>>>>>> dev
     l = r = 0;
     for (int i = 1; i <= tot; i++) {
         if (!to[i]) {
@@ -273,16 +369,34 @@ void NN::toposort() {
     DBGprint("\n");
 }
 
+<<<<<<< HEAD
 void NN::gradUpdate() {
     for (int i = 1; i <= tot; i++)
         neuron[i]->update();
 }
 
+=======
+// Update the gradient
+
+void NN::gradUpdate() {
+    for (int i = 1; i <= tot; i++) {
+        neuron[i]->update();     
+    }
+}
+
+// judge a neuron if there is a next neuron to forward
+
+>>>>>>> dev
 bool NN::forwardHasNext() {
 //    cout << curForward << ": " << tot << endl;
     return curForward < tot || neuron[q[curForward]]->forwardHasNext();
 }
 
+<<<<<<< HEAD
+=======
+// Find the neuron(forward has next) and  call function forward to forward
+
+>>>>>>> dev
 void NN::forwardNext() {
     while (!neuron[q[curForward]]->forwardHasNext()) {
         curForward++;
@@ -294,10 +408,21 @@ void NN::forwardNext() {
 
 }
 
+<<<<<<< HEAD
+=======
+// judge a neuron if there is a next neuron to back
+
+>>>>>>> dev
 bool NN::backHasNext() {
     return curGrad > 1 || neuron[q[curGrad]]->backHasNext();
 }
 
+<<<<<<< HEAD
+=======
+// if has the next back neuron and call function back
+// else roll back (--curGrad) 
+
+>>>>>>> dev
 void NN::backNext() {
     if (!backHasNext())
         return;
@@ -311,6 +436,11 @@ void NN::backNext() {
     }
 }
 
+<<<<<<< HEAD
+=======
+// judge a neuron if there is a next neuron to update
+
+>>>>>>> dev
 bool NN::updateHasNext() {
     return curUpdate < tot;
 //    || neuron[curUpdate]->updateGradHasNext();
@@ -321,6 +451,11 @@ bool NN::updateHasNext() {
 //    return 0;
 }
 
+<<<<<<< HEAD
+=======
+//  call function update_grad() to update gradient
+
+>>>>>>> dev
 void NN::update() {
     while (!neuron[curUpdate]->updateGradHasNext()) {
         curUpdate++;
@@ -335,6 +470,11 @@ void NN::update() {
 //    }
 }
 
+<<<<<<< HEAD
+=======
+// judge all neurons if there is a next neuron to reveal
+
+>>>>>>> dev
 bool NN::revealHasNext() {
 //    return curReveal < tot;
     for (int i = 1; i <= tot; i++) {
@@ -344,6 +484,11 @@ bool NN::revealHasNext() {
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+// For every neuron call function output to reveal the result
+
+>>>>>>> dev
 void NN::reveal() {
 //    while (!neuron[curReveal]->revealHasNext()) {
 //        curReveal++;
@@ -357,6 +502,11 @@ void NN::reveal() {
     }
 }
 
+<<<<<<< HEAD
+=======
+// judge all neurons (in forward phase) if there is a next neuron to compute output
+
+>>>>>>> dev
 bool NN::outputHasNext() {
     for (int i = 1; i <= tot; i++) {
         if (neuron[i]->outputHasNext())
@@ -365,6 +515,11 @@ bool NN::outputHasNext() {
     return 0;
 }
 
+<<<<<<< HEAD
+=======
+// For every neuron call function output to compute the result
+
+>>>>>>> dev
 void NN::output() {
 //    while (!neuron[curReveal]->revealHasNext()) {
 //        curReveal++;
@@ -378,6 +533,11 @@ void NN::output() {
     }
 }
 
+<<<<<<< HEAD
+=======
+// return the total number of nodes
+
+>>>>>>> dev
 int NN::getTot() {
     return tot;
 }

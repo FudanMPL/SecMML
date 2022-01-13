@@ -8,7 +8,11 @@ output/
 cmake-build-debug/
 *.count
 *.level
+*.bat
 
 __pycache__/
-*queqiao*.so
+*queqiao
 *.pyi
+*.csv
+*.o
+*.dat

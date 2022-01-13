@@ -57,9 +57,10 @@ MathOp::Mul_Mat::Mul_Mat(NeuronMat *res, NeuronMat *a, NeuronMat *b) {
     this->b = b;
     temp_a=new Mat(a->getForward()->rows(),a->getForward()->cols());
     temp_b=new Mat(b->getForward()->rows(),b->getForward()->cols());
-    div2mP_f = new Div2mP(res->getForward(), res->getForward(), BIT_P_LEN, DECIMAL_PLACES);
-    div2mP_b_a = new Div2mP(temp_a,temp_a, BIT_P_LEN, DECIMAL_PLACES);
-    div2mP_b_b = new Div2mP(temp_b,temp_b, BIT_P_LEN, DECIMAL_PLACES);
+    div2mP_f = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    div2mP_b_a = new Div2mP(temp_a,temp_a, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    div2mP_b_b = new Div2mP(temp_b,temp_b, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    reveal = new Reveal(res->getForward(), res->getForward());
     init(2, 3);
 }
 
@@ -75,8 +76,8 @@ void MathOp::Mul_Mat::forward() {
             if (div2mP_f->forwardHasNext()) {
                 forwardRound--;
             }
-        }
             break;
+        }            
     }
 }
 
@@ -123,9 +124,9 @@ MathOp::Hada_Mat::Hada_Mat(NeuronMat *res, NeuronMat *a, NeuronMat *b) {
     this->b = b;
     temp_a=new Mat(a->getForward()->rows(),a->getForward()->cols());
     temp_b=new Mat(b->getForward()->rows(),b->getForward()->cols());
-    div2mP_f = new Div2mP(res->getForward(), res->getForward(), BIT_P_LEN, DECIMAL_PLACES);
-    div2mP_b_a = new Div2mP(temp_a,temp_a, BIT_P_LEN, DECIMAL_PLACES);
-    div2mP_b_b = new Div2mP(temp_b,temp_b, BIT_P_LEN, DECIMAL_PLACES);
+    div2mP_f = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    div2mP_b_a = new Div2mP(temp_a,temp_a, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    div2mP_b_b = new Div2mP(temp_b,temp_b, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     init(2, 3);
 }
 
@@ -184,7 +185,7 @@ MathOp::Mul_Const_Trunc::Mul_Const_Trunc(Mat *res, Mat *a, double b) {
     this->b = b;
     this->revlea1 = new Mat(res->rows(), res->cols());
     *revlea1 = *res;
-    div2mP = new Div2mP(res, res, BIT_P_LEN, DECIMAL_PLACES);
+    div2mP = new Div2mP(res, res, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     reveal = new Reveal(revlea1, revlea1);
     reveal2 = new Reveal(res, res);
     init(1, 0);
@@ -196,7 +197,7 @@ void MathOp::Mul_Const_Trunc::forward() {
         case 1:
             // *res = (*a) * (ll)(b * IE);
             // we can directly perform local truncation by IE since the learning rate etc. are constants
-            *res = (*a) * (ll)(b * IE)/ IE; 
+            *res = (*a) * (ll)(b * Config::config->IE)/ Config::config->IE; 
             break;
         case 2:
             div2mP->forward();
@@ -238,10 +239,10 @@ MathOp::Div_Const_Trunc::Div_Const_Trunc() {}
 MathOp::Div_Const_Trunc::Div_Const_Trunc(Mat *res, Mat *a, ll128 b) {
     this->res = res;
     this->a = a;
-   ll128 inverse = Constant::Util::get_residual(IE/b);
+   ll128 inverse = Constant::Util::get_residual(Config::config->IE/b);
     cout << "Inverse: " << inverse << ", b: " <<b << endl;
     this->b = inverse;
-    div2mP = new Div2mP(res, res, BIT_P_LEN, DECIMAL_PLACES);
+    div2mP = new Div2mP(res, res, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     init(2, 0);
 }
 
@@ -269,7 +270,7 @@ MathOp::Div_Seg_Const_Trunc::Div_Seg_Const_Trunc(Mat *res, Mat *a, Mat* b) {
     this->res = res;
     this->a = a;
     this->b = b;
-    div2mP = new Div2mP(res, res, BIT_P_LEN, DECIMAL_PLACES);
+    div2mP = new Div2mP(res, res, Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
     init(2, 0);
 }
 
@@ -279,7 +280,7 @@ void MathOp::Div_Seg_Const_Trunc::forward() {
         case 1:
             ll inverse;
             for (int i = 0; i < b->size(); ++i) {
-                inverse = Constant::Util::get_residual(IE/b->getVal(i));
+                inverse = Constant::Util::get_residual(Config::config->IE/b->getVal(i));
                 b->setVal(i, inverse);
             }
             *res = (*a).dot(*b);
@@ -489,7 +490,7 @@ void MathOp::Div2mP::forward() {
     switch (forwardRound) {
         case 1:
             // added by curious 2020.6.3, fix bug. each time, the variables need reinit
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 r_nd->clear();
                 r_st->clear();
                 for (int i = 0; i < m; i++) {
@@ -501,7 +502,7 @@ void MathOp::Div2mP::forward() {
             break;
         case 2:
             // todo: offline
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 pRandM->forward();
                 if (pRandM->forwardHasNext()) {
                     forwardRound--;
@@ -510,7 +511,7 @@ void MathOp::Div2mP::forward() {
             break;
         case 3:
             *r = *r_nd * (1ll << m) + *r_st;
-            *r = *a + (1ll << BIT_P_LEN - 1) + *r;
+            *r = *a + (1ll << Config::config->BIT_P_LEN - 1) + *r;
             break;
         case 4:
             pRevealD->forward();
@@ -521,7 +522,7 @@ void MathOp::Div2mP::forward() {
         case 5:
             *b = b->mod(1ll << m);
 //            b->print();
-            *res = (*a - (*b - *r_st)) * Constant::Util::inverse(1ll << m, MOD);
+            *res = (*a - (*b - *r_st)) * Constant::Util::inverse(1ll << m, Config::config->MOD);
             break;
     }
 }
@@ -549,14 +550,14 @@ MathOp::Reveal::Reveal(Mat *res, Mat *a) {
 ///TODO: add reed_solomn reconstruct
 void MathOp::Reveal::forward() {
     reinit();
-    Mat tmp[M];
+    Mat tmp[Config::config->M];
     switch (forwardRound) {
         case 1:
-            *b = *a * player[node_type].lagrange;
+            *b = *a * Player::player[node_type].lagrange;
             broadcase_rep(b);
             break;
         case 2:
-            *b = *a * player[node_type].lagrange;
+            *b = *a * Player::player[node_type].lagrange;
             receive_add(b);
             *res = *b;
             break;
@@ -679,10 +680,10 @@ MathOp::PRandBit::PRandBit(Mat *res) {
     tmp_r = res->rows();
     tmp_c = res->cols();
     a = new Mat(tmp_r, tmp_c);
-    a_r = new Mat(1, tmp_r * tmp_c + REDUNDANCY);
+    a_r = new Mat(1, tmp_r * tmp_c + Config::config->REDUNDANCY);
     a2 = new Mat(tmp_r, tmp_c);
-    a2_r = new Mat(1, tmp_r * tmp_c + REDUNDANCY);
-    pRandFld = new PRandFld(a_r, MOD);
+    a2_r = new Mat(1, tmp_r * tmp_c + Config::config->REDUNDANCY);
+    pRandFld = new PRandFld(a_r, Config::config->MOD);
     mulPub = new MulPub(a2_r, a_r, a_r);
     init(3, 0);
 }
@@ -703,7 +704,7 @@ void MathOp::PRandBit::forward() {
             }
             break;
         case 3:
-            if (a2_r->count() > REDUNDANCY) {
+            if (a2_r->count() > Config::config->REDUNDANCY) {
                 forwardRound = 0;
                 break;
             }
@@ -734,13 +735,13 @@ MathOp::MulPub::MulPub(Mat *res, Mat *a, Mat *b) {
 
 void MathOp::MulPub::forward() {
     reinit();
-    Mat tmp[M];
+    Mat tmp[Config::config->M];
 
     switch (forwardRound) {
         case 1:
             *res = a->dot(*b);
-            *res = *res * player[node_type].lagrange;
-            for (int i = 0; i < M; i++) {
+            *res = *res * Player::player[node_type].lagrange;
+            for (int i = 0; i < Config::config->M; i++) {
                 if (i != node_type) {
                     tmp[i] = *res;
                 }
@@ -749,7 +750,7 @@ void MathOp::MulPub::forward() {
             break;
         case 2:
             receive(tmp);
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < Config::config->M; i++) {
                 if (i != node_type) {
                     *res = *res + tmp[i];
                 }
@@ -770,13 +771,13 @@ MathOp::PRandFld::PRandFld(Mat *res, ll range) {
 
 void MathOp::PRandFld::forward() {
     reinit();
-    Mat a[M];
+    Mat a[Config::config->M];
     switch (forwardRound) {
         case 1:
             int r, c;
             r = res->rows();
             c = res->cols();
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < Config::config->M; i++) {
                 a[i].init(r, c);
             }
             random(a, range);
@@ -785,7 +786,7 @@ void MathOp::PRandFld::forward() {
             break;
         case 2:
             receive(a);
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < Config::config->M; i++) {
                 if (i != node_type) {
                     *res = *res + a[i];
                 }
@@ -826,7 +827,7 @@ void MathOp::Mod2::forward() {
             // todo: offline
             break;
         case 2:
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 pRandM->forward();
                 if (pRandM->forwardHasNext()) {
                     forwardRound--;
@@ -834,7 +835,7 @@ void MathOp::Mod2::forward() {
             }
             break;
         case 3:
-            *c = *a + (1ll << BIT_P_LEN - 1) + (*r_nd * 2) + *r_st;
+            *c = *a + (1ll << Config::config->BIT_P_LEN - 1) + (*r_nd * 2) + *r_st;
             break;
         case 4:
             reveal->forward();
@@ -859,7 +860,7 @@ MathOp::DegRed::DegRed() {}
 MathOp::DegRed::DegRed(Mat *res, Mat *a) {
     this->res = res;
     this->a = a;
-    tmp = new Mat[M];
+    tmp = new Mat[Config::config->M];
     init(2, 0);
 }
 
@@ -867,18 +868,18 @@ void MathOp::DegRed::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < Config::config->M; i++) {
                 if (i == node_type) {
                     continue;
                 }
-                tmp[i] = *a * metadata(node_type, i);
+                tmp[i] = *a * Player::metadata(node_type, i);
             }
             broadcast(tmp);
             break;
         case 2:
-            *res = *a * metadata(node_type, node_type);
+            *res = *a * Player::metadata(node_type, node_type);
             receive(tmp);
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < Config::config->M; i++) {
                 if (i != node_type) {
                     *res = *res + tmp[i];
                 }
@@ -902,16 +903,19 @@ MathOp::PreMulC::PreMulC(Mat *res, Mat *a, int k) {
     u = new Mat[k];
     for (int i = 0; i < k; i++) {
         r[i].init(tmp_r, tmp_c);
+        r[i] = r[i] + 1;
         s[i].init(tmp_r, tmp_c);
+        s[i] = s[i] + 1;
         u[i].init(tmp_r, tmp_c);
+        u[i] = u[i] + 1;
     }
     pRandFld_r = new PRandFld *[k];
     pRandFld_s = new PRandFld *[k];
     pMulPub_st = new MulPub *[k];
     pDegRed = new DegRed *[k];
     for (int i = 0; i < k; i++) {
-        pRandFld_r[i] = new PRandFld(r+i, MOD);
-        pRandFld_s[i] = new PRandFld(s+i, MOD);
+        pRandFld_r[i] = new PRandFld(r+i, Config::config->MOD);
+        pRandFld_s[i] = new PRandFld(s+i, Config::config->MOD);
         pMulPub_st[i] = new MulPub(u+i, r+i, s+i);
     }
 
@@ -937,7 +941,7 @@ void MathOp::PreMulC::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-             if (OFFLINE_PHASE_ON) {
+             if (Config::config->OFFLINE_PHASE_ON) {
                 for (int i = 0; i < k; i++) {
                     pRandFld_r[i]->forward();
                     pRandFld_s[i]->forward();
@@ -951,7 +955,7 @@ void MathOp::PreMulC::forward() {
             }
             break;
         case 2:
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 for (int i = 0; i < k; i++) {
                     pMulPub_st[i]->forward();
                 }
@@ -983,7 +987,7 @@ void MathOp::PreMulC::forward() {
                 // optimization: make use of memory localization
                 Mat inverse_tmp [k];
                 std::vector<std::thread> thrds;
-                int thread_num = THREAD_NUM;
+                int thread_num = Config::config->THREAD_NUM;
                 int seg_len = ceil(k * 1.0 / thread_num);
                 for (int i = 0; i < thread_num; i++) {
                     thrds.emplace_back(std::thread([this, i, seg_len, &inverse_tmp]() {
@@ -1172,7 +1176,7 @@ void MathOp::Mod2m::forward() {
 //            }
 //            u->clear();
 //            b->clear();
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 pRandM->forward();
                 if (pRandM->forwardHasNext()) {
                     forwardRound--;
@@ -1181,7 +1185,7 @@ void MathOp::Mod2m::forward() {
             break;
         case 2:
             // todo: m+r > q 的问题
-            *b = *a + (1ll << (BIT_P_LEN - 1)) + (*r_nd) * (1ll << m) + (*r_st);
+            *b = *a + (1ll << (Config::config->BIT_P_LEN - 1)) + (*r_nd) * (1ll << m) + (*r_st);
             break;
         case 3:
             pRevealD->forward();
@@ -1241,7 +1245,7 @@ void MathOp::Div2m::forward() {
             }
             break;
         case 2:
-            *res = (*a - *b) * Constant::Util::inverse(1ll << m, MOD); // Div2mp 需要降次
+            *res = (*a - *b) * Constant::Util::inverse(1ll << m, Config::config->MOD); // Div2mp 需要降次
             b->clear();
             break;
     }
@@ -1271,7 +1275,7 @@ void MathOp::LTZ::forward() {
             break;
         case 2:
             // return IE, 0
-            *res = res->opposite() * IE;
+            *res = res->opposite() * Config::config->IE;
             // return 1, 0
             // *res = res->opposite();
             break;
@@ -1342,7 +1346,7 @@ void MathOp::EQZ::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            if (OFFLINE_PHASE_ON) {
+            if (Config::config->OFFLINE_PHASE_ON) {
                 pRandM->forward();
                 if (pRandM->forwardHasNext()) {
                     forwardRound--;
@@ -1351,7 +1355,7 @@ void MathOp::EQZ::forward() {
             break;
         case 2:
             // todo: c'=r' mod 2^k
-            *b = *a + (1ll << (BIT_P_LEN)) + (*r_nd) * (1ll << k) + (*r_st); // 2^(k-1) mod 2^k 存在问题
+            *b = *a + (1ll << (Config::config->BIT_P_LEN)) + (*r_nd) * (1ll << k) + (*r_st); // 2^(k-1) mod 2^k 存在问题
             break;
         case 3:
             pReveal->forward();
@@ -1400,8 +1404,8 @@ MathOp::EQZ_2LTZ::EQZ_2LTZ(Mat* res, Mat *a, int k) {
     u_st_res = new Mat(tmp_r, tmp_c);
     u_nd = new Mat(tmp_r, tmp_c);
     u_nd_res = new Mat(tmp_r, tmp_c);
-    pLTZ_f_1 = new LTZ(u_st_res, u_st, BIT_P_LEN);
-    pLTZ_f_2 = new LTZ(u_nd_res, u_nd, BIT_P_LEN);
+    pLTZ_f_1 = new LTZ(u_st_res, u_st, Config::config->BIT_P_LEN);
+    pLTZ_f_2 = new LTZ(u_nd_res, u_nd, Config::config->BIT_P_LEN);
     reveal = new Reveal(res, res);
     reveal_1 = new Reveal(u_st_res, u_st_res);
     reveal_2 = new Reveal(u_nd_res, u_nd_res);
@@ -1457,11 +1461,11 @@ MathOp::ReLU_Mat::ReLU_Mat(NeuronMat *res, NeuronMat *a) {
     tmp_r = a->rows();
     tmp_c = a->cols();
     res->setAux(new Mat(tmp_r, tmp_c));
-    pLTZ = new LTZ(res->getAux(), a->getForward(), BIT_P_LEN);
+    pLTZ = new LTZ(res->getAux(), a->getForward(), Config::config->BIT_P_LEN);
 //    pDegRed_f = new DegRed(res->getForward(), res->getForward());
 //    pDegRed_b = new DegRed(a->getGrad(), a->getGrad());
-    pDiv2mp_f = new Div2mP(res->getForward(), res->getForward(), BIT_P_LEN, DECIMAL_PLACES);
-    pDiv2mp_b = new Div2mP(a->getGrad(), a->getGrad(), BIT_P_LEN, DECIMAL_PLACES);
+    pDiv2mp_f = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    pDiv2mp_b = new Div2mP(a->getGrad(), a->getGrad(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
 
     tmp_a = new Mat(tmp_r, tmp_c);
     tmp_res = new Mat(tmp_r, tmp_c);
@@ -1516,7 +1520,7 @@ void MathOp::ReLU_Mat::back() {
     switch (backRound) {
         case 1:
             // modified to Leakey ReLU, curious 10.26
-            *a->getGrad() = res->getGrad()->dot(*res->getAux()) + res->getAux()->oneMinus_IE() * LEAKEY_RELU_BIAS;
+            *a->getGrad() = res->getGrad()->dot(*res->getAux()) + res->getAux()->oneMinus_IE() * Config::config->LEAKEY_RELU_BIAS;
             break;
         case 2:
             // pDegRed_b->back();
@@ -1544,15 +1548,15 @@ MathOp::Sigmoid_Mat::Sigmoid_Mat(NeuronMat *res, NeuronMat *a) {
     u_st_res = new Mat(tmp_r, tmp_c);
     u_nd = new Mat(tmp_r, tmp_c);
     u_nd_res = new Mat(tmp_r, tmp_c);
-    pLTZ_f_1 = new LTZ(u_st_res, u_st, BIT_P_LEN);
-    pLTZ_f_2 = new LTZ(u_nd_res, u_nd, BIT_P_LEN);
+    pLTZ_f_1 = new LTZ(u_st_res, u_st, Config::config->BIT_P_LEN);
+    pLTZ_f_2 = new LTZ(u_nd_res, u_nd, Config::config->BIT_P_LEN);
 //    pDegRed_res = new DegRed(res->getForward(), res->getForward());
-//    pDegRed_res = new Div2mP(res->getForward(), res->getForward(), BIT_P_LEN, DECIMAL_PLACES);
-//    pDiv2mP_a = new Div2mP(a->getBack(), a->getBack(), BIT_P_LEN, DECIMAL_PLACES);
-//    pDiv2mP_aux = new Div2mP(res->getAux(), res->getAux(), BIT_P_LEN, DECIMAL_PLACES);
-    pDegRed_res = new Div2mP(res->getForward(), res->getForward(), BIT_P_LEN, DECIMAL_PLACES);
-    pDiv2mP_b1 = new Div2mP(a->getGrad(), a->getGrad(), BIT_P_LEN, DECIMAL_PLACES);
-    pDiv2mP_b2 = new Div2mP(a->getGrad(), a->getGrad(), BIT_P_LEN, DECIMAL_PLACES);
+//    pDegRed_res = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+//    pDiv2mP_a = new Div2mP(a->getBack(), a->getBack(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+//    pDiv2mP_aux = new Div2mP(res->getAux(), res->getAux(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    pDegRed_res = new Div2mP(res->getForward(), res->getForward(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    pDiv2mP_b1 = new Div2mP(a->getGrad(), a->getGrad(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
+    pDiv2mP_b2 = new Div2mP(a->getGrad(), a->getGrad(), Config::config->BIT_P_LEN, Config::config->DECIMAL_PLACES);
 
     tmp = new Mat(tmp_r, tmp_c);
     reveal = new Reveal(tmp, u_st_res);
@@ -1563,8 +1567,8 @@ void MathOp::Sigmoid_Mat::forward() {
     reinit();
     switch (forwardRound) {
         case 1:
-            *u_st = *a->getForward() + (IE >> 1);
-            *u_nd = *a->getForward() - (IE >> 1);
+            *u_st = *a->getForward() + (Config::config->IE >> 1);
+            *u_nd = *a->getForward() - (Config::config->IE >> 1);
             break;
         case 2:
             pLTZ_f_1->forward();
@@ -1583,7 +1587,7 @@ void MathOp::Sigmoid_Mat::forward() {
             // added by curious 2020.6.4 -1 --> -IE
             *u_st = u_st_res->oneMinus_IE();
             *u_nd = u_nd_res->oneMinus_IE();
-            *res->getForward() = (*a->getForward() + (IE >> 1)).dot(*u_st) - (*a->getForward() - (IE >> 1)).dot(*u_nd);
+            *res->getForward() = (*a->getForward() + (Config::config->IE >> 1)).dot(*u_st) - (*a->getForward() - (Config::config->IE >> 1)).dot(*u_nd);
 //            *res->getAux() = a->getForward()->dot(a->getForward()->oneMinus_IE());
             break;
         case 5:
@@ -1674,66 +1678,66 @@ void MathOp::Equal::forward() {
 void MathOp::Equal::back() {}
 
 void MathOp::broadcast(Mat *a) {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->send_message(a[i]);
+            SocketManager::send(node_type, i, a[i]); 
         }
     }
 }
 void MathOp::broadcast_share(Mat *a, int target) {
-    socket_io[node_type][target]->send_message(a);
+    SocketManager::send(node_type, target, a);
 }
 
 void MathOp::receive_share(Mat* a, int from) {
-    socket_io[node_type][from]->recv_message(*a);
+    SocketManager::receive(node_type, from, *a);
 }
 
 void MathOp::broadcase_rep(Mat *a) {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->send_message(a);
+            SocketManager::send(node_type, i, a);
         }
     }
 }
 
 void MathOp::receive(Mat* a) {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            a[i] = socket_io[node_type][i]->recv_message();
+            a[i] = SocketManager::receive(node_type, i);
         }
     }
 }
 
 void MathOp::receive_add(Mat *a) {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->recv_message(a);
+            SocketManager::receive(node_type, i, a);
         }
     }
 }
 
 void MathOp::receive_rep(Mat *a) {
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < Config::config->M; i++) {
         if (i != node_type) {
-            socket_io[node_type][i]->recv_message(*(a+i));
+           SocketManager::receive(node_type, i, *(a+i));
         }
     }
 }
 
 void MathOp::random(Mat *a, ll range) {
     int len = a[0].rows() * a[0].cols();
-    ll128 coefficient[TN];
+    ll128 coefficient[Config::config->TN];
     for (int i = 0; i < len; i++) {
         coefficient[0] = (Constant::Util::randomlong() % range);
-        for (int j = 1; j < TN; j++) {
+        for (int j = 1; j < Config::config->TN; j++) {
             coefficient[j] = Constant::Util::randomlong();
         }
-        for (int j = 0; j < M; j++) {
+        for (int j = 0; j < Config::config->M; j++) {
             ll128 tmp = coefficient[0];
-            ll128 key = player[j].key;
-            for (int k = 1; k < TN; k++) {
+            ll128 key = Player::player[j].key;
+            for (int k = 1; k < Config::config->TN; k++) {
                 tmp += coefficient[k] * key;
-                key *= player[j].key;
+                key *= Player::player[j].key;
                 key = Constant::Util::get_residual(key);
             }
             a[j].getVal(i) = tmp;

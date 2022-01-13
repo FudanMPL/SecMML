@@ -8,27 +8,38 @@
 #include "../Constant.h"
 #include <thread>
 
-class Mat {
+class Mat
+{
+private:
     int r, c;
-    int order;
+    int order; // 0为列存 1为行存
     vector<ll128> val;
+
 public:
+    Config *config;
     Mat(int r, int c);
     Mat(int r, int c, ll128 b);
     Mat();
     Mat(const Mat &a);
     ~Mat();
     void init(int r, int c);
-    ll128&operator()(int a, int b);
+    ll128 &operator()(int a, int b);
+    vector<ll128> get_val() const;
     ll128 get(int a, int b) const;
-    ll128&getVal(int a);
+    ll128 &getVal(int a);
+    void setVal(vector<ll128> v);
     void setVal(int index, ll128 v);
     int rows() const;
     int cols() const;
+    int getorder() const;
+    void set(int p, int x);
+    void setrow(int row);
+    void setcol(int col);
+    void setorder(int order);
     int size() const;
-    Mat& operator=(const Mat &a);
-    Mat& operator=(vector<ll128> &a);
-    Mat& operator=(char* &p);
+    Mat &operator=(const Mat &a);
+    Mat &operator=(vector<ll128> &a);
+    Mat &operator=(char *&p);
     bool operator==(Mat p);
     Mat transpose() const;
     Mat operator+(const Mat &a);
@@ -57,6 +68,7 @@ public:
     Mat softmax();
     Mat sqrt();
     Mat inverse();
+    vector<double> backtoFloat();
     Mat sqrt_inv();
     Mat divideBy2();
     Mat relu();
@@ -75,7 +87,9 @@ public:
     Mat opposite() const;
     Mat toOneHot() const;
     void col(int st, int ed, Mat &a) const;
+    vector<ll128> col(int st, int ed);
     void append(int st, int ed, Mat *a);
+    void append(vector<ll128> v);
     Mat mod(ll b);
     int count();
     int count(const ll128 &b);
@@ -88,35 +102,46 @@ public:
     void cp(const Mat &a, int st, int len);
     void cp(const Mat &a, const Mat &mask);
     void residual();
-    void AddDot(int k, ll128* x, int incx, ll128* y, ll128* gamma);
+    void AddDot(int k, ll128 *x, int incx, ll128 *y, ll128 *gamma);
     void sign();
-    void reoeder();
+    void reorder();
     void transorder();
     void truncated_normal();
     void truncated_normal(double mean, double stddev);
     void random_normal();
     void constant(double b);
-    void col(int u, vector<ll128>& a);
+    void col(int u, vector<ll128> &a);
     void clear();
     void print() const;
     void printSign();
-    void toString(char* p);
-    int toString_pos(char* p) const;
+    void toString(char *p);
+    int toString_pos(char *p) const;
+    void toBuffer_pos(char *p) const;
+    void toBuffer(char *p, int i) const;
+    void to_Buffer(char *p, int i) const;
     int getStringLen();
-    void getFrom_pos(char* &p);
-    void addFrom_pos(char* &p);
+    void get_Buffer(char *&p, int i);
+    void getBuffer(char *&p, int i);
+    void getFrom_buf(char *&p);
+    void getFrom_pos(char *&p);
+    void add_Buffer(char *&p, int i);
+    void addBuffer(char *&p, int i);
+    void addFrom_buf(char *&p);
+    void addFrom_pos(char *&p);
     Mat SmoothLevel();
     ll count_sum();
-    static bool fill(Mat* a, Mat* a_r, Mat* b, Mat* b_r);
-    static void concat(Mat* res, Mat* a, Mat* b);
-    static void reconcat(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static void vstack(Mat* res, Mat* a, Mat* b);
-    static void re_vstack(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static void hstack(Mat* res, Mat* a, Mat* b);
-    static void re_hstack(Mat* res, Mat* a, bool fa, Mat* b, bool fb);
-    static int pair_order_type(Mat* a, const Mat* b);
+    ll get_memory_size();
+    static bool fill(Mat *a, Mat *a_r, Mat *b, Mat *b_r);
+    static void concat(Mat *res, Mat *a, Mat *b);
+    static void reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static void vstack(Mat *res, Mat *a, Mat *b);
+    static void re_vstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static void hstack(Mat *res, Mat *a, Mat *b);
+    static void re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb);
+    static int pair_order_type(Mat *a, const Mat *b);
     static void random_neg(Mat *a);
+    void get_secret_share(Mat *mats, int num);
+    void merge_mats(Mat *mats, int num);
 };
 
-
-#endif //MPC_ML_MAT_H
+#endif // MPC_ML_MAT_H

@@ -91,7 +91,11 @@ int generator (uint64_t p) {
     return -1;
 }
 void test_vss() {
+<<<<<<< HEAD
     ll p = MOD;
+=======
+    ll p = Config::config->MOD;
+>>>>>>> dev
     feldman_vss feldmanVss;
 
     cout << feldmanVss.is_prime(p) << endl;

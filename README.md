@@ -21,6 +21,9 @@ There are two practical situations as follow:
 2. There are a large number of individual data owners and they do not want their private data to be known by others. Internet companies want to make use of these distributed data to acquire better models. These companies may ﬁrst specify several servers to perform the computation and these servers must be independent of each other. All data owners then send their data to these servers in secret sharing manner. The servers collaboratively train the model with these data and the trained model is ﬁnally revealed to the data owners. The scalability of the framework is that it can support any number of data owners, and any number of servers can be selected as computing parties. 
 
 ## Repository Structure
+* `constant.json`: All global parameters are restored here. For more detailed information, annotations are available in config/Config.hpp
+
+* `Test/` : All tests can be found here. Make sure that relative path of file names in constant.json have been changed.
 
 * `core/`: Core libraries in MPL. The fundamental matrix lib, math operator lib and Player lib.  Some math computations are compiled as libraries (libcore_lib.so).
 
@@ -88,9 +91,9 @@ Here take training a linear regression model among three parties as an example
 
   `git clone https://github.com/FudanMPL/SecMML.git`
 
-* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
+* Set the number of parties to 3 (in `constant.json`. Note that, M can be any arbitrary number >= 3):
   
-  `#define M 3`
+  "M": 3
 
 * Install dependency:
 
@@ -122,6 +125,7 @@ Here take training a linear regression model among three parties as an example
       ```
       python3 -m pybind11 --includes
       ```
+
 
 ## Help
 

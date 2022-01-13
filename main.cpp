@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 09:52:08
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2022-01-06 14:50:53
+ * @LastEditTime: 2022-01-13 14:04:48
  */
 #include <iostream>
 
@@ -29,7 +29,20 @@ int main(int argc, char** argv) {
     
     Config::config = Config::init("config/parameter/constant.json");
     Player::init();
-    IOManager::init("datasets/mnist/mnist_train.csv", "datasets/mnist/mnist_test.csv");
+    IOManager::init_local_data();
+    for(int i = 0; i < IOManager::train_label.cols(); i++){
+        if(IOManager::train_label(0,i) > Config::config->IE){
+            IOManager::train_label(0,i) = Config::config->IE;
+        }
+    }
+    for(int i = 0; i < IOManager::test_label.cols(); i++){
+        if(IOManager::test_label(0,i) > Config::config->IE){
+            IOManager::test_label(0,i) = Config::config->IE;
+        }
+    }
+    // 归一化
+    IOManager::train_data = IOManager::train_data/256;
+    IOManager::test_data = IOManager::test_data/256;
     SocketManager::SMMLF tel;
     if (!Config::config->LOCAL_TEST) {
         tel.init(Config::config->IP,Config::config->PORT);

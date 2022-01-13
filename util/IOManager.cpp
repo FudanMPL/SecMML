@@ -82,10 +82,6 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         if (!Config::config->LABEL_P)
         { // 第一列是标签
             temp = Constant::Util::getfixpoint(ch, begin);
-            if (temp > Config::config->IE)
-            { //转化成二分类应该在main函数里面做
-                temp = Config::config->IE;
-            }
             label(0, i) = temp;
         }
 
@@ -95,8 +91,7 @@ void IOManager::load(ifstream &in, Mat &data, Mat &label, int size)
         for (j = 0; j < Config::config->USE_D; j++)
         {
             temp = Constant::Util::getfixpoint(ch, begin);
-            /// TODO: 这里本来有一个除256，是因为是像素数据
-            data(j, i) = temp / 256; //归一化应该在main函数里面做，调用mat中的算子
+            data(j, i) = temp;
         }
 
         if (Config::config->LABEL_P) // 最后一列是标签

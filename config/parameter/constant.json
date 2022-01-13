@@ -8,8 +8,8 @@
     "ACTIVATION": 0,
     "SIGMOID": 0,
     "TANH": 1,
-    "LINEAR": 0,
-    "LOGISTIC": 1,
+    "LINEAR": 1,
+    "LOGISTIC": 0,
     "MOD": "100000000000000003",
     "N": 3000,
     "L": 2,
@@ -60,8 +60,8 @@
         13688,
         13689
     ],
-    "TRAIN_FILENAME": "../datasets/mnist/mnist_train1.csv",
-    "TEST_FILENAME": "../datasets/mnist/mnist_test1.csv",
+    "TRAIN_FILENAME": "datasets/mnist/mnist_train.csv",
+    "TEST_FILENAME": "datasets/mnist/mnist_test.csv",
     "FILENAME": "",
     "TRAIN_TEST_SAME": 0
 }

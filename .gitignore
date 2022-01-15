@@ -11,7 +11,7 @@ cmake-build-debug/
 *.bat
 
 __pycache__/
-*queqiao.so
+*queqiao*.so
 *.pyi
 *.csv
 *.o

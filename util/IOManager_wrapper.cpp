@@ -14,5 +14,6 @@ void py_IOManager(py::module_ &m) {
         .def_readwrite_static("test_data", &IOManager::test_data)
         .def_readwrite_static("test_label", &IOManager::test_label)
         .def(py::init<>())
-        .def_static("init", &IOManager::init);
+        .def_static("init", &IOManager::init)
+        .def_static("init_local_data", &IOManager::init_local_data);
 }

@@ -6,6 +6,7 @@
 
 namespace py = pybind11;
 
+void py_Config(py::module_ &);
 void py_Constant(py::module_ &);
 void py_Player(py::module_ &);
 void py_IOManager(py::module_ &);
@@ -19,6 +20,7 @@ void py_LSTMGraph(py::module_ &);
 
 PYBIND11_MODULE(queqiao, m) {
     m.def("set_seed", []() { srand(time(NULL)); });
+    py_Config(m);
     py_Constant(m);
     py_Player(m);
     py_IOManager(m);

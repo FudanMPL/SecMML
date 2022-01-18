@@ -12,9 +12,7 @@ void py_SocketManager(py::module_ &m) {
     py::class_<SocketManager::SMMLF>(m, "SocketManager_SMMLF")
         .def(py::init<>())
         
-        // convert python list to c++ std::vector by including <pybind11/stl.h>
-        // then convert std::vector to array
-        .def("init", [](SocketManager::SMMLF &self, vector<string> ip, vector<int> port) {
-            self.init(&ip.at(0), &port.at(0));
-        }, py::arg("ip"), py::arg("port"));
+        // enable conversion between c++ std::vector and python list by including <pybind11/stl.h>
+        .def("init", py::overload_cast<const vector<string>&, const vector<int>&>(&SocketManager::SMMLF::init), py::arg("ip"), py::arg("port"))
+        .def("init", py::overload_cast<>(&SocketManager::SMMLF::init));
 }

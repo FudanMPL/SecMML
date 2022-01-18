@@ -144,7 +144,7 @@ SocketManager::SMMLF::SMMLF() {}
 // non-parameters Function init(default ip and port)
 
 void SocketManager::SMMLF::init() {
-    init({"10.176.34.170","10.176.34.170","10.176.34.170"}, {1234,1235,1236});
+    init({"127.0.0.1","127.0.0.1","127.0.0.1"}, {1234,1235,1236});
 }
 
 // Function init(get ip and port)

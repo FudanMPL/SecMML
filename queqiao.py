@@ -1,6 +1,6 @@
 import sys
 from queqiao import set_seed
-from queqiao import Constant, Player, IOManager, SocketManager_SMMLF
+from queqiao import Config, Constant, Player, IOManager, SocketManager_SMMLF
 from python_lib import linear_regression, logistic_regression, bp_nn, lstm_nn
 
 
@@ -11,26 +11,35 @@ if __name__ == '__main__':
         Constant.node_type = int(sys.argv[1])
     print("party index: {}".format(Constant.node_type))
 
-    ips = ["127.0.0.1", "127.0.0.1", "127.0.0.1"]
-    ports = [2222, 2223, 2224]
-
     set_seed()
+    Config.config = Config.init("constant.json")
     Player.init()
-    io = IOManager()
-    io.init()
+    IOManager.init_local_data()
+
+    for i in range(0, IOManager.train_label.cols()):
+        if IOManager.train_label[0, i] > Config.config.IE:
+            IOManager.train_label[0, i] = Config.config.IE
+    for i in range(0, IOManager.test_label.cols()):
+        if IOManager.test_label[0, i] > Config.config.IE:
+            IOManager.test_label[0, i] = Config.config.IE
+    IOManager.train_data = IOManager.train_data / 256
+    IOManager.test_data = IOManager.test_data / 256
+
     tel = SocketManager_SMMLF()
-    tel.init(ips, ports)
+    if not Config.config.LOCAL_TEST:
+        tel.init(Config.config.IP, Config.config.PORT)
+    else:
+        tel.init()
 
-    # Linear Regression Model
-    model = linear_regression.graph(io)
-
-    # Logisitc Regression Model
-    # model = logistic_regression.graph(io)
+    if Config.config.GRAPH_TYPE == Config.config.LINEAR:
+        model = linear_regression.graph()
+    elif Config.config.GRAPH_TYPE == Config.config.LOGISTIC:
+        model = logistic_regression.graph()
 
     # Three-layer Back Propagation Model
-    # model = bp_nn.graph(io)
+    # model = bp_nn.graph()
 
     # LSTM
-    # model = lstm_nn.graph(io)
+    # model = lstm_nn.graph()
 
     model.train()

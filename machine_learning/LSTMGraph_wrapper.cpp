@@ -35,6 +35,10 @@ void py_LSTMGraph(py::module_ &m) {
         .def("train", &LSTMGraph::LSTM::train)
         .def("test", &LSTMGraph::LSTM::test)
 
+        .def("resize_x", [](LSTMGraph::LSTM &self, std::size_t size) {
+            self.x.resize(size);
+        }, py::arg("size"))
+
         .def("get_x", [](LSTMGraph::LSTM &self, int idx) {
             return self.x[idx];
         }, py::arg("idx"))
@@ -42,6 +46,10 @@ void py_LSTMGraph(py::module_ &m) {
         .def("set_x", [](LSTMGraph::LSTM &self, int idx, int val) {
             self.x[idx] = val;
         }, py::arg("idx"), py::arg("val"))
+
+        .def("resize_cells", [](LSTMGraph::LSTM &self, std::size_t size) {
+            self.cells.resize(size);
+        }, py::arg("size"))
 
         .def("get_cell", [](LSTMGraph::LSTM &self, int idx) {
             return self.cells[idx];

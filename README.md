@@ -45,27 +45,13 @@ There are two practical situations as follow:
 
 ## Running
 
-Here take training a linear regression model among three parties as an example
+Here take training a linear regression model among three parties as an example. Note that we have tested our code in Ubuntu 20.04 system and support other platforms would be a future plan.  
 
 * Clone the SecMML git repository by running:
 
   `git clone https://github.com/FudanMPL/SecMML.git`
 
-* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
-  
-  `#define M 3`
-
-* Specify the platform:
-    - if Ubuntu  (in `Constant.h`)
-    
-            `#ifndef UNIX_PLATFORM`
-    
-            `#define UNIX_PLATFORM`
-            
-            `#endif`
-    - if Windows (in `CMakeLists.txt`):
-
-            Add `target_link_libraries(SMMLF ws2_32)` to the file.
+* Set parameters in constant.json according to the descriptions in config/Config.hpp
 
 * Choose the machine learning model (`main.cpp`):
     - Linear Regression Model: bp->linear_graph();

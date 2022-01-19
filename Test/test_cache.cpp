@@ -64,13 +64,13 @@ void test_cache_time()
     clock_t startTime, endTime;
     IOManager::remove_cache();
     startTime = clock();
-    IOManager::init();
+    IOManager::init_local_data();
     endTime = clock();
     double time_file = (double)(endTime - startTime) / CLOCKS_PER_SEC; // in second
     std::cout << "The time of load the original file: " << time_file << std::endl;
 
     startTime = clock();
-    IOManager::init();
+    IOManager::init_local_data();
     endTime = clock();
     double time_cache = (double)(endTime - startTime) / CLOCKS_PER_SEC;
     std::cout << "The time of load the cache file: " << time_cache << std::endl;
@@ -79,5 +79,6 @@ void test_cache_time()
 int main()
 {
     // test_cache_twofile();
+    Config::config = Config::init("../constant.json");
     test_cache_time();
 }

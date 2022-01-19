@@ -5,7 +5,8 @@ int main()
 {
     // IOManager iOManager = IOManager();
     //  iOManager.init("../datasets/mnist/mnist_train.csv","../datasets/mnist/mnist_test.csv");
-    IOManager::init();
+    Config::config = Config::init("../constant.json");
+    IOManager::init_local_data();
 
     // iOManager.train_data.print();
     // iOManager.test_data.print();

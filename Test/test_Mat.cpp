@@ -573,6 +573,7 @@ void test_re_hstack()
 
 int main()
 {
+    Config::config = Config::init("../constant.json");
     std::cout << "-----------------------------------------------" << std::endl;
     std::cout << "Test Function Mat::operator()(int row, int col)" << std::endl;
     test_operator_bracket();

@@ -658,7 +658,7 @@ void test3(int node_type, Mat test)
 
 int main(int argc, char **argv)
 {
-    Config::config = Config::init("../config/parameter/constant.json");
+    Config::config = Config::init("../constant.json");
     if (argc < 2)
     {
         DBGprint("Please enter party index:\n");

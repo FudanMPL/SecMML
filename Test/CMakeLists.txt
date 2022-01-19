@@ -54,7 +54,3 @@ target_link_libraries(test_IOManager core_lib)
 add_executable(test_SocketManager test_SocketManager.cpp ${SOURCE_FILES_BASE}  ${MALICIOUS_LIB})
 target_link_libraries(test_SocketManager jsoncpp)
 target_link_libraries(test_SocketManager core_lib)
-
-add_executable(test_LSTM test_LSTM.cpp ${SOURCE_FILES_BASE} ${MALICIOUS_LIB})
-target_link_libraries(test_LSTM jsoncpp)
-target_link_libraries(test_LSTM core_lib)

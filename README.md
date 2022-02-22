@@ -45,19 +45,37 @@ There are two practical situations as follow:
 
 ## Running
 
-Here take training a linear regression model among three parties as an example. Note that we have tested our code in Ubuntu 20.04 system and support other platforms would be a future plan.  
+Here take training a linear regression model among three parties as an example
 
 * Clone the SecMML git repository by running:
 
   `git clone https://github.com/FudanMPL/SecMML.git`
 
-* Set parameters in constant.json according to the descriptions in config/Config.hpp
+* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
+  
+  `#define M 3`
 
-* Choose the machine learning model (`main.cpp`):
-    - Linear Regression Model: bp->linear_graph();
-    - Logistic Regression Model: bp->logistic_graph();
-    - Three-layer Model: bp->graph();
-    - LSTM: lstm->graph();
+* Specify the platform:
+    - if Ubuntu  (in `Constant.h`)
+    
+            `#ifndef UNIX_PLATFORM`
+    
+            `#define UNIX_PLATFORM`
+            
+            `#endif`
+    - if Windows (in `CMakeLists.txt`):
+
+            Add `target_link_libraries(SMMLF ws2_32)` to the file.
+
+* Install mnist datasets:
+    - `cd SecMML/datasets/mnist`
+    - `python3 download.py`
+
+* Choose the machine learning model (`constant.json`):
+    Change the value of "GRAPH_TYPE" will result in different type of model:
+    - 0 refers to Lositic Regression
+    - 1 refers to Linear Regression
+    - 2 refers to LSTM
     
 * Compile the executable file:
     - `cd SecMML`
@@ -84,6 +102,11 @@ Here take training a linear regression model among three parties as an example
 * Install dependency:
 
   `pip install pybind11[global]`
+
+* Install mnist datasets:
+    - `cd SecMML/datasets/mnist`
+    - `python3 download.py`
+
 
 * Compile the dynamic library:
     - `cd SecMML`
@@ -121,11 +144,7 @@ Any question, please contact 20212010009@fudan.edu.cn.
 
 **Faculty**: Prof. Weili Han
 
-**PH.D Students**: Lushan Song, Wenqiang Ruan, Guopeng Lin
-
-**Graduate Students**: Haoqi Wu, Zifeng Jiang, Jiaxuan Wang, Mingxin Xu, Xinyu Tu, Zhexuan Wang, Shuyu Chen, Jitao Yu
-
-**PostGraduate Students**: Dingyi Tang
+**Students**: Haoqi Wu (Graduate Student), Zifeng Jiang (Graduate Student), Wenqiang Ruan (Ph.D Candidate), Shuyu Chen (Graduate Student), Xinyu Tu (Graduate Student), Zhexuan Wang (Graduate Student), Lushan Song (Ph.D Candidate), Dingyi Tang (Post Graduate Student)
 
 ## Related Projects
 

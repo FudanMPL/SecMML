@@ -65,9 +65,9 @@ Here take training a linear regression model among three parties as an example
             Add `target_link_libraries(SMMLF ws2_32)` to the file.
 
 * Install mnist datasets:
-    Install dependency:
+    * Install dependency:
       - `pip install pybind11[global]`
-    Download:
+    * Download:
       - `cd SecMML/datasets/mnist`
       - `python3 download.py`
 

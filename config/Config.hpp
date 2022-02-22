@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 10:46:07
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2022-01-11 16:16:34
+ * @LastEditTime: 2022-02-22 14:27:16
  */
 
 #include <cstdio>
@@ -29,8 +29,6 @@ class Config{
                                     ACTIVATION(root["ACTIVATION"].asInt()),
                                     SIGMOID(root["SIGMOID"].asInt()),
                                     TANH(root["TANH"].asInt()),
-                                    LINEAR(root["LINEAR"].asInt()),
-                                    LOGISTIC(root["LOGISTIC"].asInt()),
                                     LEAKEY_RELU_BIAS(root["IE"].asInt()/2),
                                     MOD(atol(root["MOD"].asString().c_str())),
                                     N(root["N"].asInt()),
@@ -93,8 +91,6 @@ class Config{
         const int SIGMOID;
         const int TANH;
         // To decide whether to run Linear regression or Logistic regression
-        const int LINEAR;               // Run Linear regression
-        const int LOGISTIC;             // Run Logistic regression
         const int LEAKEY_RELU_BIAS;
         const long MOD;                 // Global mod number
         const int N;                    

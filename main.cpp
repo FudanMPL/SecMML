@@ -2,7 +2,7 @@
  * @Author: Xinyu Tu
  * @Date: 2021-12-07 09:52:08
  * @LastEditors: Xinyu Tu
- * @LastEditTime: 2022-01-13 14:14:56
+ * @LastEditTime: 2022-02-22 15:46:06
  */
 #include <iostream>
 
@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
             IOManager::test_label(0,i) = Config::config->IE;
         }
     }
-    // 归一化
+    // normalization
     IOManager::train_data = IOManager::train_data/256;
     IOManager::test_data = IOManager::test_data/256;
     SocketManager::SMMLF tel;
@@ -50,25 +50,30 @@ int main(int argc, char** argv) {
         tel.init();
     }
 
-    /** LSTM **/
-    // LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-    // DBGprint("LSTM constructing ...\n");
-    // lstm->graph();
-    // DBGprint("LSTM constructed ...\n");
-    // lstm->train();
-
-    /** NN, Linear Regression, Logistic Regression **/
-    BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-
-    /** Three-layer Model **/
-    // bp->graph();
-
-    if(Config::config->GRAPH_TYPE == Config::config->LOGISTIC){
+    if(Config::config->GRAPH_TYPE == 0){
+        // Logistic regression
+        DBGprint("Logistic Regression begins:");
+        BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+        bp->graph();
         bp->logistic_graph();
+        bp->train();
     }
-    else if(Config::config->GRAPH_TYPE == Config::config->LINEAR){
+    else if(Config::config->GRAPH_TYPE == 1){
+        // Linear regression
+        DBGprint("Linear Regression begins:");
+        BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+        bp->graph();
         bp->linear_graph();
+        bp->train();
     }
-    bp->train();
+    else if(Config::config->GRAPH_TYPE == 2){
+        // LSTM
+        LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+        DBGprint("LSTM constructing ...\n");
+        lstm->graph();
+        DBGprint("LSTM constructed ...\n");
+        lstm->train();
+    }
+    
     return 0;
 }

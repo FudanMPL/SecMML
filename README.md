@@ -33,7 +33,7 @@ There are two practical situations as follow:
 
 * `util/`: Data IO and network IO package. The network is implemented using socket, compatible on both Windows and Ubuntu.
 
-* `Constant.h`: Some constants and general functions in SecMML. Note that, for windows users, the macro `UNIX_PLATFORM` should be defined to use the `winsocket` library.
+* `Constant.h`: Note that, for windows users, the macro `UNIX_PLATFORM` should be defined to use the `winsocket` library.
 
 * `CMakeLists.txt`: Define the compile rule for the project. Note that, for windows users, the `target_link_libraries(SMMLF ws2_32)` shall be uncommented.
 
@@ -51,9 +51,6 @@ Here take training a linear regression model among three parties as an example
 
   `git clone https://github.com/FudanMPL/SecMML.git`
 
-* Set the number of parties to 3 (in `Constant.h`. Note that, M can be any arbitrary number >= 3):
-  
-  `#define M 3`
 
 * Specify the platform:
     - if Ubuntu  (in `Constant.h`)
@@ -68,8 +65,11 @@ Here take training a linear regression model among three parties as an example
             Add `target_link_libraries(SMMLF ws2_32)` to the file.
 
 * Install mnist datasets:
-    - `cd SecMML/datasets/mnist`
-    - `python3 download.py`
+    * Install dependency:
+      - `pip install pybind11[global]`
+    * Download:
+      - `cd SecMML/datasets/mnist`
+      - `python3 download.py`
 
 * Choose the machine learning model (`constant.json`):
     Change the value of "GRAPH_TYPE" will result in different type of model:
@@ -95,10 +95,6 @@ Here take training a linear regression model among three parties as an example
 
   `git clone https://github.com/FudanMPL/SecMML.git`
 
-* Set the number of parties to 3 (in `constant.json`. Note that, M can be any arbitrary number >= 3):
-  
-  "M": 3
-
 * Install dependency:
 
   `pip install pybind11[global]`
@@ -106,7 +102,6 @@ Here take training a linear regression model among three parties as an example
 * Install mnist datasets:
     - `cd SecMML/datasets/mnist`
     - `python3 download.py`
-
 
 * Compile the dynamic library:
     - `cd SecMML`
@@ -123,7 +118,7 @@ Here take training a linear regression model among three parties as an example
     - `python3 queqiao.py`
     - `Please enter party index:`
     - Enter 0,1,...,M-1 for each process in order.
-
+  
 * Support IntelliSense features of IDE:
     - Generate stub file for queqiao:
       ```

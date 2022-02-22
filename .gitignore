@@ -17,5 +17,6 @@ __pycache__/
 *.csv
 *.o
 *.dat
+*.gz
 libjsoncpp.so
 MPL

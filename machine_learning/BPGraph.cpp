@@ -270,8 +270,8 @@ void BPGraph::LR::next_batch(Mat &batch, int start, Mat *A, int mod)
     }
     else
     {
-        batch.append(A->col(end, mod));
-        batch.append(A->col(0, begin));
+        batch.set(0, A->col(end, mod));
+        batch.set((mod - end) * A->rows(), A->col(end, mod));
     }
 }
 

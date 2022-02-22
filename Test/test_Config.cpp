@@ -43,19 +43,23 @@ int main(int argc, char **argv)
     Player::init();
 
     IOManager::init_local_data();
-    for(int i = 0; i < IOManager::train_label.cols(); i++){
-        if(IOManager::train_label(0,i) > Config::config->IE){
-            IOManager::train_label(0,i) = Config::config->IE;
+    for (int i = 0; i < IOManager::train_label.cols(); i++)
+    {
+        if (IOManager::train_label(0, i) > Config::config->IE)
+        {
+            IOManager::train_label(0, i) = Config::config->IE;
         }
     }
-    for(int i = 0; i < IOManager::test_label.cols(); i++){
-        if(IOManager::test_label(0,i) > Config::config->IE){
-            IOManager::test_label(0,i) = Config::config->IE;
+    for (int i = 0; i < IOManager::test_label.cols(); i++)
+    {
+        if (IOManager::test_label(0, i) > Config::config->IE)
+        {
+            IOManager::test_label(0, i) = Config::config->IE;
         }
     }
     // 归一化
-    IOManager::train_data = IOManager::train_data/256;
-    IOManager::test_data = IOManager::test_data/256;
+    IOManager::train_data = IOManager::train_data / 256;
+    IOManager::test_data = IOManager::test_data / 256;
     SocketManager::SMMLF tel;
     if (Config::config->LOCAL_TEST)
     {
@@ -70,16 +74,15 @@ int main(int argc, char **argv)
     // and then
     // exchange the secret mat
     IOManager::exchange_data();
-    cout<<"exchange data end"<<endl;
-
+    cout << "exchange data end" << endl;
 
     BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
 
-    if (Config::config->LOGISTIC == 1)
+    if (Config::config->GRAPH_TYPE == 0)
     {
         bp->logistic_graph();
     }
-    else if (Config::config->LINEAR == 1)
+    else if (Config::config->GRAPH_TYPE == 1)
     {
         bp->linear_graph();
     }

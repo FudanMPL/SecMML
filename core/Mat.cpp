@@ -1294,6 +1294,12 @@ void Mat::append(int st, int ed, Mat *a)
     copy(val.begin(), val.end(), a->val.begin() + st);
 }
 
+void Mat::set(int st, vector<ll128> v)
+{
+    val.insert(val.begin() + st, v.begin(), v.end());
+}
+
+
 // 将矩阵中每个元素对b取余数,返回结果矩阵
 // Take each element in the matrix %b return the matrix
 

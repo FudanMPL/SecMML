@@ -90,6 +90,7 @@ public:
     vector<ll128> col(int st, int ed);
     void append(int st, int ed, Mat *a);
     void append(vector<ll128> v);
+    void set(int st, vector<ll128> v);
     Mat mod(ll b);
     int count();
     int count(const ll128 &b);

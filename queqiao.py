@@ -31,15 +31,13 @@ if __name__ == '__main__':
     else:
         tel.init()
 
-    if Config.config.GRAPH_TYPE == Config.config.LINEAR:
-        model = linear_regression.graph()
-    elif Config.config.GRAPH_TYPE == Config.config.LOGISTIC:
+    if Config.config.GRAPH_TYPE == 0:
         model = logistic_regression.graph()
-
-    # Three-layer Back Propagation Model
-    # model = bp_nn.graph()
-
-    # LSTM
-    # model = lstm_nn.graph()
+    elif Config.config.GRAPH_TYPE == 1:
+        model = linear_regression.graph()
+    elif Config.config.GRAPH_TYPE == 2:
+        model = bp_nn.graph()
+    elif Config.config.GRAPH_TYPE == 3:
+        model = lstm_nn.graph()
 
     model.train()

@@ -54,7 +54,6 @@ int main(int argc, char** argv) {
         // Logistic regression
         DBGprint("Logistic Regression begins:");
         BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-        bp->graph();
         bp->logistic_graph();
         bp->train();
     }
@@ -62,11 +61,17 @@ int main(int argc, char** argv) {
         // Linear regression
         DBGprint("Linear Regression begins:");
         BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
-        bp->graph();
         bp->linear_graph();
         bp->train();
     }
     else if(Config::config->GRAPH_TYPE == 2){
+        // Three-layer model
+        DBGprint("Three-layer model begins:");
+        BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
+        bp->graph();
+        bp->train();
+    }
+    else if(Config::config->GRAPH_TYPE == 3){
         // LSTM
         LSTMGraph::LSTM *lstm = new LSTMGraph::LSTM(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
         DBGprint("LSTM constructing ...\n");

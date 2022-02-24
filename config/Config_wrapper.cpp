@@ -23,8 +23,6 @@ void py_Config(py::module_ &m) {
         .def_readonly("ACTIVATION", &Config::ACTIVATION)
         .def_readonly("SIGMOID", &Config::SIGMOID)
         .def_readonly("TANH", &Config::TANH)
-        .def_readonly("LINEAR", &Config::LINEAR)
-        .def_readonly("LOGISTIC", &Config::LOGISTIC)
         // enable conversion between c++ std::vector and python list by including <pybind11/stl.h>
         .def_readonly("IP", &Config::IP)
         .def_readonly("PORT", &Config::PORT);

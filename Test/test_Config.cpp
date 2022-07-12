@@ -75,11 +75,11 @@ int main(int argc, char **argv)
 
     BPGraph::LR *bp = new BPGraph::LR(&IOManager::train_data, &IOManager::train_label, &IOManager::test_data, &IOManager::test_label);
 
-    if (Config::config->LOGISTIC == 1)
+    if (Config::config->GRAPH_TYPE == 0)
     {
         bp->logistic_graph();
     }
-    else if (Config::config->LINEAR == 1)
+    else if (Config::config->GRAPH_TYPE == 1)
     {
         bp->linear_graph();
     }

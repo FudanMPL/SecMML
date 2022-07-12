@@ -101,6 +101,7 @@ ll128 &Mat::operator()(int row, int col)
     else
     {
         DBGprint("Function operator() The row value or column value entered is out of range\n");
+        exit(0);
     }
 }
 
@@ -127,6 +128,7 @@ ll128 Mat::get(int row, int col) const
     else
     {
         DBGprint("Function get The row value or column value entered is out of range\n");
+        exit(0);
     }
 }
 
@@ -139,6 +141,7 @@ ll128 &Mat::getVal(int a)
     else
     {
         DBGprint("Function getVal The input is out of range\n");
+        exit(0);
     }
 }
 
@@ -151,6 +154,7 @@ void Mat::setVal(int index, ll128 v)
     else
     {
         DBGprint("Function setVal The input is out of range\n");
+        exit(0);
     }
 }
 
@@ -232,6 +236,7 @@ Mat &Mat::operator=(vector<ll128> &a)
     else
     {
         DBGprint("Function operator= The input vector is too small\n");
+        exit(0);
     }
 }
 
@@ -276,7 +281,7 @@ bool Mat::operator==(Mat p)
     else
     {
         DBGprint("Function operator== The row or column between the two matrices is not equal\n");
-        return false;
+        exit(0);
     }
 }
 
@@ -317,6 +322,7 @@ Mat Mat::operator+(const Mat &a)
     else
     {
         DBGprint("Function operator+ The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -357,6 +363,7 @@ void Mat::operator+=(const Mat &a)
     else
     {
         DBGprint("Function operator += The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -395,6 +402,7 @@ Mat Mat::operator-(const Mat &a)
     else
     {
         DBGprint("Function operator- The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -517,6 +525,7 @@ Mat Mat::operator*(const Mat &a)
     else
     {
         DBGprint("Function operator* The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -571,6 +580,7 @@ Mat Mat::operator/(Mat a)
     else
     {
         DBGprint("Function operator/ The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -632,6 +642,7 @@ Mat Mat::operator&(const Mat &a) const
     else
     {
         DBGprint("Function operator& The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -686,6 +697,7 @@ Mat Mat::dot(const Mat &a)
     else
     {
         DBGprint("Function dot The input matrix format is illegal\n");
+        exit(0);
     }
 
     // Multithread version
@@ -719,6 +731,7 @@ vector<ll128> Mat::row(int a)
     else
     {
         DBGprint("Function row(int a) The input is out of range\n");
+        exit(0);
     }
 }
 
@@ -737,6 +750,7 @@ void Mat::init_row(vector<ll128> a, int b)
     else
     {
         DBGprint("Function init_row The row input is out of range or the vector is too small\n");
+        exit(0);
     }
 }
 
@@ -745,7 +759,7 @@ void Mat::init_row(vector<ll128> a, int b)
 
 Mat Mat::resize(int a, int b)
 {
-    if (a >= 1 && b >= 1 && a * b <= r * c)
+    if (a >= 0 && b >= 0 && a * b <= r * c)
     {
         Mat ret(a, b);
         vector<ll128> temp;
@@ -763,6 +777,7 @@ Mat Mat::resize(int a, int b)
     else
     {
         DBGprint("Function resize The input is out of range\n");
+        exit(0);
     }
 }
 
@@ -827,6 +842,7 @@ Mat Mat::eq(const Mat &a)
     else
     {
         DBGprint("Function eq The matrix input is illegal\n");
+        exit(0);
     }
 }
 
@@ -1178,6 +1194,7 @@ Mat Mat::row(int st, int ed) const
     else
     {
         DBGprint("Function row(int st, int ed) The input is out of range\n");
+        exit(0);
     }
 }
 
@@ -1277,7 +1294,10 @@ void Mat::col(int st, int ed, Mat &a) const
     if (st >= 0 && ed <= c && st <= ed && a.size() >= ((ed - st) * r) && a.rows() == r)
         a.val.assign(val.begin() + st * r, val.begin() + ed * r);
     else
+    {
         DBGprint("Function col The input is out of range\n");
+        exit(0);
+    }
 }
 
 void Mat::append(vector<ll128> v)
@@ -1714,6 +1734,7 @@ void Mat::addFrom_buf(char *&p)
     else
     {
         DBGprint("Function addFrom_pos The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -1743,6 +1764,7 @@ void Mat::addFrom_pos(char *&p)
     else
     {
         DBGprint("Function addFrom_pos The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -1777,7 +1799,7 @@ bool Mat::fill(Mat *a, Mat *a_r, Mat *b, Mat *b_r)
     else
     {
         DBGprint("Function fill The input may lead to out-of-bounds\n");
-        return 0;
+        exit(0);
     }
 }
 
@@ -1798,6 +1820,7 @@ void Mat::concat(Mat *res, Mat *a, Mat *b)
     else
     {
         DBGprint("Function concat The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -1825,6 +1848,7 @@ void Mat::reconcat(Mat *res, Mat *a, bool fa, Mat *b, bool fb)
     else
     {
         DBGprint("Function reconcat The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -1845,6 +1869,7 @@ void Mat::hstack(Mat *res, Mat *a, Mat *b)
     else
     {
         DBGprint("Function hstack The input matrix format is illegal\n");
+        exit(0);
     }
 }
 
@@ -1870,6 +1895,7 @@ void Mat::re_hstack(Mat *res, Mat *a, bool fa, Mat *b, bool fb)
     else
     {
         DBGprint("Function re_hstack The input matrix format is illegal\n");
+        exit(0);
     }
 }
 

@@ -1265,7 +1265,7 @@ Mat Mat::SmoothLevel()
         for (int j = 0; j < c; j++)
         {
             ll128 u = this->get(i, j);
-            u = log(Config::config->IE / Constant::Util::get_residual(u));
+            u = log((double)Config::config->IE / Constant::Util::get_residual(u));
             if (u > Config::config->MAX_SMOOTHING_LEVEL)
             {
                 u = Config::config->MAX_SMOOTHING_LEVEL;

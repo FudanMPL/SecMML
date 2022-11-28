@@ -1,0 +1,172 @@
+BSD 3-Clause License
+
+Copyright (c) 2022, Fudan Data Security and Governance Research Group（DSG）
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Any use of the software for commercial purposes should be reported to
+wlhan@fudan.edu.cn
+This is for impact and usage monitoring purposes only.
+
+Enquiries about further applications and development opportunities are welcome.
+Please contact wlhan@fudan.edu.cn
+
+Our lab homepage url is: https://dsg.fudan.edu.cn/
+
+
+The following third party components are distributed with the Software.
+__________________________________________________________________________________
+MP-SPDZ [https://github.com/data61/MP-SPDZ]
+Copyright (c) 2022, Commonwealth Scientific and Industrial Research Organisation
+Please contact nigel.smart@kuleuven.be
+See below for the full license.
+__________________________________________________________________________________
+SPDZ-2 [https://github.com/bristolcrypto/SPDZ-2]
+Copyright (c) 2018, The University of Bristol
+Please contact nigel@cs.bris.ac.uk
+See below for the full license.
+__________________________________________________________________________________
+SPDZ-BMR-ORAM [https://github.com/mkskeller/SPDZ-BMR-ORAM]
+Copyright (c) 2018, The University of Bristol, Bar-Ilan University
+Please contact mks.keller@gmail.com
+The same license as for SPDZ-2 applies.
+__________________________________________________________________________________
+SCALE-MAMBA [https://github.com/KULeuven-COSIC/SCALE-MAMBA]
+Copyright (c) 2020, The University of Bristol, COSIC-KU Leuven
+Please contact nigel.smart@kuleuven.be
+See below for the full license.
+__________________________________________________________________________________
+
+
+Copyright (c) 2022, Commonwealth Scientific and Industrial Research Organisation
+(CSIRO) ABN 41 687 119 230.
+
+CSIRO grants you a licence to the Software on the terms of the BSD 3-Clause Licence.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+Any use of the software for commercial purposes should be reported to
+the nigel.smart@kuleuven.be
+This is for impact and usage monitoring purposes only.
+
+Enquiries about further applications and development opportunities are welcome.
+Please contact nigel.smart@kuleuven.be
+__________________________________________________________________________________
+
+
+University of Bristol : Open Access Software Licence
+
+Copyright (c) 2018, The University of Bristol, a chartered corporation having
+Royal Charter number RC000648 and a charity (number X1121) and its place of
+administration being at Senate House, Tyndall Avenue, Bristol, BS8 1TH,
+United Kingdom.
+
+All rights reserved
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Any use of the software for scientific publications or commercial purposes
+should be reported to the University of Bristol(OSI-notifications@bristol.ac.uk
+and quote reference 1914).This is for impact and usage monitoring purposes only.
+
+Enquiries about further applications and development opportunities are welcome.
+Please contact nigel@cs.bris.ac.uk
+
+__________________________________________________________________________________
+
+
+This software incorporates components from the original SPDZ system,
+as well as various extensions. It's copyright therefore rests with
+the following two institutions:
+
+Copyright (c) 2017, The University of Bristol, Senate House, Tyndall Avenue,
+Bristol, BS8 1TH, United Kingdom.
+Copyright (c) 2020, COSIC-KU Leuven, Kasteelpark Arenberg 10, bus 2452,
+B-3001 Leuven-Heverlee, Belgium.
+
+All rights reserved
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+Any use of the software for commercial purposes should be reported to the
+nigel.smart@kuleuven.be
+This is for impact and usage monitoring purposes only.
+
+Enquiries about further applications and development opportunities are welcome.
+Please contact nigel.smart@kuleuven.be

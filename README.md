@@ -75,7 +75,8 @@ Here take training a linear regression model among three parties as an example
     Change the value of "GRAPH_TYPE" will result in different type of model:
     - 0 refers to Lositic Regression
     - 1 refers to Linear Regression
-    - 2 refers to LSTM
+    - 2 refers to BP neural networks
+    - 3 refers to LSTM
     
 * Compile the executable file:
     - `cd SecMML`
